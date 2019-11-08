@@ -50,5 +50,75 @@ paths:
               properties:
                 libelle:
                   type: string
+                vision360:
+                  type: boolean
+                texte:
+                  type: string
+                keyword:
+                  type: array
+                  items:
+                    type: string
+                image:
+                  type: array
+                  uniqueItems: true
+                  items:
+                    type: string
+                debut:
+                  type: object
+                  format: date
+                  example: 8/11/2019
+                  required:
+                    - jour
+                    - mois
+                    - annee
+                  properties:
+                    jour:
+                      type: integer
+                    mois:
+                      type: integer
+                    annee:
+                      type: integer
+                fin:
+                  type: object
+                  example: 8/12/2020
+                  properties:
+                    jour:
+                      type: integer
+                      minimum: 1
+                      maximum: 31
+                    mois:
+                      type: integer
+                      minimum: 1
+                      maximum: 12
+                    annee:
+                      type: integer
+                entite:
+                  type: array
+                  enum:
+                    - '01'
+                    - '02'
+                    - '03'
+                    - 8
+                    - '70'
+                  items:
+                    type: integer
+                canaux:
+                  type: array
+                  enum:
+                    - WEB
+                    - GAB
+                    - RWD
+                  items:
+                    type: string
+                '':
+                  type: string
+              required:
+                - libelle
+                - vision360
+                - texte
+                - debut
+                - entite
+                - canaux
+        description: Créer un message bulle
 components:
   schemas: {}
