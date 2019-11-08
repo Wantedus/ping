@@ -24,5 +24,31 @@ paths:
               properties:
                 libelle:
                   type: string
+  /message/bulle:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                libelle:
+                  type: string
+    post:
+      summary: ''
+      responses:
+        '200':
+          description: OK
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                libelle:
+                  type: string
 components:
   schemas: {}
