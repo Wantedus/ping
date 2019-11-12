@@ -29,14 +29,7 @@ paths:
       summary: Your GET endpoint
       tags: []
       responses: {}
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                libelle:
-                  type: string
+      requestBody: {}
     post:
       summary: ''
       responses:
@@ -110,8 +103,13 @@ paths:
                     - RWD
                   items:
                     type: string
-                '':
-                  type: string
+                priorite:
+                  type: array
+                  description: "Si GAB est sélectionné avec plusieurs messages, c'est obligatoire"
+                  items:
+                    type: integer
+                federation:
+                  type: boolean
               required:
                 - libelle
                 - vision360
