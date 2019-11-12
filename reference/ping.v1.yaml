@@ -108,8 +108,22 @@ paths:
                   description: "Si GAB est sélectionné avec plusieurs messages, c'est obligatoire"
                   items:
                     type: integer
-                federation:
-                  type: boolean
+                encart:
+                  type: object
+                  description: "si une seule entité de fédération sélectionnée, l'encart apparaît"
+                  properties:
+                    federation:
+                      type: boolean
+                    agence:
+                      type: boolean
+                    listeClients:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          maximum: 20000
+                        client:
+                          type: string
               required:
                 - libelle
                 - vision360
