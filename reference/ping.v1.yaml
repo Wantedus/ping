@@ -28,8 +28,65 @@ paths:
     get:
       summary: Your GET endpoint
       tags: []
-      responses: {}
+      responses:
+        '200':
+          description: OK
+        '206':
+          description: Partial Content
+          headers:
+            Link:
+              schema:
+                type: string
+              description: Le lien
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  rel:
+                    type: string
+                    enum:
+                      - first
+                      - last
+                      - prev
+                      - next
+              examples: {}
+        '400':
+          description: Bad Request
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reason:
+                    type: string
       requestBody: {}
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: range
+          description: la dimension
+        - schema:
+            type: string
+          in: header
+          name: Content-Range
+          description: |-
+            offset - limit / count
+            offset: the index of the first element returned by the query.
+            limit: The index of the last element returned by the query.
+            count: the total number of items in the collection.
+        - schema:
+            type: string
+          in: header
+          name: Accept-Range
+          description: |-
+            resource max
+            resource: the type of the pagination (resource in use), ex: customer, order, account, ...
+            max: the maximum number that can be requested at one time.
     post:
       summary: ''
       responses:
