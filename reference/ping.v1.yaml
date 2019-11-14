@@ -90,11 +90,14 @@ paths:
             resource max
             resource: the type of the pagination (resource in use), ex: customer, order, account, ...
             max: the maximum number that can be requested at one time.
+        - schema:
+            type: string
+          in: header
     post:
       summary: ''
       responses:
-        '200':
-          description: OK
+        '201':
+          description: Created
       requestBody:
         content:
           application/json:
@@ -117,34 +120,13 @@ paths:
                   items:
                     type: string
                 debut:
-                  type: object
+                  type: string
                   format: date
                   example: 8/11/2019
-                  required:
-                    - jour
-                    - mois
-                    - annee
-                  properties:
-                    jour:
-                      type: integer
-                    mois:
-                      type: integer
-                    annee:
-                      type: integer
                 fin:
-                  type: object
+                  type: string
+                  format: date
                   example: 8/12/2020
-                  properties:
-                    jour:
-                      type: integer
-                      minimum: 1
-                      maximum: 31
-                    mois:
-                      type: integer
-                      minimum: 1
-                      maximum: 12
-                    annee:
-                      type: integer
                 entite:
                   type: array
                   enum:
@@ -173,15 +155,11 @@ paths:
                     federation:
                       type: boolean
                     agence:
-                      type: boolean
+                      type: string
                     listeClients:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                          maximum: 20000
-                        client:
-                          type: string
+                      type: array
+                      items:
+                        type: string
               required:
                 - libelle
                 - vision360
@@ -189,6 +167,32 @@ paths:
                 - debut
                 - entite
                 - canaux
+            examples:
+              example-1:
+                value:
+                  libelle: example-1
+                  vision360: true
+                  texte: "Messade de type bulle d'exemple "
+                  keyword:
+                    - api
+                    - esigelec
+                    - ping
+                  image:
+                    - '? champ à complété pour le moment'
+                  debut: 8/11/2019
+                  fin: 8/12/2020
+                  entite: '01'
+                  canaux: WEB
+                  priorite: 5
+                  encart:
+                    federation: true
+                    agence: agence de rouen
+                    listeClients:
+                      id:
+                        - 1
+                        - 20
+                        - 25
+                        - 30
         description: Créer un message bulle
   '/message/information/{id}':
     parameters:
