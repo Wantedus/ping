@@ -161,10 +161,8 @@ paths:
                   items:
                     type: string
                 priorite:
-                  type: array
                   description: "Si GAB est sélectionné avec plusieurs messages, c'est obligatoire"
-                  items:
-                    type: integer
+                  type: integer
                 encart:
                   type: object
                   description: "si une seule entité de fédération sélectionnée, l'encart apparaît"
