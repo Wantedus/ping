@@ -5,11 +5,13 @@ info:
 servers:
   - url: 'http://localhost:3000'
 paths:
-  /message/information:
+  /message/information/:
     get:
       summary: Your GET endpoint
       tags: []
       responses: {}
+      description: |
+        Get with id
     post:
       summary: ''
       responses:
@@ -24,6 +26,7 @@ paths:
               properties:
                 libelle:
                   type: string
+    parameters: []
   /message/bulle:
     get:
       summary: Your GET endpoint
@@ -187,5 +190,41 @@ paths:
                 - entite
                 - canaux
         description: Créer un message bulle
+  '/message/information/{id}':
+    parameters:
+      - type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+      description: Get with id
+    put:
+      summary: ''
+      responses:
+        '201':
+          description: Created
+      description: Put with ID
+  '/message/bulle/{id}':
+    parameters:
+      - type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+    put:
+      summary: ''
+      responses:
+        '200':
+          description: OK
+      description: |
+        Put bulle message with id
 components:
   schemas: {}
