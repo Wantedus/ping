@@ -11,7 +11,7 @@ paths:
       tags: []
       responses: {}
       description: |
-        Get with id
+        Get with a range
     post:
       summary: ''
       responses:
@@ -73,7 +73,31 @@ paths:
                 - entite
                 - cannaux
             examples:
-              example-1: {}
+              example-1:
+                value:
+                  libelle: example-1
+                  vision360: true
+                  texte: "Message de type information d'exemple "
+                  keyword:
+                    - api
+                    - esigelec
+                    - ping
+                  image:
+                    - '? champ à compléter pour le moment'
+                  debut: 8/11/2019
+                  fin: 8/12/2020
+                  entite: '01'
+                  canaux: WEB
+                  priorite: 5
+                  encart:
+                    federation: true
+                    agence: agence de rouen
+                    listeClients:
+                      id:
+                        - 1
+                        - 20
+                        - 25
+                        - 30
     parameters: []
   /message/bulle:
     get:
@@ -141,6 +165,7 @@ paths:
         - schema:
             type: string
           in: header
+      description: "Get with a range \nRenvoit une liste de message bulle"
     post:
       summary: ''
       responses:
@@ -254,6 +279,81 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  libelle:
+                    type: string
+                  vision360:
+                    type: boolean
+                  texte:
+                    type: string
+                  keyword:
+                    type: array
+                    items:
+                      type: string
+                  image:
+                    type: array
+                    items:
+                      type: string
+                  debut:
+                    type: string
+                    format: date
+                  fin:
+                    type: string
+                    format: date
+                  entite:
+                    type: array
+                    items:
+                      type: string
+                  canaux:
+                    type: array
+                    items:
+                      type: string
+                  priorite:
+                    type: integer
+                  encart:
+                    type: object
+                    properties:
+                      federation:
+                        type: boolean
+                      agance:
+                        type: string
+                      listeClients:
+                        type: array
+                        items:
+                          type: string
+              examples:
+                example-1:
+                  value:
+                    id: 123456abcdef
+                    libelle: example-1
+                    vision360: true
+                    texte: "Messade de type information d'exemple pour l'update"
+                    keyword:
+                      - api
+                      - esigelec
+                      - ping
+                    image:
+                      - '? champ à compléteer pour le moment'
+                    debut: 8/11/2019
+                    fin: 8/12/2020
+                    entite: '01'
+                    canaux: WEB
+                    priorite: 5
+                    encart:
+                      federation: true
+                      agence: agence de rouen
+                      listeClients:
+                        id:
+                          - 1
+                          - 20
+                          - 25
+                          - 30
       description: Get with id
     put:
       summary: ''
@@ -306,6 +406,32 @@ paths:
                       type: array
                       items:
                         type: string
+            examples:
+              example-1:
+                value:
+                  libelle: example-1
+                  vision360: true
+                  texte: "Messade de type information d'exemple pour l'update"
+                  keyword:
+                    - api
+                    - esigelec
+                    - ping
+                  image:
+                    - '? champ à compléteer pour le moment'
+                  debut: 8/11/2019
+                  fin: 8/12/2020
+                  entite: '01'
+                  canaux: WEB
+                  priorite: 5
+                  encart:
+                    federation: true
+                    agence: agence de rouen
+                    listeClients:
+                      id:
+                        - 1
+                        - 20
+                        - 25
+                        - 30
   '/message/bulle/{id}':
     parameters:
       - type: string
@@ -315,7 +441,80 @@ paths:
     get:
       summary: Your GET endpoint
       tags: []
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  libelle:
+                    type: string
+                  vision360:
+                    type: boolean
+                  texte:
+                    type: string
+                  keyword:
+                    type: array
+                    items:
+                      type: string
+                  image:
+                    type: array
+                    items:
+                      type: string
+                  debut:
+                    type: string
+                  fin:
+                    type: string
+                  entite:
+                    type: array
+                    items:
+                      type: string
+                  canaux:
+                    type: array
+                    items:
+                      type: string
+                  priorite:
+                    type: integer
+                  encart:
+                    type: object
+                    properties:
+                      federation:
+                        type: boolean
+                      agence:
+                        type: string
+                      listeClients:
+                        type: array
+                        items:
+                          type: string
+              examples:
+                example-1:
+                  value:
+                    id: abcdef123456
+                    libelle: example-1
+                    vision360: true
+                    texte: "Messade de type bulle d'exemple pour le get"
+                    keyword:
+                      - api
+                      - esigelec
+                      - ping
+                    image:
+                      - '? champ à compléteer pour le moment'
+                    debut: 8/11/2019
+                    fin: 8/12/2020
+                    entite: '01'
+                    canaux: WEB
+                    priorite: 5
+                    encart:
+                      federation: true
+                      agence: agence de rouen
+                      listeClients:
+                        id:
+                          - 1
+                          - 20
+                          - 25
+                          - 30
     put:
       summary: ''
       responses:
@@ -323,5 +522,77 @@ paths:
           description: OK
       description: |
         Put bulle message with id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                libelle:
+                  type: string
+                vision360:
+                  type: boolean
+                texte:
+                  type: string
+                keywords:
+                  type: array
+                  items:
+                    type: string
+                image:
+                  type: array
+                  items:
+                    type: string
+                debut:
+                  type: string
+                fin:
+                  type: string
+                entite:
+                  type: array
+                  items:
+                    type: integer
+                canaux:
+                  type: array
+                  items:
+                    type: integer
+                priorite:
+                  type: integer
+                encart:
+                  type: object
+                  properties:
+                    federation:
+                      type: boolean
+                    agence:
+                      type: string
+                    listeClients:
+                      type: array
+                      items:
+                        type: string
+            examples:
+              example-1:
+                value:
+                  libelle: example-1
+                  vision360: true
+                  texte: "Messade de type bulle d'exemple pour l'update "
+                  keyword:
+                    - api
+                    - esigelec
+                    - ping
+                  image:
+                    - '? champ à complété pour le moment'
+                  debut: 8/11/2019
+                  fin: 8/12/2020
+                  entite: '01'
+                  canaux: WEB
+                  priorite: 5
+                  encart:
+                    federation: true
+                    agence: agence de rouen
+                    listeClients:
+                      id:
+                        - 1
+                        - 20
+                        - 25
+                        - 30
+        description: ''
 components:
   schemas: {}
