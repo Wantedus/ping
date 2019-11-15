@@ -48,8 +48,6 @@ paths:
                     type: array
                     items:
                       type: string
-                  priorite:
-                    type: integer
                   encart:
                     type: object
                     properties:
@@ -61,6 +59,8 @@ paths:
                         type: array
                         items:
                           type: string
+                  libMesClient:
+                    type: string
               examples:
                 example-1:
                   value:
@@ -78,7 +78,7 @@ paths:
                     fin: 8/12/2020
                     entite: '01'
                     canaux: WEB
-                    priorite: 5
+                    libMesClient: Votre conseiller vous informe
                     encart:
                       federation: true
                       agence: agence de rouen
