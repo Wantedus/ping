@@ -26,6 +26,54 @@ paths:
               properties:
                 libelle:
                   type: string
+                vision360:
+                  type: boolean
+                texte:
+                  type: string
+                keyword:
+                  type: array
+                  items:
+                    type: string
+                image:
+                  type: array
+                  items:
+                    type: string
+                debut:
+                  type: string
+                  format: date
+                fin:
+                  type: string
+                  format: date
+                entite:
+                  type: array
+                  items:
+                    type: integer
+                cannaux:
+                  type: array
+                  items:
+                    type: string
+                priorite:
+                  type: integer
+                encart:
+                  type: object
+                  properties:
+                    federation:
+                      type: boolean
+                    agence:
+                      type: string
+                    listeClients:
+                      type: array
+                      items:
+                        type: string
+              required:
+                - libelle
+                - vision360
+                - texte
+                - debut
+                - entite
+                - cannaux
+            examples:
+              example-1: {}
     parameters: []
   /message/bulle:
     get:
@@ -213,6 +261,51 @@ paths:
         '201':
           description: Created
       description: Put with ID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                libelle:
+                  type: string
+                vision360:
+                  type: boolean
+                texte:
+                  type: string
+                keyword:
+                  type: array
+                  items:
+                    type: string
+                image:
+                  type: array
+                  items:
+                    type: string
+                debut:
+                  type: string
+                fin:
+                  type: string
+                entite:
+                  type: array
+                  items:
+                    type: integer
+                canaux:
+                  type: array
+                  items:
+                    type: integer
+                priorite:
+                  type: string
+                encart:
+                  type: object
+                  properties:
+                    federation:
+                      type: boolean
+                    agence:
+                      type: string
+                    listeClients:
+                      type: array
+                      items:
+                        type: string
   '/message/bulle/{id}':
     parameters:
       - type: string
