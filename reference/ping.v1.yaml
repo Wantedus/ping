@@ -227,11 +227,13 @@ paths:
                   type: array
                   items:
                     type: string
+
                 start:
                   type: string
                 end:
                   type: string
                 entity:
+
                   type: array
                   items:
                     type: integer
@@ -286,6 +288,7 @@ paths:
                     federation: true
                     agence: agence de rouen
                     listeClients:
+
                       id:
                         - 1
                         - 20
@@ -316,5 +319,6 @@ paths:
       description: Get message by type
       requestBody:
         description: ''
+
 components:
   schemas: {}
