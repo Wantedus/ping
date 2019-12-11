@@ -5,11 +5,7 @@ info:
 servers:
   - url: 'http://localhost:3000'
 paths:
-  /message/information:
-    get:
-      summary: Your GET endpoint
-      tags: []
-      responses: {}
+  /message:
     post:
       summary: ''
       responses:
@@ -22,76 +18,199 @@ paths:
             schema:
               type: object
               properties:
-                libelle:
+                wording:
                   type: string
-  /message/bulle:
+                vision360:
+                  type: boolean
+                text:
+                  type: string
+                keywords:
+                  type: array
+                  items:
+                    type: string
+                start:
+                  type: string
+                  format: date
+                end:
+                  type: string
+                  format: date
+                entity:
+                  type: array
+                  items:
+                    type: integer
+                canals:
+                  type: array
+                  items:
+                    type: string
+                priority:
+                  type: integer
+                target:
+                  type: object
+                  properties:
+                    federation:
+                      type: boolean
+                    agency:
+                      type: string
+                    clientList:
+                      type: array
+                      items:
+                        type: string
+                    targetType:
+                      type: string
+                      enum:
+                        - federation
+                        - agency
+                        - clientList
+                type:
+                  type: string
+                  enum:
+                    - bulle
+                    - information
+                id:
+                  type: integer
+              required:
+                - wording
+                - vision360
+                - text
+                - start
+                - entity
+                - canals
+            examples:
+              example-1:
+                value:
+                  type: information
+                  id: 1
+                  wording: example-1
+                  vision360: true
+                  texte: "Message de type information d'exemple "
+                  keywords:
+                    - api
+                    - esigelec
+                    - ping
+                  start: 8/11/2019
+                  end: 8/12/2020
+                  entity: '01'
+                  canal: WEB
+                  priority: 5
+                  target:
+                    targetType: federation
+                    federation: true
+                    agence: agence de rouen
+                    listeClients:
+                      id:
+                        - 1
+                        - 20
+                        - 25
+                        - 30
+    parameters: []
+    get:
+      summary: ''
+      operationId: get-message
+      responses:
+        '200':
+          description: OK
+      description: Get a list of message
+  '/message/{id}':
+    parameters:
+      - type: string
+        name: id
+        in: path
+        required: true
     get:
       summary: Your GET endpoint
       tags: []
       responses:
         '200':
           description: OK
-        '206':
-          description: Partial Content
-          headers:
-            Link:
-              schema:
-                type: string
-              description: Le lien
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  url:
+                  id:
                     type: string
-                  rel:
+                  wording:
+                    type: string
+                  vision360:
+                    type: boolean
+                  text:
+                    type: string
+                  keywords:
+                    type: array
+                    items:
+                      type: string
+                  start:
+                    type: string
+                    format: date
+                  end:
+                    type: string
+                    format: date
+                  entity:
+                    type: array
+                    items:
+                      type: string
+                  canals:
+                    type: array
+                    items:
+                      type: string
+                  priority:
+                    type: integer
+                  target:
+                    type: object
+                    properties:
+                      federation:
+                        type: boolean
+                      agency:
+                        type: string
+                      clientList:
+                        type: array
+                        items:
+                          type: string
+                      targetType:
+                        type: string
+                        enum:
+                          - federation
+                          - agency
+                          - clientType
+                  type:
                     type: string
                     enum:
-                      - first
-                      - last
-                      - prev
-                      - next
-              examples: {}
-        '400':
-          description: Bad Request
-          headers: {}
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  reason:
-                    type: string
-      requestBody: {}
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: range
-          description: la dimension
-        - schema:
-            type: string
-          in: header
-          name: Content-Range
-          description: |-
-            offset - limit / count
-            offset: the index of the first element returned by the query.
-            limit: The index of the last element returned by the query.
-            count: the total number of items in the collection.
-        - schema:
-            type: string
-          in: header
-          name: Accept-Range
-          description: |-
-            resource max
-            resource: the type of the pagination (resource in use), ex: customer, order, account, ...
-            max: the maximum number that can be requested at one time.
-    post:
+                      - information
+                      - bulle
+              examples:
+                example-1:
+                  value:
+                    id: 123456abcdef
+                    libelle: example-1
+                    vision360: true
+                    texte: "Messade de type information d'exemple pour l'update"
+                    keyword:
+                      - api
+                      - esigelec
+                      - ping
+                    image:
+                      - '? champ à compléteer pour le moment'
+                    debut: 8/11/2019
+                    fin: 8/12/2020
+                    entite: '01'
+                    canaux: WEB
+                    priorite: 5
+                    encart:
+                      federation: true
+                      agence: agence de rouen
+                      listeClients:
+                        id:
+                          - 1
+                          - 20
+                          - 25
+                          - 30
+      description: Get message by id
+    put:
       summary: ''
       responses:
-        '200':
-          description: OK
+        '201':
+          description: Created
+      description: Put with ID
       requestBody:
         content:
           application/json:
@@ -104,92 +223,102 @@ paths:
                   type: boolean
                 text:
                   type: string
-                keyword:
+                keywords:
                   type: array
                   items:
                     type: string
-                picture:
-                  type: array
-                  uniqueItems: true
-                  items:
-                    type: string
-                begin:
-                  type: object
-                  format: date
-                  example: 8/11/2019
-                  required:
-                    - day
-                    - month
-                    - year
-                  properties:
-                    day:
-                      type: integer
-                    month:
-                      type: integer
-                    year:
-                      type: integer
+
+                start:
+                  type: string
                 end:
-                  type: object
-                  example: 8/12/2020
-                  properties:
-                    day:
-                      type: integer
-                      minimum: 1
-                      maximum: 31
-                    month:
-                      type: integer
-                      minimum: 1
-                      maximum: 12
-                    year:
-                      type: integer
-                entite:
+                  type: string
+                entity:
+
                   type: array
-                  enum:
-                    - '01'
-                    - '02'
-                    - '03'
-                    - 8
-                    - '70'
                   items:
                     type: integer
-                canaux:
+                canals:
                   type: array
-                  enum:
-                    - WEB
-                    - GAB
-                    - RWD
-                  items:
-                    type: string
-                priorite:
-                  type: array
-                  description: "Si GAB est sélectionné avec plusieurs messages, c'est obligatoire"
                   items:
                     type: integer
-                encart:
+                priority:
+                  type: string
+                target:
                   type: object
-                  description: "si une seule entité de fédération sélectionnée, l'encart apparaît"
                   properties:
                     federation:
                       type: boolean
-                    agence:
-                      type: boolean
-                    listeClients:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                          maximum: 20000
-                        client:
-                          type: string
-              required:
-                - wording
-                - vision360
-                - text
-                - begin
-                - entite
-                - canaux
+                    agency:
+                      type: string
+                    clientList:
+                      type: array
+                      items:
+                        type: string
+                    targetType:
+                      type: string
+                      enum:
+                        - federation
+                        - agency
+                        - clientList
+                id:
+                  type: integer
+                type:
+                  type: string
+                  enum:
+                    - information
+                    - bulle
             examples:
-              example-1: {}
-        description: Créer un message bulle
+              example-1:
+                value:
+                  libelle: example-1
+                  vision360: true
+                  texte: "Messade de type information d'exemple pour l'update"
+                  keyword:
+                    - api
+                    - esigelec
+                    - ping
+                  image:
+                    - '? champ à compléteer pour le moment'
+                  debut: 8/11/2019
+                  fin: 8/12/2020
+                  entite: '01'
+                  canaux: WEB
+                  priorite: 5
+                  encart:
+                    federation: true
+                    agence: agence de rouen
+                    listeClients:
+
+                      id:
+                        - 1
+                        - 20
+                        - 25
+                        - 30
+  '/message/{type}':
+    parameters:
+      - type: string
+        name: type
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: 'OK '
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  type:
+                    type: string
+      operationId: 'get-message-{type}'
+      description: Get message by type
+      requestBody:
+        description: ''
+
 components:
   schemas: {}
