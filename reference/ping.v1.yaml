@@ -98,49 +98,49 @@ paths:
             schema:
               type: object
               properties:
-                libelle:
+                wording:
                   type: string
                 vision360:
                   type: boolean
-                texte:
+                text:
                   type: string
                 keyword:
                   type: array
                   items:
                     type: string
-                image:
+                picture:
                   type: array
                   uniqueItems: true
                   items:
                     type: string
-                debut:
+                begin:
                   type: object
                   format: date
                   example: 8/11/2019
                   required:
-                    - jour
-                    - mois
-                    - annee
+                    - day
+                    - month
+                    - year
                   properties:
-                    jour:
+                    day:
                       type: integer
-                    mois:
+                    month:
                       type: integer
-                    annee:
+                    year:
                       type: integer
-                fin:
+                end:
                   type: object
                   example: 8/12/2020
                   properties:
-                    jour:
+                    day:
                       type: integer
                       minimum: 1
                       maximum: 31
-                    mois:
+                    month:
                       type: integer
                       minimum: 1
                       maximum: 12
-                    annee:
+                    year:
                       type: integer
                 entite:
                   type: array
@@ -182,12 +182,14 @@ paths:
                         client:
                           type: string
               required:
-                - libelle
+                - wording
                 - vision360
-                - texte
-                - debut
+                - text
+                - begin
                 - entite
                 - canaux
+            examples:
+              example-1: {}
         description: Créer un message bulle
 components:
   schemas: {}
