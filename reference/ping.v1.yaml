@@ -5,6 +5,201 @@ info:
 servers:
   - url: 'http://localhost:3000'
 paths:
+  /message:
+    post:
+      summary: ''
+      responses:
+        '200':
+          description: ID du message créé
+      description: ''
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                wording:
+                  type: string
+                vision360:
+                  type: boolean
+                text:
+                  type: string
+                keywords:
+                  type: array
+                  items:
+                    type: string
+                start:
+                  type: string
+                  format: date
+                end:
+                  type: string
+                  format: date
+                entity:
+                  type: array
+                  items:
+                    type: integer
+                canals:
+                  type: array
+                  items:
+                    type: string
+                priority:
+                  type: integer
+                target:
+                  type: object
+                  properties:
+                    federation:
+                      type: boolean
+                    agency:
+                      type: string
+                    clientList:
+                      type: array
+                      items:
+                        type: string
+                    targetType:
+                      type: string
+                      enum:
+                        - federation
+                        - agency
+                        - clientList
+                type:
+                  type: string
+                  enum:
+                    - bulle
+                    - information
+                id:
+                  type: integer
+              required:
+                - wording
+                - vision360
+                - text
+                - start
+                - entity
+                - canals
+            examples:
+              example-1:
+                value:
+                  type: information
+                  id: 1
+                  wording: example-1
+                  vision360: true
+                  texte: "Message de type information d'exemple "
+                  keywords:
+                    - api
+                    - esigelec
+                    - ping
+                  start: 8/11/2019
+                  end: 8/12/2020
+                  entity: '01'
+                  canal: WEB
+                  priority: 5
+                  target:
+                    targetType: federation
+                    federation: true
+                    agence: agence de rouen
+                    listeClients:
+                      id:
+                        - 1
+                        - 20
+                        - 25
+                        - 30
+      operationId: ''
+    parameters: []
+    get:
+      summary: ''
+      operationId: get-message
+      responses:
+        '200':
+          description: OK
+        '':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messageList:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        type:
+                          type: string
+                          enum:
+                            - information
+                            - bulle
+                        wording:
+                          type: string
+                        vision360:
+                          type: boolean
+                        text:
+                          type: string
+                        keywords:
+                          type: array
+                          items:
+                            type: string
+                        canals:
+                          type: array
+                          items:
+                            type: string
+                        priority:
+                          type: integer
+                        target:
+                          type: object
+                          properties:
+                            federation:
+                              type: boolean
+                            agency:
+                              type: string
+                            clientList:
+                              type: array
+                              items:
+                                type: string
+                        start:
+                          type: string
+                          format: date
+                        end:
+                          type: string
+                        entity:
+                          type: array
+                          items:
+                            type: integer
+                      required:
+                        - id
+                        - type
+                        - wording
+                        - vision360
+                        - text
+                        - start
+      description: Get a list of message
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: type
+          description: Get message by type
+        - schema:
+            type: string
+          in: query
+          name: range
+          description: Get message with a range
+        - schema:
+            type: string
+          in: query
+          name: wording
+          description: Get message by its wording
+        - schema:
+            type: string
+          in: query
+          name: entity
+          description: Get message by entity
+        - schema:
+            type: string
+          in: query
+          name: keyword
+          description: Get message by keyword
+      requestBody: {}
   '/message/{id}':
     parameters:
       - type: string
@@ -186,199 +381,5 @@ paths:
                         - 20
                         - 25
                         - 30
-  /message:
-    post:
-      summary: ''
-      responses:
-        '200':
-          description: OK
-      description: ''
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                wording:
-                  type: string
-                vision360:
-                  type: boolean
-                text:
-                  type: string
-                keywords:
-                  type: array
-                  items:
-                    type: string
-                start:
-                  type: string
-                  format: date
-                end:
-                  type: string
-                  format: date
-                entity:
-                  type: array
-                  items:
-                    type: integer
-                canals:
-                  type: array
-                  items:
-                    type: string
-                priority:
-                  type: integer
-                target:
-                  type: object
-                  properties:
-                    federation:
-                      type: boolean
-                    agency:
-                      type: string
-                    clientList:
-                      type: array
-                      items:
-                        type: string
-                    targetType:
-                      type: string
-                      enum:
-                        - federation
-                        - agency
-                        - clientList
-                type:
-                  type: string
-                  enum:
-                    - bulle
-                    - information
-                id:
-                  type: integer
-              required:
-                - wording
-                - vision360
-                - text
-                - start
-                - entity
-                - canals
-            examples:
-              example-1:
-                value:
-                  type: information
-                  id: 1
-                  wording: example-1
-                  vision360: true
-                  texte: "Message de type information d'exemple "
-                  keywords:
-                    - api
-                    - esigelec
-                    - ping
-                  start: 8/11/2019
-                  end: 8/12/2020
-                  entity: '01'
-                  canal: WEB
-                  priority: 5
-                  target:
-                    targetType: federation
-                    federation: true
-                    agence: agence de rouen
-                    listeClients:
-                      id:
-                        - 1
-                        - 20
-                        - 25
-                        - 30
-    parameters: []
-    get:
-      summary: ''
-      operationId: get-message
-      responses:
-        '200':
-          description: OK
-        '':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  messageList:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                        type:
-                          type: string
-                          enum:
-                            - information
-                            - bulle
-                        wording:
-                          type: string
-                        vision360:
-                          type: boolean
-                        text:
-                          type: string
-                        keywords:
-                          type: array
-                          items:
-                            type: string
-                        canals:
-                          type: array
-                          items:
-                            type: string
-                        priority:
-                          type: integer
-                        target:
-                          type: object
-                          properties:
-                            federation:
-                              type: boolean
-                            agency:
-                              type: string
-                            clientList:
-                              type: array
-                              items:
-                                type: string
-                        start:
-                          type: string
-                          format: date
-                        end:
-                          type: string
-                        entity:
-                          type: array
-                          items:
-                            type: integer
-                      required:
-                        - id
-                        - type
-                        - wording
-                        - vision360
-                        - text
-                        - start
-      description: Get a list of message
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: type
-          description: Get message by type
-        - schema:
-            type: string
-          in: query
-          name: range
-          description: Get message with a range
-        - schema:
-            type: string
-          in: query
-          name: wording
-          description: Get message by its wording
-        - schema:
-            type: string
-          in: query
-          name: entity
-          description: Get message by entity
-        - schema:
-            type: string
-          in: query
-          name: keyword
-          description: Get message by keyword
-      requestBody: {}
 components:
   schemas: {}
