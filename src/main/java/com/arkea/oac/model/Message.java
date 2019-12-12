@@ -6,12 +6,12 @@ import java.util.List;
 
 public class Message {
 	
+	private String id;
 	private String type;//bulle ou message
 	private String wording ;
 	private boolean vision360;
 	private String text;
 	private List<String> keywords = new ArrayList<>();
-	private List<String> images = new ArrayList<>();
 	private Date start;
 	private Date end;
 	private List<Integer> entity = new ArrayList<Integer>();
@@ -22,16 +22,15 @@ public class Message {
 	
 	
 
-	public Message(String type, String wording, boolean vision360, String text, List<String> keywords,
-			List<String> images, Date start, Date end, List<Integer> entity, List<String> canals, int priority,
-			Target t) {
+		public Message(String id, String type, String wording, boolean vision360, String text, List<String> keywords,
+			Date start, Date end, List<Integer> entity, List<String> canals, int priority, Target t) {
 		super();
+		this.id = id;
 		this.type = type;
 		this.wording = wording;
 		this.vision360 = vision360;
 		this.text = text;
 		this.keywords = keywords;
-		this.images = images;
 		this.start = start;
 		this.end = end;
 		this.entity = entity;
@@ -39,9 +38,16 @@ public class Message {
 		this.priority = priority;
 		this.t = t;
 	}
-	
+		
+
 	public Message() {
 				
+	}
+
+	public Message(String text) {
+		// TODO Auto-generated constructor stub
+		//returns a tests message 
+		this.type = text;
 	}
 
 	public String getType() {
@@ -84,13 +90,6 @@ public class Message {
 		this.keywords = keywords;
 	}
 
-	public List<String> getImages() {
-		return images;
-	}
-
-	public void setImages(List<String> images) {
-		this.images = images;
-	}
 
 	public Date getStart() {
 		return start;
@@ -138,6 +137,14 @@ public class Message {
 
 	public void setT(Target t) {
 		this.t = t;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 	
 	
