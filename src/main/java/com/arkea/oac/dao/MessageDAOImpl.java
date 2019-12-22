@@ -40,24 +40,25 @@ private static java.sql.Connection con;
 		
 		
 		String sql = "INSERT INTO t90_msg(CD_EFS,LIB_TY_MES,TXT_LIB_MES,"
- 		+ "LIB_MES_CNS,CD_PRTY_MES,DUR_VIE_MES,IDT_UTI, TXT_MES_CTU) VALUES (?, ?, ?,?,?,?,?,?)";
+ 		+ "LIB_MES_CNS,CD_PRTY_MES,DUR_VIE_MES,IDT_UTI,NB_AFG_MAX, TXT_MES_CTU) VALUES (?, ?, ?,?,?,?,?,?,?)";
 		
 		 try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS))
 	        {
-			    ps.setInt(1,34);
-			    //ps.setInt(2,null);
-			    ps.setString(2,m.getType());
-	        	ps.setString(3,m.getWording());
-	        	if(m.getType().equals("BULLE_CONSEILLER")) {
-	        		ps.setString(4,"BULLE_CONSEILLER");
+			    ps.setInt(1,34); //CD_EFS
+			   
+			    ps.setString(2,m.getType()); //LIB_TY_MES
+	        	ps.setString(3,m.getWording()); //TXT_LIB_MES
+	        	if(m.getType().equals("BULLE_CONSEILLER")) { 
+	        		ps.setString(4,"Votre conseiller vous informe");  //LIB_MES_CNS
 	        	}
 	        	else {
-	        		ps.setString(4,null	);
+	        		ps.setString(4,null	); 
 	        	}
-	        	ps.setInt(5,m.getPriority());
-	        	ps.setInt(6,0);
-	        	ps.setString(7,"thomas");
-	        	ps.setString(8,m.getText());
+	        	ps.setInt(5,m.getPriority()); //CD_PRTY_MES
+	        	ps.setInt(6,0); //DUR_VIE_MES
+	        	ps.setString(7,"thomas"); //IDT_UTI
+	        	ps.setInt(8,0); //NB_AFG_MAX 
+	        	ps.setString(9,m.getText()); //TXT_MES_CTU
 	        	
 	        	int rowAffected =ps.executeUpdate();
 	            if(rowAffected == 1)
@@ -78,7 +79,7 @@ private static java.sql.Connection con;
 	@Override
 	public Message getMessage(int id) {
 		// Method to get a message based on its ID
-		System.out.println("enter getMessage fonction");
+		System.out.println("Get message with id : " +id);
 		try(java.sql.PreparedStatement ps = getInstance().prepareStatement("SELECT *	 FROM t90_msg WHERE IDT_MES_DWB = ?"))
 		{
 			
@@ -86,7 +87,7 @@ private static java.sql.Connection con;
             ResultSet r =  ps.executeQuery();
             if(r.next() )
             	
-                return new Message(r.getString(3));
+                return new Message(r.getString(1), r.getString(3));
         }
         catch (Exception e)
 		{

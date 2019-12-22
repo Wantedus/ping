@@ -40,15 +40,14 @@ public class Message {
 	}
 		
 
-	public Message() {
-				
-	}
-
-	public Message(String text) {
-		// TODO Auto-generated constructor stub
+	public Message(String id, String text) {
+	
 		//returns a tests message 
+		this.id=id;
 		this.type = text;
 	}
+
+
 
 	public String getType() {
 		return type;
