@@ -22,6 +22,9 @@ public class Target {
 		this.target_type = defineTargetType(federation, agency, client_list);
 	}
 
+	public Target(String targetType) {
+		this.target_type = targetType;
+	}
 
 	public boolean isFederation() {
 		return this.federation;
@@ -53,11 +56,14 @@ public class Target {
 
 	public String defineTargetType (boolean federation, boolean agency, List<String> client_list) {
 		if (federation)
-			return "federation";
+//			Federation
+			return "F"; 
 		else if (agency)
-			return "agency";
+//			Agency
+			return "S";
 		else 
-			return "clients";
+//			Clients
+			return "C";
 	}
 	
 }

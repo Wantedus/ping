@@ -20,10 +20,9 @@ public class Message {
 	
 	private Target t;
 	
-	
 
-		public Message(String id, String type, String wording, boolean vision360, String text, List<String> keywords,
-			Date start, Date end, List<Integer> entity, List<String> canals, int priority, Target t) {
+	public Message(String id, String type, String wording, boolean vision360, String text, List<String> keywords,
+		Date start, Date end, List<Integer> entity, List<String> canals, int priority, Target t) {
 		super();
 		this.id = id;
 		this.type = type;
@@ -46,7 +45,6 @@ public class Message {
 		this.id=id;
 		this.type = text;
 	}
-
 
 
 	public String getType() {
