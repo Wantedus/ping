@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,6 +38,31 @@ public class MessageController {
 		
 		
 		return new ResponseEntity<Integer>(id, HttpStatus.CREATED);
+		
+	}
+	
+	@PutMapping(value = "/message/{id}")
+	public Message putMessage(@RequestBody Message m,@PathVariable int id) {
+		
+	
+		
+		Message updatedMessage =messageDAOImpl.getMessage(id);
+		
+		updatedMessage.setCanals(m.getCanals());
+		updatedMessage.setEnd(m.getEnd());
+		updatedMessage.setEntity(m.getEntity());
+		updatedMessage.setKeywords(m.getKeywords());
+		updatedMessage.setPriority(m.getPriority());
+		updatedMessage.setStart(m.getStart());
+		updatedMessage.setT(m.getT());
+		updatedMessage.setText(m.getText());
+		updatedMessage.setType(m.getType());
+		updatedMessage.setVision360(m.isVision360());
+		updatedMessage.setWording(m.getWording());
+		
+		messageDAOImpl.updateMessage(id, updatedMessage);
+		
+		return messageDAOImpl.getMessage(id);
 		
 	}
 	

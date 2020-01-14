@@ -10,4 +10,6 @@ public interface MessageDAO {
 	public int createMessage(Message m);
 	
 	public Message getMessage(int id);
+	
+	public int updateMessage(int id,Message m);
 }
