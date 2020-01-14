@@ -21,6 +21,11 @@ public class Message {
 	private Target t;
 	
 
+	public Message() {
+	
+	}
+
+
 	public Message(String id, String type, String wording, boolean vision360, String text, List<String> keywords,
 		Date start, Date end, List<Integer> entity, List<String> canals, int priority, Target t) {
 		super();
