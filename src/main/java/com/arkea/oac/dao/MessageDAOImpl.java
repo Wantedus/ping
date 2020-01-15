@@ -537,34 +537,49 @@ private static String url = "jdbc:mysql://localhost:8889/ping?serverTimezone=UTC
             	if ( !canaux.contains(r.getString(35)) ) 
             		canaux.add(r.getString(35));
             	
-            	// La valeur temporaire 
+            	// La valeur temporaire du canal
             	tmp = r.getString(35);
             	
+            	// Vérifier si le canal est null
             	if (tmp != null) {
-            		if (tmp.equals("GAB") && tmp != null) {
+            		// Vérifier si le canal est GAB
+            		if (tmp.equals("GAB")) {
                 		tmp = r.getString(36);
             			priorityGAB = r.getInt(36);
                 	}
             	}
             	
+            	// Vérifier si la liste des mots clés contient un élément pareil
             	if ( !keywords.contains(r.getString(38)) )
             		keywords.add(r.getString(38));
             	
+            	// Vérifier si le type de la cible est null
             	if(r.getString(22) !=null) {
+            		
+            		// Vérifier si le type de la cible est de la liste des clients
             		if (targetType.equals("C")) {
+            			// Mettre la federation en false
                 		federation=false;
+                		// Mettre l'agence en false
                 		agency=false;
-                		// Add list of clients PM, PP
+                		
+                		// Add list of clients
                 		if ( NO_PSE.contains(r.getString(46)) && !tmp.equals(r.getString(49))) {
+                			//la valeur temporaire du client
                     		tmp = r.getString(49);
+                    		// Ajouter le PP
                     		client += tmp;
+                    		// Ajouter le PP/PM dans la liste de client
                     		clients.add(client);
                     		
                     	} else if ( !NO_PSE.contains(r.getString(46))){
+                    		// Add client PP
                     		NO_PSE.add(r.getString(46));
+                    		// La valeur temporaire du Client PP
                     		tmp = r.getString(49);
                     		client = tmp + ",";
                     	}
+         
                 	} else if (targetType.equals("F")) {
                 		federation=true;
                 		agency=false;
@@ -581,7 +596,8 @@ private static String url = "jdbc:mysql://localhost:8889/ping?serverTimezone=UTC
             ps.close();
             
             return new Message(identity, type, wording, vision360, text, keywords, start, end, entities, canaux, priority, priorityGAB, t);
-        }
+        
+		}
         catch (Exception e)
 		{
             e.printStackTrace();
