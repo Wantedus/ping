@@ -20,8 +20,8 @@ public class  MessageDAOImpl implements MessageDAO {
 private static java.sql.Connection con;
     
 private static String user = "root";
-private static String mdp = "";
-private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
+private static String mdp = "root";
+private static String url = "jdbc:mysql://localhost:8889/ping?serverTimezone=UTC";
     
     
     public static java.sql.Connection getInstance(){
@@ -229,7 +229,7 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 	        {
 	            e.printStackTrace();
 	        }
-		 //Ajouter les différents clients en aprsant le fichier envoyé
+		 //Ajouter les diffï¿½rents clients en aprsant le fichier envoyï¿½
 		 /*
 		 String sqlVar = "INSERT INTO t90_var(CD_EFS_PUB,CD_EFS_PSE,NO_PSE_MAL,IDT_PUB,NO_PSE,IDT_CTB_CTU,CD_CHP,LIB_CHP)"
 			 		+ " VALUES (?,?,?,?,?)";
@@ -263,6 +263,7 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 		 
 		return  generatedId;
 	}
+
 
 	public int updateMessage(int id, Message m) { //Fonctionne pour les champs simple (pas les lise, ni le target)
 		
@@ -410,7 +411,30 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 		
 		
 	}
-	
+
+	@Override 
+	public ArrayList<Message> getAllMessage() {
+		int identity;
+		Message m = new Message();
+		ArrayList<Message> mMessageList = new ArrayList<>(); 
+		
+		try(java.sql.PreparedStatement ps = getInstance().prepareStatement("SELECT IDT_MES_DWB FROM t90_msg "))
+		{
+			ResultSet r = ps.executeQuery();
+			
+			while (r.next()) {
+				identity = r.getInt(1);
+				m = getMessage(identity);
+				mMessageList.add(m);
+			}
+			
+			return mMessageList;
+		}catch (Exception e)
+		{
+            e.printStackTrace();
+        }
+		return null;
+	}
 	
 	@Override
 	public Message getMessage(int id) {
@@ -440,8 +464,9 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
         
 		// Method to get a message based on its ID
 		System.out.println("Get message with id : " +id);
+//		try(java.sql.PreparedStatement ps )
 		try(java.sql.PreparedStatement ps = getInstance().prepareStatement("SELECT * FROM t90_msg  "
-																		+ "LEFT JOIN t90_pub ON t90_msg.IDT_MES_DWB = t90_pub.IDT_MES_DWB "
+																		+ "INNER JOIN t90_pub ON t90_msg.IDT_MES_DWB = t90_pub.IDT_MES_DWB "
 																		+ "LEFT JOIN t90_efs ON t90_pub.IDT_PUB = t90_efs.IDT_PUB "
 																		+ "LEFT JOIN t90_cnl ON t90_pub.IDT_PUB = t90_cnl.IDT_PUB "
 																		+ "LEFT JOIN t90_mot_cle ON t90_pub.IDT_MES_DWB = t90_mot_cle.IDT_MES_DWB "

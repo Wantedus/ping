@@ -1,10 +1,13 @@
 package com.arkea.oac.controller;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +34,11 @@ public class MessageController {
 		
 	}
 	
+	@GetMapping(value = "/message/all")
+	public ArrayList<Message> getAllMessage() {
+		return messageDAOImpl.getAllMessage();
+	}
+	
 	@PostMapping(value = "/message")
 	public ResponseEntity<Integer> postMessage(@RequestBody Message m) {
 		
@@ -40,7 +48,7 @@ public class MessageController {
 		return new ResponseEntity<Integer>(id, HttpStatus.CREATED);
 		
 	}
-	
+
 	@PutMapping(value = "/message/{id}")
 	public Message putMessage(@RequestBody Message m,@PathVariable int id) {
 		
@@ -65,6 +73,13 @@ public class MessageController {
 		return messageDAOImpl.getMessage(id);
 		
 	}
+	
+//	@DeleteMapping(value = "/message/{id}")
+//	public ResponseEntity<Integer> deleteMessage(@RequestBody Message m, @ PathVariable int id) {
+//		int id =messageDAOImpl.deleteMessage(m);
+//		return new ResponseEntity<Integer>(id, HttpStatus.ACCEPTED);
+//	}
+	
 	
 	
 }
