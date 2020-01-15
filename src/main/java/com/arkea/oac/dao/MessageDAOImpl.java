@@ -412,6 +412,13 @@ private static String url = "jdbc:mysql://localhost:8889/ping?serverTimezone=UTC
 		
 	}
 
+	/**
+	 * Get all messages in database
+	 * @param null
+	 * @return a list of messages
+	 * @exception exception while compiling SQL
+	 * @author YinjieZHAO
+	 */
 	@Override 
 	public ArrayList<Message> getAllMessage() {
 		int identity;
@@ -436,6 +443,13 @@ private static String url = "jdbc:mysql://localhost:8889/ping?serverTimezone=UTC
 		return null;
 	}
 	
+	
+	/**
+	 * Get message by id
+	 * @param id id du message
+	 * @return le resultat du message
+	 * @author YinjieZHAO
+	 */
 	@Override
 	public Message getMessage(int id) {
 		//In the target section
@@ -449,6 +463,9 @@ private static String url = "jdbc:mysql://localhost:8889/ping?serverTimezone=UTC
         ArrayList <String> clients = new ArrayList<>();
         ArrayList <String> NO_PSE = new ArrayList<>();
         
+        //Target
+        Target t;
+        
         // Elements
         String identity="";
         String type="";
@@ -458,39 +475,77 @@ private static String url = "jdbc:mysql://localhost:8889/ping?serverTimezone=UTC
         Date end=null;
         String targetType="";
         String client="";
+        String vision360="";
+        
+        int priority=0;
+        int priorityGAB=0;
         
         //Temporary value
         String tmp="";
         
 		// Method to get a message based on its ID
 		System.out.println("Get message with id : " +id);
-//		try(java.sql.PreparedStatement ps )
-		try(java.sql.PreparedStatement ps = getInstance().prepareStatement("SELECT * FROM t90_msg  "
-																		+ "INNER JOIN t90_pub ON t90_msg.IDT_MES_DWB = t90_pub.IDT_MES_DWB "
-																		+ "LEFT JOIN t90_efs ON t90_pub.IDT_PUB = t90_efs.IDT_PUB "
-																		+ "LEFT JOIN t90_cnl ON t90_pub.IDT_PUB = t90_cnl.IDT_PUB "
-																		+ "LEFT JOIN t90_mot_cle ON t90_pub.IDT_MES_DWB = t90_mot_cle.IDT_MES_DWB "
-																		+ "LEFT JOIN t90_var ON t90_pub.IDT_PUB = t90_var.IDT_PUB "
-																		+ "WHERE t90_msg.IDT_MES_DWB = ?"))
+		
+		String SELECT = "SELECT * FROM t90_msg  ";
+		String JOIN_t90_pub = "LEFT JOIN t90_pub ON t90_msg.IDT_MES_DWB = t90_pub.IDT_MES_DWB ";
+		String JOIN_t90_efs = "LEFT JOIN t90_efs ON t90_pub.IDT_PUB = t90_efs.IDT_PUB ";
+		String JOIN_t90_cnl = "LEFT JOIN t90_cnl ON t90_pub.IDT_PUB = t90_cnl.IDT_PUB ";
+		String JOIN_t90_mot_cle = "LEFT JOIN t90_mot_cle ON t90_pub.IDT_MES_DWB = t90_mot_cle.IDT_MES_DWB ";
+		String JOIN_t90_var = "LEFT JOIN t90_var ON t90_pub.IDT_PUB = t90_var.IDT_PUB ";
+		String WHERE_t90_var = "WHERE t90_msg.IDT_MES_DWB = ?";
+		
+		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(SELECT
+																		+ JOIN_t90_pub
+																		+ JOIN_t90_efs
+																		+ JOIN_t90_cnl
+																		+ JOIN_t90_mot_cle
+																		+ JOIN_t90_var
+																		+ WHERE_t90_var))
 		{
 			ps.setInt(1,id);
             ResultSet r =  ps.executeQuery();
             
             while(r.next() ) {
-
+            	//Identity
             	identity = r.getString(2);
+            	//Type of message
             	type = r.getString(3);
+            	// Libellé
             	wording = r.getString(3);
+            	// Texte
             	text = r.getString(4);
+            	// Vision360
+            	vision360 = r.getString(9);
+            	// Le type de la cible
             	targetType = r.getString(22);
+            	// La date début d'affichage du message
             	start = r.getDate(23);
+            	// La date fin d'affichage du message
             	end = r.getDate(24);
             	
+            	// La valeur temporaire de la priorité
+            	tmp = r.getString(6);
+            	// Vérifier si la valeur temporaire est nulle
+            	if (tmp != null)
+            		priority = Integer.parseInt(tmp);
+            	
+            	// Vérifier si la liste entité contient un élément pareil
             	if ( !entities.contains(r.getInt(32)) ) 
             		entities.add(r.getInt(32));
             	
+            	// Vérifier si la liste canal contient un élément pareil
             	if ( !canaux.contains(r.getString(35)) ) 
             		canaux.add(r.getString(35));
+            	
+            	// La valeur temporaire 
+            	tmp = r.getString(35);
+            	
+            	if (tmp != null) {
+            		if (tmp.equals("GAB") && tmp != null) {
+                		tmp = r.getString(36);
+            			priorityGAB = r.getInt(36);
+                	}
+            	}
             	
             	if ( !keywords.contains(r.getString(38)) )
             		keywords.add(r.getString(38));
@@ -519,42 +574,13 @@ private static String url = "jdbc:mysql://localhost:8889/ping?serverTimezone=UTC
                 	}
             		
             	}
-            	
-            
             } 
             
-            Target target = new Target(federation, agency, clients);
-/*            
-            System.out.println("id : " + identity);
-        	System.out.println("vision360 : ???");
-        	System.out.println("type : " + type);
-        	System.out.println("wording : " + wording);
-        	System.out.println("text : " + text);
-        	System.out.println("start : " + start);
-        	System.out.println("end : " + end);
-        	System.out.println("priority : ???");
-        	System.out.println("targetType : " + targetType);
-       	
-            for (int mEntity : entities) {
-            	System.out.println("Entity : " + mEntity);
-            }
+            t = new Target(federation, agency, clients);
             
-            for (String mCanal : canaux) {
-            	System.out.println("canal : " + mCanal);
-            }
+            ps.close();
             
-            for (String mKeyword : keywords) {
-            	System.out.println("Keyword : " + mKeyword);
-           }
-            
-            for (String mClient : clients) {
-            	System.out.println("Client : " + mClient);
-            }
- */           
-            boolean vision360=true;
-            int priority=0;
-            
-            return new Message(identity, type, wording, vision360, text, keywords, start, end, entities, canaux, priority, target);
+            return new Message(identity, type, wording, vision360, text, keywords, start, end, entities, canaux, priority, priorityGAB, t);
         }
         catch (Exception e)
 		{

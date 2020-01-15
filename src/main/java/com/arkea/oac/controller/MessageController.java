@@ -34,7 +34,7 @@ public class MessageController {
 		
 	}
 	
-	@GetMapping(value = "/message/all")
+	@GetMapping(value = "/message")
 	public ArrayList<Message> getAllMessage() {
 		return messageDAOImpl.getAllMessage();
 	}

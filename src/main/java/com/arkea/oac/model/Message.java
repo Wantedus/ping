@@ -9,7 +9,7 @@ public class Message {
 	private String id;
 	private String type;//bulle ou message
 	private String wording ;
-	private boolean vision360;
+	private String vision360;
 	private String text;
 	private List<String> keywords = new ArrayList<>();
 	private Date start;
@@ -17,6 +17,7 @@ public class Message {
 	private List<Integer> entity = new ArrayList<Integer>();
 	private List<String> canals = new ArrayList<>();
 	private int priority;
+	private int priorityGAB;
 	
 	private Target t;
 	
@@ -26,8 +27,8 @@ public class Message {
 	}
 
 
-	public Message(String id, String type, String wording, boolean vision360, String text, List<String> keywords,
-		Date start, Date end, List<Integer> entity, List<String> canals, int priority, Target t) {
+	public Message(String id, String type, String wording, String vision360, String text, List<String> keywords,
+		Date start, Date end, List<Integer> entity, List<String> canals, int priority, int priorityGAB, Target t) {
 		super();
 		this.id = id;
 		this.type = type;
@@ -40,6 +41,7 @@ public class Message {
 		this.entity = entity;
 		this.canals = canals;
 		this.priority = priority;
+		this.priorityGAB = priorityGAB;
 		this.t = t;
 	}
 		
@@ -68,11 +70,11 @@ public class Message {
 		this.wording = wording;
 	}
 
-	public boolean isVision360() {
+	public String isVision360() {
 		return vision360;
 	}
 
-	public void setVision360(boolean vision360) {
+	public void setVision360(String vision360) {
 		this.vision360 = vision360;
 	}
 
@@ -131,6 +133,14 @@ public class Message {
 
 	public void setPriority(int priority) {
 		this.priority = priority;
+	}
+	
+	public int getPriorityGAB() {
+		return priorityGAB;
+	}
+	
+	public void setPriorityGAB(int priorityGAB) {
+		this.priorityGAB = priorityGAB;
 	}
 
 	public Target getT() {
