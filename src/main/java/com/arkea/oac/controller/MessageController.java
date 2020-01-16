@@ -54,7 +54,7 @@ public class MessageController {
 	public Message putMessage(@RequestBody Message m,@PathVariable int id) {
 		
 	
-		
+		/*
 		Message updatedMessage =messageDAOImpl.getMessage(id);
 		
 		updatedMessage.setCanals(m.getCanals());
@@ -68,8 +68,9 @@ public class MessageController {
 		updatedMessage.setType(m.getType());
 		updatedMessage.setVision360(m.isVision360());
 		updatedMessage.setWording(m.getWording());
-		
-		messageDAOImpl.updateMessage(id, updatedMessage);
+		*/
+		;
+		messageDAOImpl.updateMessage(id, m);
 		
 		return messageDAOImpl.getMessage(id);
 		

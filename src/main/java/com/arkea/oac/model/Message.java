@@ -9,14 +9,16 @@ public class Message {
 	private String id;
 	private String type;//bulle ou message
 	private String wording ;
-	private boolean vision360;
-	private String text;
+	private String vision360;
+	private String textLib;
+	private String textMes;
 	private List<String> keywords = new ArrayList<>();
 	private Date start;
 	private Date end;
 	private List<Integer> entity = new ArrayList<Integer>();
 	private List<String> canals = new ArrayList<>();
 	private int priority;
+	private int priorityGAB;
 	
 	private Target t;
 	
@@ -26,20 +28,25 @@ public class Message {
 	}
 
 
-	public Message(String id, String type, String wording, boolean vision360, String text, List<String> keywords,
-		Date start, Date end, List<Integer> entity, List<String> canals, int priority, Target t) {
+	
+
+
+	public Message(String id, String type, String wording, String vision360, String textLib, List<String> keywords,
+		Date start, Date end, List<Integer> entity, List<String> canals, int priority, int priorityGAB, Target t, String textMes) {
 		super();
 		this.id = id;
 		this.type = type;
 		this.wording = wording;
 		this.vision360 = vision360;
-		this.text = text;
+		this.textLib = textLib;
+		this.textMes = textMes;
 		this.keywords = keywords;
 		this.start = start;
 		this.end = end;
 		this.entity = entity;
 		this.canals = canals;
 		this.priority = priority;
+		this.priorityGAB = priorityGAB;
 		this.t = t;
 	}
 		
@@ -68,20 +75,31 @@ public class Message {
 		this.wording = wording;
 	}
 
-	public boolean isVision360() {
+	public String isVision360() {
 		return vision360;
 	}
 
-	public void setVision360(boolean vision360) {
+	public void setVision360(String vision360) {
 		this.vision360 = vision360;
 	}
 
-	public String getText() {
-		return text;
+	public String getTextLib() {
+		return textLib;
 	}
 
-	public void setText(String text) {
-		this.text = text;
+
+	public void setTextLib(String textLib) {
+		this.textLib = textLib;
+	}
+
+
+	public String getTextMes() {
+		return textMes;
+	}
+
+
+	public void setTextMes(String textMes) {
+		this.textMes = textMes;
 	}
 
 	public List<String> getKeywords() {
@@ -131,6 +149,14 @@ public class Message {
 
 	public void setPriority(int priority) {
 		this.priority = priority;
+	}
+	
+	public int getPriorityGAB() {
+		return priorityGAB;
+	}
+	
+	public void setPriorityGAB(int priorityGAB) {
+		this.priorityGAB = priorityGAB;
 	}
 
 	public Target getT() {

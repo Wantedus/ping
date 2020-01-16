@@ -40,12 +40,20 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
         return con;
     }
 
+    /**
+	 * Cr�er un message 
+	 * @param Messsage
+	 * @return Id du message cr��
+	 * @exception exception while compiling SQL
+	 * @author ThomasCLISSON
+	 */
 	@Override
 	public int createMessage(Message m) {
 		
 		int generatedId = 0;
 		int generatedIdPub=0;
 		ResultSet rs;
+		int rowAffected;
 		
 		//ajout dans t90_msg
 		String sql = "INSERT INTO t90_msg(CD_EFS,LIB_TY_MES,TXT_LIB_MES,"
@@ -54,6 +62,19 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 		 String sqlPub = "INSERT INTO t90_pub(CD_EFS,CD_EFS_MES,"
 			 		+ "IDT_MES_DWB,CD_ETA_PUB,CD_TY_PUB,DA_DBT_AFG,DA_FIN_AFG, IDC_BIC,IDT_UTI,TM_STP)"
 			 		+ " VALUES (?, ?,?,?,?,?,?,?,?,?)";
+		 //dans t90_efs
+		 String sqlEfs = "INSERT INTO t90_efs(CD_EFS_PUB,IDT_PUB,CD_EFS)"
+			 		+ " VALUES (?,?,?)";
+		 //t90_cnl
+		 String sqlCnl = "INSERT INTO t90_cnl(CD_EFS_PUB,IDT_PUB,CD_CNL,NO_PRTY)"
+			 		+ " VALUES (?,?,?,?)";
+		 //t90_mc
+		 String sqlMc = "INSERT INTO t90_mot_cle(CD_EFS,TXT_CLE,IDT_MES_DWB,IDT_UTI,TM_STP)"
+			 		+ " VALUES (?,?,?,?,?)";
+		 
+		 String sqlMcDelete = "delete from t90_mot_cle where IDT_MES_DWB=?";
+		 String sqlTy = "INSERT INTO oac.T90_TY_CLI (CD_EFS, CD_ESA, IDT_MES_DWB, IDT_UTI, TM_STP)"
+		 +"VALUES (34, ?, ?, ?, ?)";
 		
 		 try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS))
 	        {
@@ -65,15 +86,15 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 	        		ps.setString(4,"Votre conseiller vous informe");  //LIB_MES_CNS
 	        	}
 	        	else {
-	        		ps.setString(4,""); 
+	        		ps.setString(4,m.getTextLib()); 
 	        	}
 	        	ps.setInt(5,m.getPriority()); //CD_PRTY_MES
 	        	ps.setInt(6,0); //DUR_VIE_MES
 	        	ps.setString(7,"thomas"); //IDT_UTI
 	        	
-	        	ps.setString(8,m.getText()); //TXT_MES_CTU
+	        	ps.setString(8,m.getTextMes()); //TXT_MES_CTU
 	        	
-	        	int rowAffected =ps.executeUpdate();
+	        	rowAffected =ps.executeUpdate();
 	            if(rowAffected == 1)
 	            {
 	            	
@@ -81,6 +102,7 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 	            	if(rs.next())
 	            	   generatedId = rs.getInt(1);
 	            }
+	            rowAffected=0;
 	        }
 	        catch (Exception e)
 	        {
@@ -118,7 +140,7 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 	        	ps.setTimestamp(10, date);
 	        	
 	        	
-	        	int rowAffected =ps.executeUpdate();
+	        	rowAffected =ps.executeUpdate();
 	            if(rowAffected == 1)
 	            {
 	            	
@@ -126,20 +148,15 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 	            	if(rs.next())
 	            	   generatedIdPub = rs.getInt(1);
 	            }
+	            rowAffected=0;
 	        }
 	        catch (Exception e)
 	        {
 	            e.printStackTrace();
 	        }
 		 
-		 String sqlEfs = "INSERT INTO t90_efs(CD_EFS_PUB,IDT_PUB,CD_EFS)"
-			 		+ " VALUES (?,?,?)";
-					/*
-					"SELECT * FROM t90_msg  "
-					+ "LEFT JOIN t90_cnl ON t90_pub.IDT_PUB = t90_cnl.IDT_PUB "
-					+ "LEFT JOIN t90_mot_cle ON t90_pub.IDT_MES_DWB = t90_mot_cle.IDT_MES_DWB "
-					+ "LEFT JOIN t90_var ON t90_pub.IDT_PUB = t90_var.IDT_PUB "
-					+ "WHERE t90_msg.IDT_MES_DWB = ?"*/
+		
+					
 		 try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlEfs))
 	        {
 			 
@@ -160,13 +177,7 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 	            e.printStackTrace();
 	        }
 		 
-		 String sqlCnl = "INSERT INTO t90_cnl(CD_EFS_PUB,IDT_PUB,CD_CNL,NO_PRTY)"
-			 		+ " VALUES (?,?,?,?)";
-					/*
-					"SELECT * FROM t90_msg  "
-					+ "LEFT JOIN t90_mot_cle ON t90_pub.IDT_MES_DWB = t90_mot_cle.IDT_MES_DWB "
-					+ "LEFT JOIN t90_var ON t90_pub.IDT_PUB = t90_var.IDT_PUB "
-					+ "WHERE t90_msg.IDT_MES_DWB = ?"*/
+			
 		 try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlCnl))
 	        {
 			 
@@ -177,7 +188,7 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 						    ps.setInt(2,generatedIdPub);
 				        	ps.setString(3,temp);
 				        	ps.setInt(4, m.getPriority());
-			 			ps.executeUpdate();
+			 			    ps.executeUpdate();
 					}
 			}
 			 	
@@ -187,12 +198,8 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 	        {
 	            e.printStackTrace();
 	        }
-		 String sqlMc = "INSERT INTO t90_mot_cle(CD_EFS,TXT_CLE,IDT_MES_DWB,IDT_UTI,TM_STP)"
-			 		+ " VALUES (?,?,?,?,?)";
-					/*
-					"SELECT * FROM t90_msg  "
-					+ "LEFT JOIN t90_var ON t90_pub.IDT_PUB = t90_var.IDT_PUB "
-					+ "WHERE t90_msg.IDT_MES_DWB = ?"*/
+		
+					
 		 try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlMc))
 	        {
 			 
@@ -217,6 +224,34 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 	        {
 	            e.printStackTrace();
 	        }
+		 /*
+		 try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlTy))
+	        {
+			 
+			 if(m.getKeywords() !=null) {
+			 		for (String temp : m.getKeywords()) {
+			 			 
+			 			   //AG, AS, PA,PR -- d�pend du fichier � l'upload ? 
+						    ps.setString(1,temp);
+						    //IDT_MES_DWB
+				        	ps.setInt(3,generatedId);
+				        	//IDT_UTI
+				        	ps.setString(4, "thomas");
+				        	//TP_STP (current timestamp)
+				        	java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
+				        	ps.setTimestamp(5, date);
+				        	
+			 			ps.executeUpdate();
+					}
+			}
+			    
+	        }
+	        catch (Exception e)
+	        {
+	            e.printStackTrace();
+	        }
+	      */  
+	        
 		 //Ajouter les diff�rents clients en aprsant le fichier envoy�
 		 /*
 		 String sqlVar = "INSERT INTO t90_var(CD_EFS_PUB,CD_EFS_PSE,NO_PSE_MAL,IDT_PUB,NO_PSE,IDT_CTB_CTU,CD_CHP,LIB_CHP)"
@@ -252,22 +287,29 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 		return  generatedId;
 	}
 
-
-	public int updateMessage(int id, Message m) { //Fonctionne pour les champs simple (pas les liste, ni le target)
+	/**
+	 * Mettre un jour message 
+	 * @param id du message, Messsage
+	 * @return Id du message modifi�
+	 * @exception exception while compiling SQL
+	 * @author ThomasCLISSON
+	 */
+	public int updateMessage(int id, Message m) { //Fonctionne pour les champs simple et keywords (pas les liste, ni le target)
 		
 		int generatedId = 0;
 		int generatedIdPub=0;
+		int rowAffected=0;
+		ResultSet rs;
 		
 		String sqlMsg = "UPDATE t90_msg SET CD_EFS = ? ,LIB_TY_MES =?,TXT_LIB_MES=?,"
-				+ "LIB_MES_CNS=?,CD_PRTY_MES=?,DUR_VIE_MES=?,NB_AFG_MX=?, TXT_MES_CTU=?"
-				+ " WHERE IDT_MES_DWB = ?";
-		//"INSERT INTO t90_msg(CD_EFS,LIB_TY_MES,TXT_LIB_MES,"
- 		//+ "LIB_MES_CNS,CD_PRTY_MES,DUR_VIE_MES,IDT_UTI,NB_AFG_MAX, TXT_MES_CTU) VALUES (?, ?, ?,?,?,?,?,?,?)";
-		//to do
+				+ "LIB_MES_CNS=?,CD_PRTY_MES=?,DUR_VIE_MES=?,NB_AFG_MX=?, TXT_MES_CTU=?";
+		
 		
 		String sqlPub  ="UPDATE t90_pub SET DA_DBT_AFG = ? ,DA_FIN_AFG =?  WHERE IDT_MES_DWB = ? ";
-		String sqlMc = "UPDATE t90_mot_cle SET TXT_CLE = ?   WHERE IDT_MES_DWB = ? ";
-		//"LEFT JOIN t90_efs ON t90_pub.IDT_PUB = t90_efs.IDT_PUB "
+		
+		String sqlMc = "INSERT INTO t90_mot_cle (CD_EFS,TXT_CLE,IDT_MES_DWB,IDT_UTI,TM_STP) values (?,?,?,?,?)  ";
+		String sqlMcD = "DELETE from t90_mot_cle WHERE IDT_MES_DWB = ? ";		
+		
 		String sqlEfsD = "DELETE from t90_efs WHERE IDT_PUB = ? ";		
 		String sqlEfsI = "INSERT into t90_efs (CD_EFS_PUB, IDT_PUB,CD_EFS) values (?,?,?)  ";		
 		
@@ -276,29 +318,34 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 			    ps.setInt(1,34); //CD_EFS
 			   
 			    ps.setString(2,m.getType()); //LIB_TY_MES
+			   
 	        	ps.setString(3,m.getWording()); //TXT_LIB_MES
 	        	if(m.getType().equals("BULLE_CONSEILLER")) { 
 	        		ps.setString(4,"Votre conseiller vous informe");  //LIB_MES_CNS
 	        	}
 	        	else {
-	        		ps.setString(4,null	); 
+	        		System.out.println(m.getTextLib());
+	        		ps.setString(4,m.getTextLib()); 
 	        	}
 	        	ps.setInt(5,m.getPriority()); //CD_PRTY_MES
 	        	ps.setInt(6,0); //DUR_VIE_MES
 	        	//ps.setString(7,"thomas"); //IDT_UTI
 	        	ps.setInt(7,0); //NB_AFG_MAX 
-	        	ps.setString(8,m.getText()); //TXT_MES_CTU
+	        	System.out.println(m.getTextMes());
+	        	ps.setString(8,m.getTextMes()); //TXT_MES_CTU
 	        	
-	        	ps.setInt(9,id); //IDT_MES_DWB
 	        	
-	        	int rowAffected =ps.executeUpdate();
+	        	
+	        	 rowAffected =ps.executeUpdate();
 	            if(rowAffected == 1)
 	            {
 	            	
-	            	ResultSet rs = ps.getGeneratedKeys();
-	            	if(rs.next())
+	            	 rs = ps.getGeneratedKeys();
+	            	 if(rs.next())
 	            	   generatedId = rs.getInt(1);
 	            }
+	            rs=null;
+	            rowAffected=0;
 	        }
 	        catch (Exception e)
 	        {
@@ -322,43 +369,62 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 				else {
 			 		ps.setDate(2, null);
 			 	}
-					   
 					
 			     	ps.setInt(3,id); //TXT_LIB_MES
-			     	int rowAffected =ps.executeUpdate();
+			     	rowAffected =ps.executeUpdate();
 		            if(rowAffected == 1)
 		            {
 		            	
-		            	ResultSet rs = ps.getGeneratedKeys();
+		            	rs = ps.getGeneratedKeys();
 		            	if(rs.next())
 		            		generatedIdPub = rs.getInt(1);
 		            }
+		            rs=null;
+		            rowAffected=0;
 	        }
 		  catch (Exception e)
 	        {
 	            e.printStackTrace();
 	        }
 		 
-		 /*
-		 try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlMc))
-	        {
-			
-			 	if(m.getKeywords()!=null) {
-			 		 ps.setString(1,  m.getKeywords().get(0) ); 
-			 	}
-			 	else {
-			 		ps.setDate(1, null);
-			 	}
-						   
-					
-			     	ps.setInt(2,id); //TXT_LIB_MES
-			     	ps.executeUpdate();
-	        }
-		  catch (Exception e)
-	        {
-	            e.printStackTrace();
-	        }
-	        */
+		 if(m.getKeywords().size()>0) {
+			 try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlMc))
+		        {	
+				
+				 	
+				 		for(String k : m.getKeywords()) {
+				 			 ps.setInt(1,  34); 
+					 		 //Mot cl�
+					 		 ps.setString(2,k);
+					 		//TXT_LIB_MES
+					 		 ps.setInt(3,id);
+					 		 ps.setString(4, "thomas");
+					 	 	java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
+					 		 ps.setTimestamp(5,  date ); 
+					 		ps.executeUpdate();
+				 		}
+				 		
+						ps.close();
+		        }
+			  catch (Exception e)
+		        {
+		            e.printStackTrace();
+		        }
+		 }
+		 else {
+			 try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlMcD))
+		        {	
+				 ps.setInt(1, id);
+						ps.executeUpdate();
+						ps.close();
+		        }
+			  catch (Exception e)
+		        {
+		            e.printStackTrace();
+		        }
+			 
+		 	}
+	        
 		/* 
 		 try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlEfsD))
 	        {
@@ -400,6 +466,13 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 		
 	}
 
+	/**
+	 * Get all messages in database
+	 * @param null
+	 * @return a list of messages
+	 * @exception exception while compiling SQL
+	 * @author YinjieZHAO
+	 */
 	@Override 
 	public ArrayList<Message> getAllMessage() {
 		int identity;
@@ -424,6 +497,13 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 		return null;
 	}
 	
+	
+	/**
+	 * Get message by id
+	 * @param id id du message
+	 * @return le resultat du message
+	 * @author YinjieZHAO
+	 */
 	@Override
 	public Message getMessage(int id) {
 		//In the target section
@@ -437,67 +517,125 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
         ArrayList <String> clients = new ArrayList<>();
         ArrayList <String> NO_PSE = new ArrayList<>();
         
+        //Target
+        Target t;
+        
         // Elements
         String identity="";
         String type="";
         String wording="";
-        String text="";
+        String textLib="";
+        String textMes="";
         Date start=null;
         Date end=null;
         String targetType="";
         String client="";
+        String vision360="";
+        
+        int priority=0;
+        int priorityGAB=0;
         
         //Temporary value
         String tmp="";
         
 		// Method to get a message based on its ID
 		System.out.println("Get message with id : " +id);
-//		try(java.sql.PreparedStatement ps )
-		try(java.sql.PreparedStatement ps = getInstance().prepareStatement("SELECT * FROM t90_msg  "
-																		+ "INNER JOIN t90_pub ON t90_msg.IDT_MES_DWB = t90_pub.IDT_MES_DWB "
-																		+ "LEFT JOIN t90_efs ON t90_pub.IDT_PUB = t90_efs.IDT_PUB "
-																		+ "LEFT JOIN t90_cnl ON t90_pub.IDT_PUB = t90_cnl.IDT_PUB "
-																		+ "LEFT JOIN t90_mot_cle ON t90_pub.IDT_MES_DWB = t90_mot_cle.IDT_MES_DWB "
-																		+ "LEFT JOIN t90_var ON t90_pub.IDT_PUB = t90_var.IDT_PUB "
-																		+ "WHERE t90_msg.IDT_MES_DWB = ?"))
+		
+		String SELECT = "SELECT * FROM t90_msg  ";
+		String JOIN_t90_pub = "LEFT JOIN t90_pub ON t90_msg.IDT_MES_DWB = t90_pub.IDT_MES_DWB ";
+		String JOIN_t90_efs = "LEFT JOIN t90_efs ON t90_pub.IDT_PUB = t90_efs.IDT_PUB ";
+		String JOIN_t90_cnl = "LEFT JOIN t90_cnl ON t90_pub.IDT_PUB = t90_cnl.IDT_PUB ";
+		String JOIN_t90_mot_cle = "LEFT JOIN t90_mot_cle ON t90_msg.IDT_MES_DWB = t90_mot_cle.IDT_MES_DWB ";
+		String JOIN_t90_var = "LEFT JOIN t90_var ON t90_pub.IDT_PUB = t90_var.IDT_PUB ";
+		String WHERE_t90_var = "WHERE t90_msg.IDT_MES_DWB = ?";
+		
+		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(SELECT
+																		+ JOIN_t90_pub
+																		+ JOIN_t90_efs
+																		+ JOIN_t90_cnl
+																		+ JOIN_t90_mot_cle
+																		+ JOIN_t90_var
+																		+ WHERE_t90_var))
 		{
 			ps.setInt(1,id);
             ResultSet r =  ps.executeQuery();
             
             while(r.next() ) {
-
+            	//Identity
             	identity = r.getString(2);
+            	//Type of message
             	type = r.getString(3);
-            	wording = r.getString(3);
-            	text = r.getString(4);
+            	// Libellé
+            	wording = r.getString(4);
+            	// Texte
+            	textLib = r.getString(5);
+            	// Vision360
+            	vision360 = r.getString(9);
+            	// Le type de la cible
             	targetType = r.getString(22);
+            	// La date début d'affichage du message
             	start = r.getDate(23);
+            	// La date fin d'affichage du message
             	end = r.getDate(24);
+            	textMes=r.getString(11);
             	
+            	// La valeur temporaire de la priorité
+            	tmp = r.getString(6);
+            	// Vérifier si la valeur temporaire est nulle
+            	if (tmp != null)
+            		priority = Integer.parseInt(tmp);
+            	
+            	// Vérifier si la liste entité contient un élément pareil
             	if ( !entities.contains(r.getInt(32)) ) 
             		entities.add(r.getInt(32));
             	
+            	// Vérifier si la liste canal contient un élément pareil
             	if ( !canaux.contains(r.getString(35)) ) 
             		canaux.add(r.getString(35));
             	
+            	// La valeur temporaire du canal
+            	tmp = r.getString(35);
+            	
+            	// Vérifier si le canal est null
+            	if (tmp != null) {
+            		// Vérifier si le canal est GAB
+            		if (tmp.equals("GAB")) {
+                		tmp = r.getString(36);
+            			priorityGAB = r.getInt(36);
+                	}
+            	}
+            	System.out.println(r.getString(38));
+            	// Vérifier si la liste des mots clés contient un élément pareil
             	if ( !keywords.contains(r.getString(38)) )
             		keywords.add(r.getString(38));
             	
+            	// Vérifier si le type de la cible est null
             	if(r.getString(22) !=null) {
+            		
+            		// Vérifier si le type de la cible est de la liste des clients
             		if (targetType.equals("C")) {
+            			// Mettre la federation en false
                 		federation=false;
+                		// Mettre l'agence en false
                 		agency=false;
-                		// Add list of clients PM, PP
+                		
+                		// Add list of clients
                 		if ( NO_PSE.contains(r.getString(46)) && !tmp.equals(r.getString(49))) {
+                			//la valeur temporaire du client
                     		tmp = r.getString(49);
+                    		// Ajouter le PP
                     		client += tmp;
+                    		// Ajouter le PP/PM dans la liste de client
                     		clients.add(client);
                     		
                     	} else if ( !NO_PSE.contains(r.getString(46))){
+                    		// Add client PP
                     		NO_PSE.add(r.getString(46));
+                    		// La valeur temporaire du Client PP
                     		tmp = r.getString(49);
                     		client = tmp + ",";
                     	}
+         
                 	} else if (targetType.equals("F")) {
                 		federation=true;
                 		agency=false;
@@ -507,43 +645,16 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
                 	}
             		
             	}
-            	
-            
             } 
             
-            Target target = new Target(federation, agency, clients);
-/*            
-            System.out.println("id : " + identity);
-        	System.out.println("vision360 : ???");
-        	System.out.println("type : " + type);
-        	System.out.println("wording : " + wording);
-        	System.out.println("text : " + text);
-        	System.out.println("start : " + start);
-        	System.out.println("end : " + end);
-        	System.out.println("priority : ???");
-        	System.out.println("targetType : " + targetType);
-       	
-            for (int mEntity : entities) {
-            	System.out.println("Entity : " + mEntity);
-            }
+            t = new Target(federation, agency, clients);
+
+            ps.close();
             
-            for (String mCanal : canaux) {
-            	System.out.println("canal : " + mCanal);
-            }
-            
-            for (String mKeyword : keywords) {
-            	System.out.println("Keyword : " + mKeyword);
-           }
-            
-            for (String mClient : clients) {
-            	System.out.println("Client : " + mClient);
-            }
- */           
-            boolean vision360=true;
-            int priority=0;
-            	
-            return new Message(identity, type, wording, vision360, text, keywords, start, end, entities, canaux, priority, target);
-        }
+            return new Message(identity, type, wording, vision360, textLib, keywords, start, end, entities, canaux, priority, priorityGAB, t,textMes );
+        
+		}
+
         catch (Exception e)
 		{
             e.printStackTrace();
@@ -553,25 +664,27 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 
 	public int deleteMessage(int id) {
 		
-			System.out.println("avant le try");
+			
 			String sql ="delete from t90_pub where IDT_MES_DWB=?";
+			String sql2 ="delete from t90_msg where IDT_MES_DWB=?";
+			
 			 try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sql))
 		        {
 				   ps.setInt(1,id); //CD_EFS
 				   ps.executeUpdate();
 				   System.out.println("after execute");
-		           
+		           ps.close();
 		        }
 		        catch (Exception e)
 		        {
 		            e.printStackTrace();
 		        }
-			String sql2 ="delete from t90_msg where IDT_MES_DWB=?";
+			
 			try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sql2))
 	        {
 			   ps.setInt(1,id); //CD_EFS
 			   ps.executeUpdate();
-			   System.out.println("after execute");
+			   ps.close();
 	           
 	        }
 	        catch (Exception e)
@@ -581,8 +694,5 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 		
 		return id;
 	}
-
-	
-	
 
 }
