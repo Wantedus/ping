@@ -30,7 +30,14 @@ public class MessageController {
 	@GetMapping(value = "/message/{id}")
 	public Message getMessage(@PathVariable int id) {
 		
-		return messageDAOImpl.getMessage(id);
+		 Message m =messageDAOImpl.getMessage(id);
+		
+		 if(m.getId()=="") {
+			 return null;
+		 }
+		 else{
+			 return m; 
+		 }
 		
 	}
 	
@@ -39,6 +46,7 @@ public class MessageController {
 		
 		return messageDAOImpl.getAllMessage();
 	}
+
 	
 	@PostMapping(value = "/message")
 	public ResponseEntity<Integer> postMessage(@RequestBody Message m) {
@@ -54,7 +62,7 @@ public class MessageController {
 	public Message putMessage(@RequestBody Message m,@PathVariable int id) {
 		
 	
-		
+		/*
 		Message updatedMessage =messageDAOImpl.getMessage(id);
 		
 		updatedMessage.setCanals(m.getCanals());
@@ -68,18 +76,19 @@ public class MessageController {
 		updatedMessage.setType(m.getType());
 		updatedMessage.setVision360(m.isVision360());
 		updatedMessage.setWording(m.getWording());
-		
-		messageDAOImpl.updateMessage(id, updatedMessage);
+		*/
+		;
+		messageDAOImpl.updateMessage(id, m);
 		
 		return messageDAOImpl.getMessage(id);
 		
 	}
 	
-//	@DeleteMapping(value = "/message/{id}")
-//	public ResponseEntity<Integer> deleteMessage(@RequestBody Message m, @ PathVariable int id) {
-//		int id =messageDAOImpl.deleteMessage(m);
-//		return new ResponseEntity<Integer>(id, HttpStatus.ACCEPTED);
-//	}
+	@DeleteMapping(value = "/message/{id}")
+	public ResponseEntity<Integer> deleteMessage(@PathVariable int id) {
+		messageDAOImpl.deleteMessage(id);
+		return new ResponseEntity<Integer>(id, HttpStatus.ACCEPTED);
+	}
 	
 	
 	

@@ -10,7 +10,8 @@ public class Message {
 	private String type;//bulle ou message
 	private String wording ;
 	private String vision360;
-	private String text;
+	private String textLib;
+	private String textMes;
 	private List<String> keywords = new ArrayList<>();
 	private Date start;
 	private Date end;
@@ -27,14 +28,18 @@ public class Message {
 	}
 
 
-	public Message(String id, String type, String wording, String vision360, String text, List<String> keywords,
-		Date start, Date end, List<Integer> entity, List<String> canals, int priority, int priorityGAB, Target t) {
+	
+
+
+	public Message(String id, String type, String wording, String vision360, String textLib, List<String> keywords,
+		Date start, Date end, List<Integer> entity, List<String> canals, int priority, int priorityGAB, Target t, String textMes) {
 		super();
 		this.id = id;
 		this.type = type;
 		this.wording = wording;
 		this.vision360 = vision360;
-		this.text = text;
+		this.textLib = textLib;
+		this.textMes = textMes;
 		this.keywords = keywords;
 		this.start = start;
 		this.end = end;
@@ -78,12 +83,23 @@ public class Message {
 		this.vision360 = vision360;
 	}
 
-	public String getText() {
-		return text;
+	public String getTextLib() {
+		return textLib;
 	}
 
-	public void setText(String text) {
-		this.text = text;
+
+	public void setTextLib(String textLib) {
+		this.textLib = textLib;
+	}
+
+
+	public String getTextMes() {
+		return textMes;
+	}
+
+
+	public void setTextMes(String textMes) {
+		this.textMes = textMes;
 	}
 
 	public List<String> getKeywords() {
