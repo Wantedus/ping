@@ -20,7 +20,8 @@ public class  MessageDAOImpl implements MessageDAO {
 private static java.sql.Connection con;
     
 private static String user = "root";
-private static String mdp = "";
+//private static String mdp = "";
+private static String mdp = "root";
 private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
     
     
