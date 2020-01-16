@@ -34,10 +34,11 @@ public class MessageController {
 		
 	}
 	
-	@GetMapping(value = "/message/all")
+	@GetMapping(value = "/message")
 	public ArrayList<Message> getAllMessage() {
 		return messageDAOImpl.getAllMessage();
 	}
+
 	
 	@PostMapping(value = "/message")
 	public ResponseEntity<Integer> postMessage(@RequestBody Message m) {
@@ -74,11 +75,11 @@ public class MessageController {
 		
 	}
 	
-//	@DeleteMapping(value = "/message/{id}")
-//	public ResponseEntity<Integer> deleteMessage(@RequestBody Message m, @ PathVariable int id) {
-//		int id =messageDAOImpl.deleteMessage(m);
-//		return new ResponseEntity<Integer>(id, HttpStatus.ACCEPTED);
-//	}
+	@DeleteMapping(value = "/message/{id}")
+	public ResponseEntity<Integer> deleteMessage(@PathVariable int id) {
+		messageDAOImpl.deleteMessage(id);
+		return new ResponseEntity<Integer>(id, HttpStatus.ACCEPTED);
+	}
 	
 	
 	

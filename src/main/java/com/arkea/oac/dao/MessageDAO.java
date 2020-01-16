@@ -16,4 +16,6 @@ public interface MessageDAO {
 	public int updateMessage(int id,Message m);
 	
 	public ArrayList<Message> getAllMessage();
+	
+	public int deleteMessage(int id);
 }
