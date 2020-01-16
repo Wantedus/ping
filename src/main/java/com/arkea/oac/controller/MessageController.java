@@ -30,7 +30,14 @@ public class MessageController {
 	@GetMapping(value = "/message/{id}")
 	public Message getMessage(@PathVariable int id) {
 		
-		return messageDAOImpl.getMessage(id);
+		 Message m =messageDAOImpl.getMessage(id);
+		
+		 if(m.getId()=="") {
+			 return null;
+		 }
+		 else{
+			 return m; 
+		 }
 		
 	}
 	

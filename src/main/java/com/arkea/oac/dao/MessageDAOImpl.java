@@ -302,7 +302,7 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 		ResultSet rs;
 		
 		String sqlMsg = "UPDATE t90_msg SET CD_EFS = ? ,LIB_TY_MES =?,TXT_LIB_MES=?,"
-				+ "LIB_MES_CNS=?,CD_PRTY_MES=?,DUR_VIE_MES=?,NB_AFG_MX=?, TXT_MES_CTU=? WHERE IDT_MES_DWB = ? " ;
+				+ "LIB_MES_CNS=?,CD_PRTY_MES=?,DUR_VIE_MES=?,DA_MOD=?,NB_AFG_MX=?, TXT_MES_CTU=? WHERE IDT_MES_DWB = ? " ;
 		
 		
 		String sqlPub  ="UPDATE t90_pub SET DA_DBT_AFG = ? ,DA_FIN_AFG =?  WHERE IDT_MES_DWB = ? ";
@@ -330,11 +330,13 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 	        	ps.setInt(5,m.getPriority()); //CD_PRTY_MES
 	        	ps.setInt(6,0); //DUR_VIE_MES
 	        	//ps.setString(7,"thomas"); //IDT_UTI
-	        	ps.setInt(7,0); //NB_AFG_MAX 
+	        	java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
+		 		 ps.setTimestamp(7,  date ); 
+	        	ps.setInt(8,0); //NB_AFG_MAX 
 	        	System.out.println(m.getTextMes());
-	        	ps.setString(8,m.getTextMes()); //TXT_MES_CTU
+	        	ps.setString(9,m.getTextMes()); //TXT_MES_CTU
 	        	
-	        	ps.setInt(9, id);
+	        	ps.setInt(10, id);
 	        	
 	        	 rowAffected =ps.executeUpdate();
 	            if(rowAffected == 1)
