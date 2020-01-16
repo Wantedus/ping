@@ -435,7 +435,10 @@ private static String url = "jdbc:mysql://localhost:8889/ping?serverTimezone=UTC
 				mMessageList.add(m);
 			}
 			
+			ps.close();
+			
 			return mMessageList;
+			
 		}catch (Exception e)
 		{
             e.printStackTrace();
@@ -511,9 +514,9 @@ private static String url = "jdbc:mysql://localhost:8889/ping?serverTimezone=UTC
             	//Type of message
             	type = r.getString(3);
             	// Libellé
-            	wording = r.getString(3);
+            	wording = r.getString(4);
             	// Texte
-            	text = r.getString(4);
+            	text = r.getString(11);
             	// Vision360
             	vision360 = r.getString(9);
             	// Le type de la cible
