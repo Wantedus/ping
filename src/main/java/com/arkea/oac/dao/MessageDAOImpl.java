@@ -41,9 +41,9 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
     }
 
     /**
-	 * Créer un message 
+	 * Crï¿½er un message 
 	 * @param Messsage
-	 * @return Id du message créé
+	 * @return Id du message crï¿½ï¿½
 	 * @exception exception while compiling SQL
 	 * @author ThomasCLISSON
 	 */
@@ -231,7 +231,7 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 			 if(m.getKeywords() !=null) {
 			 		for (String temp : m.getKeywords()) {
 			 			 
-			 			   //AG, AS, PA,PR -- dépend du fichier à l'upload ? 
+			 			   //AG, AS, PA,PR -- dï¿½pend du fichier ï¿½ l'upload ? 
 						    ps.setString(1,temp);
 						    //IDT_MES_DWB
 				        	ps.setInt(3,generatedId);
@@ -290,7 +290,7 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 	/**
 	 * Mettre un jour message 
 	 * @param id du message, Messsage
-	 * @return Id du message modifié
+	 * @return Id du message modifiï¿½
 	 * @exception exception while compiling SQL
 	 * @author ThomasCLISSON
 	 */
@@ -396,7 +396,7 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 				 	
 				 		for(String k : m.getKeywords()) {
 				 			 ps.setInt(1,  34); 
-					 		 //Mot clé
+					 		 //Mot clï¿½
 					 		 ps.setString(2,k);
 					 		//TXT_LIB_MES
 					 		 ps.setInt(3,id);
@@ -530,6 +530,7 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
         String type="";
         String wording="";
         String textLib="";
+        String textBulle="";
         String textMes="";
         Date start=null;
         Date end=null;
@@ -571,13 +572,11 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
             	//Type of message
             	type = r.getString(3);
             	// LibellÃ©
-            	wording = r.getString(4);
-            	// Texte
-<<<<<<< HEAD
-            	text = r.getString(11);
-=======
-            	textLib = r.getString(5);
->>>>>>> 4089b3a615a2f23460ef02340e79ee3fc28bd01f
+            	textLib = r.getString(4);
+            	// Texte 
+            	textLib = r.getString(11);
+            	// Texte pour Message Bulle
+            	textBulle = r.getString(5);
             	// Vision360
             	vision360 = r.getString(9);
             	// Le type de la cible
@@ -660,7 +659,7 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 
             ps.close();
             
-            return new Message(identity, type, wording, vision360, textLib, keywords, start, end, entities, canaux, priority, priorityGAB, t,textMes );
+            return new Message(identity, type, wording, vision360, textLib, textBulle, keywords, start, end, entities, canaux, priority, priorityGAB, t,textMes );
         
 		}
 
