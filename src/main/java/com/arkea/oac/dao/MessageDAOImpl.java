@@ -1,12 +1,22 @@
 package com.arkea.oac.dao;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.stereotype.Component;
 
 import com.arkea.oac.model.Message;
@@ -15,18 +25,24 @@ import com.mysql.jdbc.PreparedStatement;
 import com.mysql.jdbc.Statement;
 
 @Component
+@PropertySource("classpath:application.properties")
 public class  MessageDAOImpl implements MessageDAO {
 	
-private static java.sql.Connection con;
-    
-private static String user = "root";
-private static String mdp = "";
-private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
-    
-    
-    
-    public static java.sql.Connection getInstance(){
+		private static java.sql.Connection con;
 
+		@Value( "${user}" )  
+		private String user;
+		@Value( "${mdp}" )  
+		private  String mdp;
+		@Value( "${url}" )  
+		private  String url ;
+		
+	
+    public java.sql.Connection getInstance(){
+    	System.out.println(user);
+    	System.out.println(mdp);
+    	System.out.println(url);
+    	
         if(con == null){
             try {
             	Class.forName("com.mysql.jdbc.Driver");
