@@ -57,9 +57,9 @@ public class  MessageDAOImpl implements MessageDAO {
     }
 
     /**
-	 * Créer un message 
+	 * Crï¿½er un message 
 	 * @param Messsage
-	 * @return Id du message créé
+	 * @return Id du message crï¿½ï¿½
 	 * @exception exception while compiling SQL
 	 * @author ThomasCLISSON
 	 */
@@ -247,7 +247,7 @@ public class  MessageDAOImpl implements MessageDAO {
 			 if(m.getKeywords() !=null) {
 			 		for (String temp : m.getKeywords()) {
 			 			 
-			 			   //AG, AS, PA,PR -- dépend du fichier à l'upload ? 
+			 			   //AG, AS, PA,PR -- dï¿½pend du fichier ï¿½ l'upload ? 
 						    ps.setString(1,temp);
 						    //IDT_MES_DWB
 				        	ps.setInt(3,generatedId);
@@ -306,7 +306,7 @@ public class  MessageDAOImpl implements MessageDAO {
 	/**
 	 * Mettre un jour message 
 	 * @param id du message, Messsage
-	 * @return Id du message modifié
+	 * @return Id du message modifiï¿½
 	 * @exception exception while compiling SQL
 	 * @author ThomasCLISSON
 	 */
@@ -412,7 +412,7 @@ public class  MessageDAOImpl implements MessageDAO {
 				 	
 				 		for(String k : m.getKeywords()) {
 				 			 ps.setInt(1,  34); 
-					 		 //Mot clé
+					 		 //Mot clï¿½
 					 		 ps.setString(2,k);
 					 		//TXT_LIB_MES
 					 		 ps.setInt(3,id);
@@ -507,7 +507,10 @@ public class  MessageDAOImpl implements MessageDAO {
 				mMessageList.add(m);
 			}
 			
+			ps.close();
+			
 			return mMessageList;
+			
 		}catch (Exception e)
 		{
             e.printStackTrace();
@@ -543,6 +546,7 @@ public class  MessageDAOImpl implements MessageDAO {
         String type="";
         String wording="";
         String textLib="";
+        String textBulle="";
         String textMes="";
         Date start=null;
         Date end=null;
@@ -584,9 +588,11 @@ public class  MessageDAOImpl implements MessageDAO {
             	//Type of message
             	type = r.getString(3);
             	// LibellÃ©
-            	wording = r.getString(4);
-            	// Texte
-            	textLib = r.getString(5);
+            	textLib = r.getString(4);
+            	// Texte 
+            	textLib = r.getString(11);
+            	// Texte pour Message Bulle
+            	textBulle = r.getString(5);
             	// Vision360
             	vision360 = r.getString(9);
             	// Le type de la cible
@@ -669,7 +675,7 @@ public class  MessageDAOImpl implements MessageDAO {
 
             ps.close();
             
-            return new Message(identity, type, wording, vision360, textLib, keywords, start, end, entities, canaux, priority, priorityGAB, t,textMes );
+            return new Message(identity, type, wording, vision360, textLib, textBulle, keywords, start, end, entities, canaux, priority, priorityGAB, t,textMes );
         
 		}
 

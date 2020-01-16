@@ -11,6 +11,7 @@ public class Message {
 	private String wording ;
 	private String vision360;
 	private String textLib;
+	private String textBulle;
 	private String textMes;
 	private List<String> keywords = new ArrayList<>();
 	private Date start;
@@ -31,7 +32,7 @@ public class Message {
 	
 
 
-	public Message(String id, String type, String wording, String vision360, String textLib, List<String> keywords,
+	public Message(String id, String type, String wording, String vision360, String textLib, String textBulle, List<String> keywords,
 		Date start, Date end, List<Integer> entity, List<String> canals, int priority, int priorityGAB, Target t, String textMes) {
 		super();
 		this.id = id;
@@ -39,6 +40,7 @@ public class Message {
 		this.wording = wording;
 		this.vision360 = vision360;
 		this.textLib = textLib;
+		this.textBulle = textBulle;
 		this.textMes = textMes;
 		this.keywords = keywords;
 		this.start = start;
