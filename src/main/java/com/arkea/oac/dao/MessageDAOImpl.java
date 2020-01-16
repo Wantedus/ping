@@ -302,7 +302,7 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 		ResultSet rs;
 		
 		String sqlMsg = "UPDATE t90_msg SET CD_EFS = ? ,LIB_TY_MES =?,TXT_LIB_MES=?,"
-				+ "LIB_MES_CNS=?,CD_PRTY_MES=?,DUR_VIE_MES=?,NB_AFG_MX=?, TXT_MES_CTU=?";
+				+ "LIB_MES_CNS=?,CD_PRTY_MES=?,DUR_VIE_MES=?,NB_AFG_MX=?, TXT_MES_CTU=? WHERE IDT_MES_DWB = ? " ;
 		
 		
 		String sqlPub  ="UPDATE t90_pub SET DA_DBT_AFG = ? ,DA_FIN_AFG =?  WHERE IDT_MES_DWB = ? ";
@@ -334,7 +334,7 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 	        	System.out.println(m.getTextMes());
 	        	ps.setString(8,m.getTextMes()); //TXT_MES_CTU
 	        	
-	        	
+	        	ps.setInt(9, id);
 	        	
 	        	 rowAffected =ps.executeUpdate();
 	            if(rowAffected == 1)
