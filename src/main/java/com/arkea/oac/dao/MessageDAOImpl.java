@@ -1,9 +1,11 @@
 package com.arkea.oac.dao;
 
+
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -16,10 +18,6 @@ import com.mysql.jdbc.Statement;
 @Component
 @PropertySource("classpath:application.properties")
 public class  MessageDAOImpl implements MessageDAO {
-<<<<<<< HEAD
-=======
-
->>>>>>> d42f83e9791dda77662dafd6ad8be1b878d2126b
 
 	private static java.sql.Connection con;
 
@@ -51,53 +49,39 @@ public class  MessageDAOImpl implements MessageDAO {
 
 
 
-	
-<<<<<<< HEAD
-<<<<<<< HEAD
-private static java.sql.Connection con;
-    
-private static String user = "root";
-//private static String mdp = "";
-private static String mdp = "root";
-private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
-    
-    
-    
-    public static java.sql.Connection getInstance(){
-=======
-		private static java.sql.Connection con;
->>>>>>> 6121934a42d3d3b3f86f662bbc544d49a812219e
+	//    public static java.sql.Connection getInstance(){
+	//		
+	//    	private static java.sql.Connection con;
+	//
+	//		@Value( "${user}" )  
+	//		private String user;
+	//		@Value( "${mdp}" )  
+	//		private  String mdp;
+	//		@Value( "${url}" )  
+	//		private  String url ;
+	//		
+	//	
+	//    	System.out.println(user);
+	//    	System.out.println(mdp);
+	//    	System.out.println(url);
+	//    	
+	//        if(con == null){
+	//            try {
+	//            	Class.forName("com.mysql.jdbc.Driver");
+	//                con = DriverManager.getConnection(url, user, mdp);
+	//
+	//            } catch (Exception e)
+	//            {
+	//                e.printStackTrace();
+	//            }
+	//       }
+	//        return con;
+	//    }
 
-		@Value( "${user}" )  
-		private String user;
-		@Value( "${mdp}" )  
-		private  String mdp;
-		@Value( "${url}" )  
-		private  String url ;
-		
-	
-    public java.sql.Connection getInstance(){
-    	System.out.println(user);
-    	System.out.println(mdp);
-    	System.out.println(url);
-    	
-        if(con == null){
-            try {
-            	Class.forName("com.mysql.jdbc.Driver");
-                con = DriverManager.getConnection(url, user, mdp);
-
-            } catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-       }
-        return con;
-    }
-
-    /**
+	/**
 >>>>>>> yinjie
 =======
-		
+
 
     /**
 
@@ -121,156 +105,156 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 				+ "LIB_MES_CNS,CD_PRTY_MES,DUR_VIE_MES,IDT_UTI, TXT_MES_CTU) VALUES (?, ?, ?,?,?,?,?,?)";
 		//dans t90_pub
 
-		 String sqlPub = "INSERT INTO t90_pub(CD_EFS,CD_EFS_MES,"
-			 		+ "IDT_MES_DWB,CD_ETA_PUB,CD_TY_PUB,DA_DBT_AFG,DA_FIN_AFG, IDC_BIC,IDT_UTI,TM_STP)"
-			 		+ " VALUES (?, ?,?,?,?,?,?,?,?,?)";
-		 //dans t90_efs
-		 String sqlEfs = "INSERT INTO t90_efs(CD_EFS_PUB,IDT_PUB,CD_EFS)"
-			 		+ " VALUES (?,?,?)";
-		 //t90_cnl
-		 String sqlCnl = "INSERT INTO t90_cnl(CD_EFS_PUB,IDT_PUB,CD_CNL,NO_PRTY)"
-			 		+ " VALUES (?,?,?,?)";
-		 //t90_mc
-		 String sqlMc = "INSERT INTO t90_mot_cle(CD_EFS,TXT_CLE,IDT_MES_DWB,IDT_UTI,TM_STP)"
-			 		+ " VALUES (?,?,?,?,?)";
-		 
-		 
-		 String sqlTy = "INSERT INTO oac.T90_TY_CLI (CD_EFS, CD_ESA, IDT_MES_DWB, IDT_UTI, TM_STP)"
-		 +"VALUES (34, ?, ?, ?, ?)";
-		
-		 try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS))
-	        {
-			    ps.setInt(1,34); //CD_EFS
-			   
-			    ps.setString(2,m.getType()); //LIB_TY_MES
-	        	ps.setString(3,m.getLibelle()); //TXT_LIB_MES
-	        	if(m.getType().equals("BULLE_CONSEILLER")) { 
-	        		ps.setString(4,"Votre conseiller vous informe");  //LIB_MES_CNS
-	        	}
-	        	else {
-	        		ps.setString(4,m.getLibelle()); 
-	        	}
-	        	//CD_PRTY_MES
-	        	ps.setInt(5,m.getPriority()); 
-	        	//DUR_VIE_MES
-	        	ps.setInt(6,0);
-	        	//IDT_UTI
-	        	ps.setString(7,"thomas"); 
-	        	//TXT_MES_CTU
-	        	ps.setString(8,m.getTextBulle()); 
-	        	
-	        	rowAffected =ps.executeUpdate();
-	            if(rowAffected == 1)
-	            {
-	            	
-	            	rs = ps.getGeneratedKeys();
-	            	if(rs.next())
-	            	   generatedId = rs.getInt(1);
-	            }
-	            rowAffected=0;
-	        }
-	        catch (Exception e)
-	        {
-	            e.printStackTrace();
-	        }
-		 
-		
-		 
-		 try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlPub, Statement.RETURN_GENERATED_KEYS))
-	        {
-			    //CD_EFS
-			    ps.setInt(1,34); 
-			   //CD_EFS_MES
-			    ps.setInt(2,34); 
-			    //IDT_MES_DWB
-	        	ps.setInt(3,generatedId ); 
-	        	//CD_ETA_PUB
-	        	ps.setString(4,"O");  
-	        	//CD_TY_PUB
-	        	ps.setString(5,m.getT().getTargetType()); 
-	        	
-	        	if(m.getStart()!=null) {
-			 		 ps.setDate(6,  new java.sql.Date(m.getStart().getTime() ) ); 
-			 	}
-			 	else {
-			 		ps.setDate(6, null);
-			 	}
-	        	if(m.getEnd()!=null) {
-			 		 ps.setDate(7,  new java.sql.Date(m.getEnd().getTime() ) ); 
-			 	}
-			 	else {
-			 		ps.setDate(7, null);
-			 	}
-	        	//IDC_BIC
-	        	if(m.isVision360()=="true") {
-	        		ps.setString(8,"O"); 
-	        	}
-	        	else if(m.isVision360()=="false") {
-	        		ps.setString(8,"N"); 
-	        	}
-	        	else {
-	        		ps.setString(8,null);
-	        	}
-	        	//IDT_UTI
-	        	ps.setString(9,"thomas"); 
-	        	java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
-	        	ps.setTimestamp(10, date);
-	        	
-	        	
-	        	rowAffected =ps.executeUpdate();
-	            if(rowAffected == 1)
-	            {
-	            	
-	            	 rs = ps.getGeneratedKeys();
-	            	if(rs.next())
-	            	   generatedIdPub = rs.getInt(1);
-	            }
-	            rowAffected=0;
-	        }
-	        catch (Exception e)
-	        {
-	            e.printStackTrace();
-	        }
-		 
-		
-					
-		 try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlEfs))
-	        {
-			 
-			 if(m.getEntity()!=null) {	
-			 		for (Integer temp : m.getEntity()) {
-			 			 ps.setInt(1,34); //CD_EFS
-						   
-						    ps.setInt(2,generatedIdPub); //CD_EFS_MES
-				        	ps.setInt(3,temp ); //IDT_MES_DWB
-			 			ps.executeUpdate();
-					}
-			 	}
-	        }
-	        catch (Exception e)
-	        {
-	            e.printStackTrace();
-	        }
-		
-					
-		 try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlMc))
-	        {
-			 
-			 if(m.getKeywords().size()>0) {
-			 		for (String temp : m.getKeywords()) {
-			 			 
-			 			ps.setInt(1,34); 
-						 
-						    ps.setString(2,temp);
-				        	ps.setInt(3,generatedId);
-				        	ps.setString(4, "thomas");
-				        	java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
-				        	ps.setTimestamp(5, date);
-				        	
-			 			ps.executeUpdate();
-					}rowAffected=0;
-			 }
-	        }
+		String sqlPub = "INSERT INTO t90_pub(CD_EFS,CD_EFS_MES,"
+				+ "IDT_MES_DWB,CD_ETA_PUB,CD_TY_PUB,DA_DBT_AFG,DA_FIN_AFG, IDC_BIC,IDT_UTI,TM_STP)"
+				+ " VALUES (?, ?,?,?,?,?,?,?,?,?)";
+		//dans t90_efs
+		String sqlEfs = "INSERT INTO t90_efs(CD_EFS_PUB,IDT_PUB,CD_EFS)"
+				+ " VALUES (?,?,?)";
+		//t90_cnl
+		String sqlCnl = "INSERT INTO t90_cnl(CD_EFS_PUB,IDT_PUB,CD_CNL,NO_PRTY)"
+				+ " VALUES (?,?,?,?)";
+		//t90_mc
+		String sqlMc = "INSERT INTO t90_mot_cle(CD_EFS,TXT_CLE,IDT_MES_DWB,IDT_UTI,TM_STP)"
+				+ " VALUES (?,?,?,?,?)";
+
+
+		String sqlTy = "INSERT INTO oac.T90_TY_CLI (CD_EFS, CD_ESA, IDT_MES_DWB, IDT_UTI, TM_STP)"
+				+"VALUES (34, ?, ?, ?, ?)";
+
+		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS))
+		{
+			ps.setInt(1,34); //CD_EFS
+
+			ps.setString(2,m.getType()); //LIB_TY_MES
+			ps.setString(3,m.getLibelle()); //TXT_LIB_MES
+			if(m.getType().equals("BULLE_CONSEILLER")) { 
+				ps.setString(4,"Votre conseiller vous informe");  //LIB_MES_CNS
+			}
+			else {
+				ps.setString(4,m.getLibelle()); 
+			}
+			//CD_PRTY_MES
+			ps.setInt(5,m.getPriority()); 
+			//DUR_VIE_MES
+			ps.setInt(6,0);
+			//IDT_UTI
+			ps.setString(7,"thomas"); 
+			//TXT_MES_CTU
+			ps.setString(8,m.getTextBulle()); 
+
+			rowAffected =ps.executeUpdate();
+			if(rowAffected == 1)
+			{
+
+				rs = ps.getGeneratedKeys();
+				if(rs.next())
+					generatedId = rs.getInt(1);
+			}
+			rowAffected=0;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+
+
+		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlPub, Statement.RETURN_GENERATED_KEYS))
+		{
+			//CD_EFS
+			ps.setInt(1,34); 
+			//CD_EFS_MES
+			ps.setInt(2,34); 
+			//IDT_MES_DWB
+			ps.setInt(3,generatedId ); 
+			//CD_ETA_PUB
+			ps.setString(4,"O");  
+			//CD_TY_PUB
+			ps.setString(5,m.getT().getTargetType()); 
+
+			if(m.getStart()!=null) {
+				ps.setDate(6,  new java.sql.Date(m.getStart().getTime() ) ); 
+			}
+			else {
+				ps.setDate(6, null);
+			}
+			if(m.getEnd()!=null) {
+				ps.setDate(7,  new java.sql.Date(m.getEnd().getTime() ) ); 
+			}
+			else {
+				ps.setDate(7, null);
+			}
+			//IDC_BIC
+			if(m.isVision360()=="true") {
+				ps.setString(8,"O"); 
+			}
+			else if(m.isVision360()=="false") {
+				ps.setString(8,"N"); 
+			}
+			else {
+				ps.setString(8,null);
+			}
+			//IDT_UTI
+			ps.setString(9,"thomas"); 
+			java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
+			ps.setTimestamp(10, date);
+
+
+			rowAffected =ps.executeUpdate();
+			if(rowAffected == 1)
+			{
+
+				rs = ps.getGeneratedKeys();
+				if(rs.next())
+					generatedIdPub = rs.getInt(1);
+			}
+			rowAffected=0;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+
+
+		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlEfs))
+		{
+
+			if(m.getEntity()!=null) {	
+				for (Integer temp : m.getEntity()) {
+					ps.setInt(1,34); //CD_EFS
+
+					ps.setInt(2,generatedIdPub); //CD_EFS_MES
+					ps.setInt(3,temp ); //IDT_MES_DWB
+					ps.executeUpdate();
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+
+		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlMc))
+		{
+
+			if(m.getKeywords().size()>0) {
+				for (String temp : m.getKeywords()) {
+
+					ps.setInt(1,34); 
+
+					ps.setString(2,temp);
+					ps.setInt(3,generatedId);
+					ps.setString(4, "thomas");
+					java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
+					ps.setTimestamp(5, date);
+
+					ps.executeUpdate();
+				}rowAffected=0;
+			}
+		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
@@ -656,13 +640,13 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 
 		ArrayList<Message> mMessageList = new ArrayList<>();
 		Message m;
-		
+
 
 		if (!range.contains("-")) {
 			System.out.println("Not Contains - ");
 			return null;
 		}
-			
+
 		System.out.println("Contains - ");
 		String parts[] = range.split("-");
 
@@ -678,14 +662,14 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 
 			if (start <= 0)
 				return null;
-			
+
 			start--;
 			encart = end - start;
-			
+
 			try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlRangeMessage))
 			{
-								ps.setInt(1,start);
-								ps.setInt(2, encart);
+				ps.setInt(1,start);
+				ps.setInt(2, encart);
 				ResultSet r = ps.executeQuery();
 
 				while (r.next()) {
@@ -696,7 +680,7 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 
 				r.close();
 				ps.close();
-				
+
 				return mMessageList;
 
 			}catch (Exception e)
@@ -730,7 +714,7 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 				+ "LEFT JOIN t90_pub ON t90_pub.IDT_MES_DWB = t90_msg.IDT_MES_DWB "
 				+ "LEFT JOIN t90_cnl ON t90_pub.IDT_PUB = t90_cnl.IDT_PUB "
 				+ "ORDER BY t90_cnl.NO_PRTY, t90_msg.CD_PRTY_MES ";
-		
+
 		ArrayList<Message> mMessageList = new ArrayList<>(); 
 
 		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlGetAll))
@@ -773,7 +757,7 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 		ArrayList <String> canaux = new ArrayList<>();
 		ArrayList <Integer> entities = new ArrayList<>();
 		ArrayList <String> keywords = new ArrayList<>();
-		ArrayList <String> clients = new ArrayList<>();
+		List<String> clients = null;
 		ArrayList <String> NO_PSE = new ArrayList<>();
 
 		//Target
@@ -790,7 +774,7 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 		String targetType="";
 		String client="";
 		String vision360="";
-		
+
 		//Le texte du message
 		String textMessage="";
 
@@ -843,6 +827,7 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 				start = r.getDate(23);
 				// La date fin d'affichage du message
 				end = r.getDate(24);
+
 
 
 
@@ -945,7 +930,7 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 	 * @author Abdoul Leadi - Thomas Clisson
 	 */
 	public int deleteMessage(int id) {
-<<<<<<< HEAD
+
 
 
 		String sql ="delete from t90_pub where IDT_MES_DWB=?";
@@ -1120,157 +1105,141 @@ private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
 		{
 			e.printStackTrace();
 		}
-=======
 
-		
-			String sqlPubId ="Select IDT_PUB from t90_pub where IDT_MES_DWB=?";
-			
-			String sqlPub ="delete from t90_pub where IDT_MES_DWB=?";
-			String sqlMc ="delete from t90_mot_cle where IDT_MES_DWB=?";
-			String sqlTy ="delete from t90_ty_cli where IDT_MES_DWB=?";
-			
-			String sqlEfs ="delete from t90_efs where IDT_PUB=?";
-			String sqlCnl ="delete from t90_cnl where IDT_PUB=?";
-			String sqlAprl ="delete from t90_aprl where IDT_PUB=?";
-			String sqlCli ="delete from t90_cli where IDT_PUB=?";
-			String sqlStr ="delete from t90_str where IDT_PUB=?";
-			
-			String sqlMsg ="delete from t90_msg where IDT_MES_DWB=?";
-			
-			int idPub=0;
-			ResultSet r;
-			
-			//Selectionner l'id de la publication liée au message
-			try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlPubId))
-			{
-				 ps.setInt(1,id);
-				 r = ps.executeQuery();
-				
-				while (r.next()) {
-					idPub = r.getInt(1);
-				}
-				r.close();
-				ps.close();
-				
-			}catch (Exception e)
-			{
-	            e.printStackTrace();
-	        }
-			// Delete from Pub
-			 try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlPub))
-		        {
-				   ps.setInt(1,id); 
-				   ps.executeUpdate();
-				   ps.close();
-		        }
-		        catch (Exception e)
-		        {
-		            e.printStackTrace();
-		        }
-			//Delete from msg
-			try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlMsg))
-	        {
-			   ps.setInt(1,id); //CD_EFS
-			   ps.executeUpdate();
-			   ps.close();
-	           
-	        }
-	        catch (Exception e)
-	        {
-	            e.printStackTrace();
-	        }
-			//Delete from Mot Clé
-			try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlMc))
-	        {
-			   ps.setInt(1,id); //CD_EFS
-			   ps.executeUpdate();
-			   ps.close();
-	           
-	        }
-	        catch (Exception e)
-	        {
-	            e.printStackTrace();
-	        }
-			//Delete from ty_cli
-			try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlTy))
-	        {
-			   //IDT_PUB
-			   ps.setInt(1,id);
-			   ps.executeUpdate();
-			   ps.close();
-	           
-	        }
-	        catch (Exception e)
-	        {
-	            e.printStackTrace();
-	        }
-			//Delete from efs
-			try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlEfs))
-	        {
-			   //IDT_PUB
-			   ps.setInt(1,idPub); 
-			   ps.executeUpdate();
-			   ps.close();
-	           
-	        }
-	        catch (Exception e)
-	        {
-	            e.printStackTrace();
-	        }
-			//Delete from cnl
-			try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlCnl))
-	        {
-			   //IDT_PUB
-			   ps.setInt(1,idPub); 
-			   ps.executeUpdate();
-			   ps.close();
-	           
-	        }
-	        catch (Exception e)
-	        {
-	            e.printStackTrace();
-	        }
-			//Delete from aprl
-			try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlAprl))
-	        {
-			   //IDT_PUB
-			   ps.setInt(1,idPub); 
-			   ps.executeUpdate();
-			   ps.close();
-	           
-	        }
-	        catch (Exception e)
-	        {
-	            e.printStackTrace();
-	        }
-			//Delete from cli
-			try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlCli))
-	        {
-			   //IDT_PUB
-			   ps.setInt(1,idPub); 
-			   ps.executeUpdate();
-			   ps.close();
-	           
-	        }
-	        catch (Exception e)
-	        {
-	            e.printStackTrace();
-	        }
-			//Delete from str
-			try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlStr))
-	        {
-			   //IDT_PUB
-			   ps.setInt(1,idPub); 
-			   ps.executeUpdate();
-			   ps.close();
-	           
-	        }
-	        catch (Exception e)
-	        {
-	            e.printStackTrace();
-	        }
-		
->>>>>>> d42f83e9791dda77662dafd6ad8be1b878d2126b
+
+
+		ResultSet r;
+
+		//Selectionner l'id de la publication liï¿½e au message
+		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlPubId))
+		{
+			ps.setInt(1,id);
+			r = ps.executeQuery();
+
+			while (r.next()) {
+				idPub = r.getInt(1);
+			}
+			r.close();
+			ps.close();
+
+		}catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		// Delete from Pub
+		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlPub))
+		{
+			ps.setInt(1,id); 
+			ps.executeUpdate();
+			ps.close();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		//Delete from msg
+		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlMsg))
+		{
+			ps.setInt(1,id); //CD_EFS
+			ps.executeUpdate();
+			ps.close();
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		//Delete from Mot Clï¿½
+		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlMc))
+		{
+			ps.setInt(1,id); //CD_EFS
+			ps.executeUpdate();
+			ps.close();
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		//Delete from ty_cli
+		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlTy))
+		{
+			//IDT_PUB
+			ps.setInt(1,id);
+			ps.executeUpdate();
+			ps.close();
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		//Delete from efs
+		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlEfs))
+		{
+			//IDT_PUB
+			ps.setInt(1,idPub); 
+			ps.executeUpdate();
+			ps.close();
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		//Delete from cnl
+		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlCnl))
+		{
+			//IDT_PUB
+			ps.setInt(1,idPub); 
+			ps.executeUpdate();
+			ps.close();
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		//Delete from aprl
+		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlAprl))
+		{
+			//IDT_PUB
+			ps.setInt(1,idPub); 
+			ps.executeUpdate();
+			ps.close();
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		//Delete from cli
+		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlCli))
+		{
+			//IDT_PUB
+			ps.setInt(1,idPub); 
+			ps.executeUpdate();
+			ps.close();
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		//Delete from str
+		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlStr))
+		{
+			//IDT_PUB
+			ps.setInt(1,idPub); 
+			ps.executeUpdate();
+			ps.close();
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
 
 		return id;
 	}
