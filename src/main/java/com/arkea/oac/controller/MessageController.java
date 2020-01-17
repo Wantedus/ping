@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -41,12 +42,14 @@ public class MessageController {
 		
 	}
 	
-	@GetMapping(value = "/message")
-	public ArrayList<Message> getAllMessage() {
+	@GetMapping(value = "**/message")
+	public ArrayList<Message> getRangedMessage(@RequestParam("range") String range) {
 		
-		return messageDAOImpl.getAllMessage();
+		return messageDAOImpl.getRangedMessage(range);
 	}
 
+	
+	
 	
 	@PostMapping(value = "/message")
 	public ResponseEntity<Integer> postMessage(@RequestBody Message m) {
