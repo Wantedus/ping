@@ -10,8 +10,18 @@ public class Message {
 	//bulle ou message
 	private String type;
 	private String vision360;
-	private String textLib;
+	private String libelle;
 	private String textBulle;
+	private String textMessage;
+	public String getTextMessage() {
+		return textMessage;
+	}
+
+
+	public void setTextMessage(String textMessage) {
+		this.textMessage = textMessage;
+	}
+
 	private List<String> keywords = new ArrayList<>();
 	private Date start;
 	private Date end;
@@ -21,6 +31,7 @@ public class Message {
 	private int priorityGAB;
 
 	private Target target;
+	
 
 
 	public Message() {
@@ -28,14 +39,15 @@ public class Message {
 	}
 
 
-	public Message(String id, String type, String vision360, String textLib, String textBulle, List<String> keywords,
+	public Message(String id, String type, String vision360, String lib, String textBulle,String textMessage, List<String> keywords,
 			Date start, Date end, List<Integer> entity, List<String> canals, int priority, int priorityGAB, Target t) {
 		super();
 		this.id = id;
 		this.type = type;
 		this.vision360 = vision360;
-		this.textLib = textLib;
+		this.libelle = lib;
 		this.textBulle = textBulle;
+		this.textMessage=textMessage;
 		this.keywords = keywords;
 		this.start = start;
 		this.end = end;
@@ -71,13 +83,13 @@ public class Message {
 		this.vision360 = vision360;
 	}
 
-	public String getTextLib() {
-		return textLib;
+	public String getLibelle() {
+		return libelle;
 	}
 
 
-	public void setTextLib(String textLib) {
-		this.textLib = textLib;
+	public void setTextLibelle(String lib) {
+		this.libelle = lib;
 	}
 
 
