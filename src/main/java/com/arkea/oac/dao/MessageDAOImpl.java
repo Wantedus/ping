@@ -11,17 +11,12 @@ import org.springframework.stereotype.Component;
 
 import com.arkea.oac.model.Message;
 import com.arkea.oac.model.Target;
-<<<<<<< HEAD
-=======
-import com.mysql.jdbc.PreparedStatement;
-import com.mysql.jdbc.ResultSetMetaData;
->>>>>>> 0ac9bb6b0718f1e7adf8ab39fd2f84e6ec2d99c2
 import com.mysql.jdbc.Statement;
 
 @Component
 @PropertySource("classpath:application.properties")
 public class  MessageDAOImpl implements MessageDAO {
-<<<<<<< HEAD
+
 
 	private static java.sql.Connection con;
 
@@ -51,35 +46,13 @@ public class  MessageDAOImpl implements MessageDAO {
 		return con;
 	}
 
-	/**
-=======
+
+
 	
-		private static java.sql.Connection con;
-
-		@Value( "${user}" )  
-		private String user;
-		@Value( "${mdp}" )  
-		private  String mdp;
-		@Value( "${url}" )  
-		private  String url ;
 		
-    public java.sql.Connection getInstance(){
-    	
-        if(con == null){
-            try {
-            	Class.forName("com.mysql.jdbc.Driver");
-                con = DriverManager.getConnection(url, user, mdp);
-
-            } catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-       }
-        return con;
-    }
 
     /**
->>>>>>> 34a4b509461d6d9e8169bea530cedd108190d3f8
+
 	 * Cr�er un message 
 	 * @param Messsage
 	 * @return Id du message créé
@@ -98,7 +71,7 @@ public class  MessageDAOImpl implements MessageDAO {
 		String sql = "INSERT INTO t90_msg(CD_EFS,LIB_TY_MES,TXT_LIB_MES,"
 				+ "LIB_MES_CNS,CD_PRTY_MES,DUR_VIE_MES,IDT_UTI, TXT_MES_CTU) VALUES (?, ?, ?,?,?,?,?,?)";
 		//dans t90_pub
-<<<<<<< HEAD
+
 		 String sqlPub = "INSERT INTO t90_pub(CD_EFS,CD_EFS_MES,"
 			 		+ "IDT_MES_DWB,CD_ETA_PUB,CD_TY_PUB,DA_DBT_AFG,DA_FIN_AFG, IDC_BIC,IDT_UTI,TM_STP)"
 			 		+ " VALUES (?, ?,?,?,?,?,?,?,?,?)";
@@ -121,12 +94,12 @@ public class  MessageDAOImpl implements MessageDAO {
 			    ps.setInt(1,34); //CD_EFS
 			   
 			    ps.setString(2,m.getType()); //LIB_TY_MES
-	        	ps.setString(3,m.getWording()); //TXT_LIB_MES
+	        	ps.setString(3,m.getLibelle()); //TXT_LIB_MES
 	        	if(m.getType().equals("BULLE_CONSEILLER")) { 
 	        		ps.setString(4,"Votre conseiller vous informe");  //LIB_MES_CNS
 	        	}
 	        	else {
-	        		ps.setString(4,m.getTextLib()); 
+	        		ps.setString(4,m.getLibelle()); 
 	        	}
 	        	//CD_PRTY_MES
 	        	ps.setInt(5,m.getPriority()); 
@@ -135,7 +108,7 @@ public class  MessageDAOImpl implements MessageDAO {
 	        	//IDT_UTI
 	        	ps.setString(7,"thomas"); 
 	        	//TXT_MES_CTU
-	        	ps.setString(8,m.getTextMes()); 
+	        	ps.setString(8,m.getTextBulle()); 
 	        	
 	        	rowAffected =ps.executeUpdate();
 	            if(rowAffected == 1)
@@ -215,7 +188,7 @@ public class  MessageDAOImpl implements MessageDAO {
 		 try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlEfs))
 	        {
 			 
-			 if(m.getEntity()!=null) {
+			 if(m.getEntity()!=null) {	
 			 		for (Integer temp : m.getEntity()) {
 			 			 ps.setInt(1,34); //CD_EFS
 						   
@@ -223,40 +196,7 @@ public class  MessageDAOImpl implements MessageDAO {
 				        	ps.setInt(3,temp ); //IDT_MES_DWB
 			 			ps.executeUpdate();
 					}
-=======
-		String sqlPub = "INSERT INTO t90_pub(CD_EFS,CD_EFS_MES,"
-				+ "IDT_MES_DWB,CD_ETA_PUB,CD_TY_PUB,DA_DBT_AFG,DA_FIN_AFG, IDC_BIC,IDT_UTI,TM_STP)"
-				+ " VALUES (?, ?,?,?,?,?,?,?,?,?)";
-		//dans t90_efs
-		String sqlEfs = "INSERT INTO t90_efs(CD_EFS_PUB,IDT_PUB,CD_EFS)"
-				+ " VALUES (?,?,?)";
-		//t90_cnl
-		String sqlCnl = "INSERT INTO t90_cnl(CD_EFS_PUB,IDT_PUB,CD_CNL,NO_PRTY)"
-				+ " VALUES (?,?,?,?)";
-		//t90_mc
-		String sqlMc = "INSERT INTO t90_mot_cle(CD_EFS,TXT_CLE,IDT_MES_DWB,IDT_UTI,TM_STP)"
-				+ " VALUES (?,?,?,?,?)";
-
-		String sqlMcDelete = "delete from t90_mot_cle where IDT_MES_DWB=?";
-		String sqlTy = "INSERT INTO oac.T90_TY_CLI (CD_EFS, CD_ESA, IDT_MES_DWB, IDT_UTI, TM_STP)"
-				+"VALUES (34, ?, ?, ?, ?)";
-
-		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS))
-		{
-			ps.setInt(1,34); //CD_EFS
-
-			ps.setString(2,m.getType()); //LIB_TY_MES
-			ps.setString(3,m.getTextLib()); //TXT_LIB_MES
-			if(m.getType().equals("BULLE_CONSEILLER")) { 
-				ps.setString(4,"Votre conseiller vous informe");  //LIB_MES_CNS
->>>>>>> 0ac9bb6b0718f1e7adf8ab39fd2f84e6ec2d99c2
-			}
-			else {
-				ps.setString(4,m.getTextLib()); 
-			}
-<<<<<<< HEAD
-			 	
-			     
+			 	}
 	        }
 	        catch (Exception e)
 	        {
@@ -279,25 +219,9 @@ public class  MessageDAOImpl implements MessageDAO {
 				        	ps.setTimestamp(5, date);
 				        	
 			 			ps.executeUpdate();
-					}
-=======
-			ps.setInt(5,m.getPriority()); //CD_PRTY_MES
-			ps.setInt(6,0); //DUR_VIE_MES
-			ps.setString(7,"thomas"); //IDT_UTI
-
-			ps.setString(8,m.getTextBulle()); //TXT_MES_CTU
-
-			rowAffected =ps.executeUpdate();
-			if(rowAffected == 1)
-			{
-
-				rs = ps.getGeneratedKeys();
-				if(rs.next())
-					generatedId = rs.getInt(1);
->>>>>>> 0ac9bb6b0718f1e7adf8ab39fd2f84e6ec2d99c2
-			}
-			rowAffected=0;
-		}
+					}rowAffected=0;
+			 }
+	        }
 		catch (Exception e)
 		{
 			e.printStackTrace();
@@ -513,13 +437,13 @@ public class  MessageDAOImpl implements MessageDAO {
 
 			ps.setString(2,m.getType()); //LIB_TY_MES
 
-			ps.setString(3,m.getTextLib()); //TXT_LIB_MES
+			ps.setString(3,m.getLibelle()); //TXT_LIB_MES
 			if(m.getType().equals("BULLE_CONSEILLER")) { 
 				ps.setString(4,"Votre conseiller vous informe");  //LIB_MES_CNS
 			}
 			else {
-				System.out.println(m.getTextLib());
-				ps.setString(4,m.getTextLib()); 
+				System.out.println(m.getLibelle());
+				ps.setString(4,m.getLibelle()); 
 			}
 			ps.setInt(5,m.getPriority()); //CD_PRTY_MES
 			ps.setInt(6,0); //DUR_VIE_MES
@@ -779,7 +703,7 @@ public class  MessageDAOImpl implements MessageDAO {
 		// Elements
 		String identity="";
 		String type="";
-		String textLib="";
+		String libelle="";
 		String textBulle="";
 		String ville="";
 		Date start=null;
@@ -787,6 +711,9 @@ public class  MessageDAOImpl implements MessageDAO {
 		String targetType="";
 		String client="";
 		String vision360="";
+		
+		//Le texte du message
+		String textMessage="";
 
 		int priority=0;
 		int priorityGAB=0;
@@ -826,9 +753,9 @@ public class  MessageDAOImpl implements MessageDAO {
 				//Type of message
 				type = r.getString(3);
 				// Libellé
-				textLib = r.getString(4);
-				// Texte 
-				textLib = r.getString(11);
+				libelle = r.getString(4);
+				// Texte du message !
+				textMessage = r.getString(11);
 				// Texte pour Message Bulle
 				textBulle = r.getString(5);
 				// Vision360
@@ -923,7 +850,7 @@ public class  MessageDAOImpl implements MessageDAO {
 			
 			ps.close();
 
-			return new Message(identity, type, vision360, textLib, textBulle, keywords, start, end, entities, canaux, priority, priorityGAB, t );
+			return new Message(identity, type, vision360, libelle, textBulle,textMessage, keywords, start, end, entities, canaux, priority, priorityGAB, t );
 
 		}
 
@@ -941,37 +868,7 @@ public class  MessageDAOImpl implements MessageDAO {
 	 * @author Abdoul Leadi - Thomas Clisson
 	 */
 	public int deleteMessage(int id) {
-<<<<<<< HEAD
 
-
-		String sql ="delete from t90_pub where IDT_MES_DWB=?";
-		String sql2 ="delete from t90_msg where IDT_MES_DWB=?";
-
-		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sql))
-		{
-			ps.setInt(1,id); //CD_EFS
-			ps.executeUpdate();
-			System.out.println("after execute");
-			ps.close();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-
-		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sql2))
-		{
-			ps.setInt(1,id); //CD_EFS
-			ps.executeUpdate();
-			ps.close();
-
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-
-=======
 		
 			String sqlPubId ="Select IDT_PUB from t90_pub where IDT_MES_DWB=?";
 			
@@ -1120,7 +1017,7 @@ public class  MessageDAOImpl implements MessageDAO {
 	            e.printStackTrace();
 	        }
 		
->>>>>>> 34a4b509461d6d9e8169bea530cedd108190d3f8
+
 		return id;
 	}
 
