@@ -28,6 +28,7 @@ import com.mysql.jdbc.Statement;
 @Component
 @PropertySource("classpath:application.properties")
 public class  MessageDAOImpl implements MessageDAO {
+<<<<<<< HEAD
 
 	private static java.sql.Connection con;
 
@@ -58,6 +59,51 @@ public class  MessageDAOImpl implements MessageDAO {
 	}
 
 	/**
+=======
+	
+<<<<<<< HEAD
+private static java.sql.Connection con;
+    
+private static String user = "root";
+//private static String mdp = "";
+private static String mdp = "root";
+private static String url = "jdbc:mysql://localhost/ping?serverTimezone=UTC";
+    
+    
+    
+    public static java.sql.Connection getInstance(){
+=======
+		private static java.sql.Connection con;
+>>>>>>> 6121934a42d3d3b3f86f662bbc544d49a812219e
+
+		@Value( "${user}" )  
+		private String user;
+		@Value( "${mdp}" )  
+		private  String mdp;
+		@Value( "${url}" )  
+		private  String url ;
+		
+	
+    public java.sql.Connection getInstance(){
+    	System.out.println(user);
+    	System.out.println(mdp);
+    	System.out.println(url);
+    	
+        if(con == null){
+            try {
+            	Class.forName("com.mysql.jdbc.Driver");
+                con = DriverManager.getConnection(url, user, mdp);
+
+            } catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+       }
+        return con;
+    }
+
+    /**
+>>>>>>> yinjie
 	 * Cr�er un message 
 	 * @param Messsage
 	 * @return Id du message créé
