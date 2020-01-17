@@ -28,7 +28,6 @@ import com.mysql.jdbc.Statement;
 @Component
 @PropertySource("classpath:application.properties")
 public class  MessageDAOImpl implements MessageDAO {
-<<<<<<< HEAD
 
 	private static java.sql.Connection con;
 
