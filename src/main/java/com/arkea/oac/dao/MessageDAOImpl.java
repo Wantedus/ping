@@ -1,27 +1,16 @@
 package com.arkea.oac.dao;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.Properties;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.stereotype.Component;
 
 import com.arkea.oac.model.Message;
 import com.arkea.oac.model.Target;
-import com.mysql.jdbc.PreparedStatement;
 import com.mysql.jdbc.Statement;
 
 @Component
@@ -37,7 +26,6 @@ public class  MessageDAOImpl implements MessageDAO {
 		@Value( "${url}" )  
 		private  String url ;
 		
-	
     public java.sql.Connection getInstance(){
     	
         if(con == null){
@@ -85,7 +73,7 @@ public class  MessageDAOImpl implements MessageDAO {
 		 String sqlMc = "INSERT INTO t90_mot_cle(CD_EFS,TXT_CLE,IDT_MES_DWB,IDT_UTI,TM_STP)"
 			 		+ " VALUES (?,?,?,?,?)";
 		 
-		 String sqlMcDelete = "delete from t90_mot_cle where IDT_MES_DWB=?";
+		 
 		 String sqlTy = "INSERT INTO oac.T90_TY_CLI (CD_EFS, CD_ESA, IDT_MES_DWB, IDT_UTI, TM_STP)"
 		 +"VALUES (34, ?, ?, ?, ?)";
 		
@@ -101,11 +89,14 @@ public class  MessageDAOImpl implements MessageDAO {
 	        	else {
 	        		ps.setString(4,m.getTextLib()); 
 	        	}
-	        	ps.setInt(5,m.getPriority()); //CD_PRTY_MES
-	        	ps.setInt(6,0); //DUR_VIE_MES
-	        	ps.setString(7,"thomas"); //IDT_UTI
-	        	
-	        	ps.setString(8,m.getTextMes()); //TXT_MES_CTU
+	        	//CD_PRTY_MES
+	        	ps.setInt(5,m.getPriority()); 
+	        	//DUR_VIE_MES
+	        	ps.setInt(6,0);
+	        	//IDT_UTI
+	        	ps.setString(7,"thomas"); 
+	        	//TXT_MES_CTU
+	        	ps.setString(8,m.getTextMes()); 
 	        	
 	        	rowAffected =ps.executeUpdate();
 	            if(rowAffected == 1)
@@ -123,17 +114,20 @@ public class  MessageDAOImpl implements MessageDAO {
 	        }
 		 
 		
-					
+		 
 		 try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlPub, Statement.RETURN_GENERATED_KEYS))
 	        {
-			    ps.setInt(1,34); //CD_EFS
-			   
-			    ps.setInt(2,34); //CD_EFS_MES
-	        	ps.setInt(3,generatedId ); //IDT_MES_DWB
+			    //CD_EFS
+			    ps.setInt(1,34); 
+			   //CD_EFS_MES
+			    ps.setInt(2,34); 
+			    //IDT_MES_DWB
+	        	ps.setInt(3,generatedId ); 
+	        	//CD_ETA_PUB
+	        	ps.setString(4,"O");  
+	        	//CD_TY_PUB
+	        	ps.setString(5,m.getT().getTargetType()); 
 	        	
-	        	ps.setString(4,"O");  //CD_ETA_PUB
-	        	
-	        	ps.setString(5,"F"); //CD_TY_PUB
 	        	if(m.getStart()!=null) {
 			 		 ps.setDate(6,  new java.sql.Date(m.getStart().getTime() ) ); 
 			 	}
@@ -146,9 +140,18 @@ public class  MessageDAOImpl implements MessageDAO {
 			 	else {
 			 		ps.setDate(7, null);
 			 	}
-	        	
-	        	ps.setString(8,"N"); //IDC_BIC
-	        	ps.setString(9,"thomas"); //IDT_UTI
+	        	//IDC_BIC
+	        	if(m.isVision360()=="true") {
+	        		ps.setString(8,"O"); 
+	        	}
+	        	else if(m.isVision360()=="false") {
+	        		ps.setString(8,"N"); 
+	        	}
+	        	else {
+	        		ps.setString(8,null);
+	        	}
+	        	//IDT_UTI
+	        	ps.setString(9,"thomas"); 
 	        	java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
 	        	ps.setTimestamp(10, date);
 	        	
@@ -216,7 +219,7 @@ public class  MessageDAOImpl implements MessageDAO {
 		 try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlMc))
 	        {
 			 
-			 if(m.getKeywords() !=null) {
+			 if(m.getKeywords().size()>0) {
 			 		for (String temp : m.getKeywords()) {
 			 			 
 			 			ps.setInt(1,34); 
@@ -706,11 +709,13 @@ public class  MessageDAOImpl implements MessageDAO {
 			String sqlMsg ="delete from t90_msg where IDT_MES_DWB=?";
 			
 			int idPub=0;
+			ResultSet r;
 			
+			//Selectionner l'id de la publication liée au message
 			try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlPubId))
 			{
 				 ps.setInt(1,id);
-				ResultSet r = ps.executeQuery();
+				 r = ps.executeQuery();
 				
 				while (r.next()) {
 					idPub = r.getInt(1);
