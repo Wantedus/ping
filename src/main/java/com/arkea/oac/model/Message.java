@@ -5,14 +5,13 @@ import java.util.Date;
 import java.util.List;
 
 public class Message {
-	
+
 	private String id;
-	private String type;//bulle ou message
-	private String wording ;
+	//bulle ou message
+	private String type;
 	private String vision360;
 	private String textLib;
 	private String textBulle;
-	private String textMes;
 	private List<String> keywords = new ArrayList<>();
 	private Date start;
 	private Date end;
@@ -20,28 +19,23 @@ public class Message {
 	private List<String> canals = new ArrayList<>();
 	private int priority;
 	private int priorityGAB;
-	
-	private Target t;
-	
+
+	private Target target;
+
 
 	public Message() {
-	
+
 	}
 
 
-	
-
-
-	public Message(String id, String type, String wording, String vision360, String textLib, String textBulle, List<String> keywords,
-		Date start, Date end, List<Integer> entity, List<String> canals, int priority, int priorityGAB, Target t, String textMes) {
+	public Message(String id, String type, String vision360, String textLib, String textBulle, List<String> keywords,
+			Date start, Date end, List<Integer> entity, List<String> canals, int priority, int priorityGAB, Target t) {
 		super();
 		this.id = id;
 		this.type = type;
-		this.wording = wording;
 		this.vision360 = vision360;
 		this.textLib = textLib;
 		this.textBulle = textBulle;
-		this.textMes = textMes;
 		this.keywords = keywords;
 		this.start = start;
 		this.end = end;
@@ -49,12 +43,12 @@ public class Message {
 		this.canals = canals;
 		this.priority = priority;
 		this.priorityGAB = priorityGAB;
-		this.t = t;
+		this.target = t;
 	}
-		
+
 
 	public Message(String id, String text) {
-	
+
 		//returns a tests message 
 		this.id=id;
 		this.type = text;
@@ -67,14 +61,6 @@ public class Message {
 
 	public void setType(String type) {
 		this.type = type;
-	}
-
-	public String getWording() {
-		return wording;
-	}
-
-	public void setWording(String wording) {
-		this.wording = wording;
 	}
 
 	public String isVision360() {
@@ -95,13 +81,13 @@ public class Message {
 	}
 
 
-	public String getTextMes() {
-		return textMes;
+	public String getTextBulle() {
+		return textBulle;
 	}
 
 
 	public void setTextMes(String textMes) {
-		this.textMes = textMes;
+		this.textBulle = textMes;
 	}
 
 	public List<String> getKeywords() {
@@ -152,21 +138,21 @@ public class Message {
 	public void setPriority(int priority) {
 		this.priority = priority;
 	}
-	
+
 	public int getPriorityGAB() {
 		return priorityGAB;
 	}
-	
+
 	public void setPriorityGAB(int priorityGAB) {
 		this.priorityGAB = priorityGAB;
 	}
 
 	public Target getT() {
-		return t;
+		return target;
 	}
 
 	public void setT(Target t) {
-		this.t = t;
+		this.target = t;
 	}
 
 	public String getId() {
@@ -176,7 +162,7 @@ public class Message {
 	public void setId(String id) {
 		this.id = id;
 	}
-	
-	
+
+
 
 }

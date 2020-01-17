@@ -11,6 +11,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+<<<<<<< HEAD
+=======
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+>>>>>>> 0ac9bb6b0718f1e7adf8ab39fd2f84e6ec2d99c2
 import org.springframework.web.bind.annotation.RestController;
 
 import com.arkea.oac.dao.MessageDAOImpl;
@@ -36,12 +42,14 @@ public class MessageController {
 		
 	}
 	
-	@GetMapping(value = "/message")
-	public ArrayList<Message> getAllMessage() {
+	@GetMapping(value = "**/message")
+	public ArrayList<Message> getRangedMessage(@RequestParam("range") String range) {
 		
-		return messageDAOImpl.getAllMessage();
+		return messageDAOImpl.getRangedMessage(range);
 	}
 
+	
+	
 	
 	@PostMapping(value = "/message")
 	public ResponseEntity<Integer> postMessage(@RequestBody Message m) {

@@ -18,4 +18,6 @@ public interface MessageDAO {
 	public ArrayList<Message> getAllMessage();
 	
 	public int deleteMessage(int id);
+
+	ArrayList<Message> getRangedMessage(String range);
 }
