@@ -13,30 +13,12 @@ import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
 @ComponentScan
-public class Application extends SpringBootServletInitializer implements EmbeddedServletContainerCustomizer{
+public class Application {
 
     public static void main(String[] args) {
     	
         SpringApplication.run(Application.class, args);
     }
     
-    /**
-     * Configurer l'environnement de l'application
-     * @param builder 
-     * @return Ajouter cette classe dans la configuration
-     */
-    @Override
-    protected SpringApplicationBuilder configure (SpringApplicationBuilder builder) {
-    	return builder.sources(Application.class);
-    }
-
-    /**
-     * Personnaliser la configuration. Ici, on peut changer le port par défaut en 8090
-     * @param container 
-     * @return void
-     */
-    @Override
-    public void customize(ConfigurableEmbeddedServletContainer container) {
-    	container.setPort(8090);
-    }
+    
 }

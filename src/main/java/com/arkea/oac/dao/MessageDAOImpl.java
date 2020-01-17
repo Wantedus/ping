@@ -39,9 +39,6 @@ public class  MessageDAOImpl implements MessageDAO {
 		
 	
     public java.sql.Connection getInstance(){
-    	System.out.println(user);
-    	System.out.println(mdp);
-    	System.out.println(url);
     	
         if(con == null){
             try {
@@ -685,28 +682,151 @@ public class  MessageDAOImpl implements MessageDAO {
         }
 		return null;
 	}
-
+	
+	/**
+	 * Delete message by id
+	 * @param id id du message
+	 * @return l'id du message supprimé
+	 * @author Abdoul Leadi - Thomas Clisson
+	 */
 	public int deleteMessage(int id) {
 		
+			String sqlPubId ="Select IDT_PUB from t90_pub where IDT_MES_DWB=?";
 			
-			String sql ="delete from t90_pub where IDT_MES_DWB=?";
-			String sql2 ="delete from t90_msg where IDT_MES_DWB=?";
+			String sqlPub ="delete from t90_pub where IDT_MES_DWB=?";
+			String sqlMc ="delete from t90_mot_cle where IDT_MES_DWB=?";
+			String sqlTy ="delete from t90_ty_cli where IDT_MES_DWB=?";
 			
-			 try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sql))
+			String sqlEfs ="delete from t90_efs where IDT_PUB=?";
+			String sqlCnl ="delete from t90_cnl where IDT_PUB=?";
+			String sqlAprl ="delete from t90_aprl where IDT_PUB=?";
+			String sqlCli ="delete from t90_cli where IDT_PUB=?";
+			String sqlStr ="delete from t90_str where IDT_PUB=?";
+			
+			String sqlMsg ="delete from t90_msg where IDT_MES_DWB=?";
+			
+			int idPub=0;
+			
+			try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlPubId))
+			{
+				 ps.setInt(1,id);
+				ResultSet r = ps.executeQuery();
+				
+				while (r.next()) {
+					idPub = r.getInt(1);
+				}
+				r.close();
+				ps.close();
+				
+			}catch (Exception e)
+			{
+	            e.printStackTrace();
+	        }
+			// Delete from Pub
+			 try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlPub))
 		        {
-				   ps.setInt(1,id); //CD_EFS
+				   ps.setInt(1,id); 
 				   ps.executeUpdate();
-				   System.out.println("after execute");
-		           ps.close();
+				   ps.close();
 		        }
 		        catch (Exception e)
 		        {
 		            e.printStackTrace();
 		        }
-			
-			try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sql2))
+			//Delete from msg
+			try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlMsg))
 	        {
 			   ps.setInt(1,id); //CD_EFS
+			   ps.executeUpdate();
+			   ps.close();
+	           
+	        }
+	        catch (Exception e)
+	        {
+	            e.printStackTrace();
+	        }
+			//Delete from Mot Clé
+			try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlMc))
+	        {
+			   ps.setInt(1,id); //CD_EFS
+			   ps.executeUpdate();
+			   ps.close();
+	           
+	        }
+	        catch (Exception e)
+	        {
+	            e.printStackTrace();
+	        }
+			//Delete from ty_cli
+			try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlTy))
+	        {
+			   //IDT_PUB
+			   ps.setInt(1,id);
+			   ps.executeUpdate();
+			   ps.close();
+	           
+	        }
+	        catch (Exception e)
+	        {
+	            e.printStackTrace();
+	        }
+			//Delete from efs
+			try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlEfs))
+	        {
+			   //IDT_PUB
+			   ps.setInt(1,idPub); 
+			   ps.executeUpdate();
+			   ps.close();
+	           
+	        }
+	        catch (Exception e)
+	        {
+	            e.printStackTrace();
+	        }
+			//Delete from cnl
+			try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlCnl))
+	        {
+			   //IDT_PUB
+			   ps.setInt(1,idPub); 
+			   ps.executeUpdate();
+			   ps.close();
+	           
+	        }
+	        catch (Exception e)
+	        {
+	            e.printStackTrace();
+	        }
+			//Delete from aprl
+			try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlAprl))
+	        {
+			   //IDT_PUB
+			   ps.setInt(1,idPub); 
+			   ps.executeUpdate();
+			   ps.close();
+	           
+	        }
+	        catch (Exception e)
+	        {
+	            e.printStackTrace();
+	        }
+			//Delete from cli
+			try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlCli))
+	        {
+			   //IDT_PUB
+			   ps.setInt(1,idPub); 
+			   ps.executeUpdate();
+			   ps.close();
+	           
+	        }
+	        catch (Exception e)
+	        {
+	            e.printStackTrace();
+	        }
+			//Delete from str
+			try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlStr))
+	        {
+			   //IDT_PUB
+			   ps.setInt(1,idPub); 
 			   ps.executeUpdate();
 			   ps.close();
 	           
