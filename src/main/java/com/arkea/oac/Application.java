@@ -2,13 +2,8 @@ package com.arkea.oac;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
-import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+
 
 
 @SpringBootApplication
@@ -19,9 +14,5 @@ public class Application {
     	
         SpringApplication.run(Application.class, args);
     }
-    
-<<<<<<< HEAD
-=======
-    
->>>>>>> 34a4b509461d6d9e8169bea530cedd108190d3f8
+
 }
