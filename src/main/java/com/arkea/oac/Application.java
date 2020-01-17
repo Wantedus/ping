@@ -20,4 +20,8 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
     
+<<<<<<< HEAD
+=======
+    
+>>>>>>> 34a4b509461d6d9e8169bea530cedd108190d3f8
 }
