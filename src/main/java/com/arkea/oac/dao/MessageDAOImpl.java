@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import com.arkea.oac.model.Message;
 import com.arkea.oac.model.Target;
+import com.arkea.page.MessagePageEntity;
 import com.mysql.jdbc.Statement;
 
 @Component
@@ -79,13 +80,6 @@ public class  MessageDAOImpl implements MessageDAO {
 	//    }
 
 	/**
->>>>>>> yinjie
-=======
-
-
-    /**
-
->>>>>>> d42f83e9791dda77662dafd6ad8be1b878d2126b
 	 * Cr�er un message 
 	 * @param Messsage
 	 * @return Id du message créé
@@ -618,7 +612,171 @@ public class  MessageDAOImpl implements MessageDAO {
 
 
 	}
+	
+	
+	/**
+	 * Get message by mot cle
+	 * @param motCle Le mot cle du message
+	 * @param type Le type du message
+	 * @param page La page actuelle
+	 * @param size Les elements max sur la page
+	 * @return liste des messages filtrée
+	 * @author YinjieZHAO
+	 */
+	public List<Message> getMessageByMotCle (String motCle, String type, Integer page, Integer size) {
+		int identity=0;
+		String containMot = "%"+motCle+"%";
+		if (motCle == null)
+			containMot = "%%";
+		String sqlRangeMessage="SELECT * "
+				+ "FROM t90_msg "
+				+ "LEFT JOIN t90_mot_cle ON t90_mot_cle.IDT_MES_DWB = t90_msg.IDT_MES_DWB "
+				+ "WHERE t90_mot_cle.TXT_CLE LIKE ? AND t90_msg.LIB_TY_MES = ? "
+				+ "LIMIT ?,?;";
+		ArrayList<Message> mMessageList = new ArrayList<>();
+		Message m;
+		
+		if (page != null && size != null) {
+			page = (page-1)*size;
+		}
+		
+		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlRangeMessage))
+		{
+			ps.setString(1,containMot);
+			ps.setString(2, type);
+			ps.setInt(3, page);
+			ps.setInt(4, size);
+			
+			ResultSet r = ps.executeQuery();
 
+			while (r.next()) {
+				identity = r.getInt(2);
+				m = getMessage(identity);
+				mMessageList.add(m);
+			}
+
+			r.close();
+			ps.close();
+
+		}catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return mMessageList;
+	}
+	
+	
+	/**
+	 * Get Message by Libelle
+	 * @param libelle Le libelle du message
+	 * @param type Le type du message
+	 * @param page La page actuelle
+	 * @param size Les elements max
+	 * @return liste des messages filtrée
+	 * @author YinjieZHAO
+	 */
+	public List<Message> getMessageByLibelle (String libelle, String type, Integer page, Integer size){
+		int identity=0;
+		String containLib = "%"+libelle+"%";
+		String sqlRangeMessage="SELECT * "
+				+ "FROM t90_msg "
+				+ "WHERE t90_msg.TXT_LIB_MES LIKE ? AND t90_msg.LIB_TY_MES = ? "
+				+ "LIMIT ?,?;";
+		ArrayList<Message> mMessageList = new ArrayList<>();
+		Message m;
+		
+		if (libelle == null)
+			containLib = "%%";
+		
+		if (page != null && size != null) {
+			page = (page-1)*size;
+		}
+		
+		System.out.println("In function getMessage by libelle");
+		System.out.println("Libelle : " + containLib);
+		System.out.println("Type : " + type);
+		
+		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlRangeMessage))
+		{
+			ps.setString(1, containLib);
+			ps.setString(2, type);
+			ps.setInt(3, page);
+			ps.setInt(4, size);
+			
+			System.out.println("In SQL getMessage by libelle");
+			
+			ResultSet r = ps.executeQuery();
+
+			while (r.next()) {
+				identity = r.getInt(2);
+				m = getMessage(identity);
+				System.out.println("Identity : " + identity);
+				mMessageList.add(m);
+			}
+
+			r.close();
+			ps.close();
+
+		}catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return mMessageList;
+	}
+	
+	
+	/**
+	 * Get all message by page
+	 * @param page la page actuelle
+	 * @param size les elements max sur la page
+	 * @return l'entité du message, c'est une liste des messages et un nombre total
+	 * @author YinjieZHAO
+	 */
+	public MessagePageEntity getAllMessageByPage (Integer page, Integer size) {
+		MessagePageEntity pageEntity = new MessagePageEntity();
+		
+		if (page != null && size != null) {
+			page = (page-1)*size;
+		} else {
+			System.out.println("Syntaxe error, MessagePageEntity");
+			return null;
+		}
+		
+		List<Message> messages = getRangedMessage(page, size);
+		pageEntity.setData(messages);
+		Long total = getTotal();
+		pageEntity.setTotal(total);
+		return pageEntity;
+	}
+
+	/**
+	 * Get le nombre total du message
+	 * @return le nombre total
+	 * @author YinjieZHAO
+	 */
+	public Long getTotal() {
+		long total=0;
+		String sqlGetTotal="SELECT count(*) "
+				+ "FROM t90_msg;";
+		
+		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlGetTotal))
+		{
+			ResultSet r = ps.executeQuery();
+
+			if (r.next()) {
+				total = r.getLong(1);
+			}
+			System.out.println("Total : " + total);
+		}catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return total;
+			
+	}
+	
 	/**
 	 * Get a range of message
 	 * @param range the range
@@ -626,10 +784,7 @@ public class  MessageDAOImpl implements MessageDAO {
 	 * @author YinjieZHAO
 	 */
 	@Override
-	public ArrayList<Message> getRangedMessage(String range) { 
-		int start=0;
-		int end=0;
-		int encart=0;
+	public ArrayList<Message> getRangedMessage(Integer page, Integer size ) { 
 		int identity=0;
 		String sqlRangeMessage="SELECT * "
 				+ "FROM t90_msg "
@@ -640,61 +795,31 @@ public class  MessageDAOImpl implements MessageDAO {
 
 		ArrayList<Message> mMessageList = new ArrayList<>();
 		Message m;
+		
+		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlRangeMessage))
+		{
+			ps.setInt(1,page);
+			ps.setInt(2, size);
+			
+			ResultSet r = ps.executeQuery();
 
-
-		if (!range.contains("-")) {
-			System.out.println("Not Contains - ");
-			return null;
-		}
-
-		System.out.println("Contains - ");
-		String parts[] = range.split("-");
-
-		try {
-			start = Integer.parseInt(parts[0]);
-			System.out.println("Start " + start);
-
-			end = Integer.parseInt(parts[1]);
-			System.out.println("End " + end);
-
-			if (start > end)
-				return null;
-
-			if (start <= 0)
-				return null;
-
-			start--;
-			encart = end - start;
-
-			try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlRangeMessage))
-			{
-				ps.setInt(1,start);
-				ps.setInt(2, encart);
-				ResultSet r = ps.executeQuery();
-
-				while (r.next()) {
-					identity = r.getInt(2);
-					m = getMessage(identity);
-					mMessageList.add(m);
-				}
-
-				r.close();
-				ps.close();
-
-				return mMessageList;
-
-			}catch (Exception e)
-			{
-				e.printStackTrace();
+			while (r.next()) {
+				identity = r.getInt(2);
+				m = getMessage(identity);
+				mMessageList.add(m);
 			}
-			return null;
 
-		}catch (NumberFormatException e) {
-			// Il ne faut pas être des caractères, il faut que des nombres
+			r.close();
+			ps.close();
+
+			return mMessageList;
+
+		}catch (Exception e)
+		{
+			e.printStackTrace();
 		}
-
+		
 		return mMessageList;
-
 	}
 
 

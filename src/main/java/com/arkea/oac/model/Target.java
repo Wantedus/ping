@@ -11,9 +11,6 @@ public class Target {
 	private String targetType;//permet de controller le type de cible
 	private String villeAgence;
 	
-	public Target() {
-	}
-	
 	
 	//Posibilit� de g�n�rer des champs null, s'ils ne correspondent pas au target_type
 	public Target(boolean federation, boolean agency, List<String> clientList, String villeAgence) {
