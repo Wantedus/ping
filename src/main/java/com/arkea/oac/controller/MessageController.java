@@ -27,17 +27,18 @@ public class MessageController {
 	private MessageDAOImpl messageDAOImpl;
 	
 	@GetMapping(value = "/message/{id}")
-	public Message getMessage(@PathVariable int id) {
+	public ResponseEntity<Message> getMessage(@PathVariable int id) {
 		
 		 Message m =messageDAOImpl.getMessage(id);
 		
 		 if(m.getId()=="") {
-			 return null;
+			 return  new ResponseEntity<Message>(m, HttpStatus.NO_CONTENT);
 		 }
 		 else{
-			 return m; 
+			return new ResponseEntity<Message>(m, HttpStatus.OK);
 		 }
-		
+	 
+
 	}
 	
 	@GetMapping(value = "/message")
@@ -92,7 +93,7 @@ public class MessageController {
 	}
 
 	@PutMapping(value = "/message/{id}")
-	public Message putMessage(@RequestBody Message m,@PathVariable int id) {
+	public ResponseEntity<Integer> putMessage(@RequestBody Message m,@PathVariable int id) {
 		
 	
 		/*
@@ -113,14 +114,16 @@ public class MessageController {
 		;
 		messageDAOImpl.updateMessage(id, m);
 		
-		return messageDAOImpl.getMessage(id);
+		//return messageDAOImpl.getMessage(id);
+		
+		return new ResponseEntity<Integer>(id, HttpStatus.ACCEPTED);
 		
 	}
 	
 	@DeleteMapping(value = "/message/{id}")
 	public ResponseEntity<Integer> deleteMessage(@PathVariable int id) {
 		messageDAOImpl.deleteMessage(id);
-		return new ResponseEntity<Integer>(id, HttpStatus.ACCEPTED);
+		return new ResponseEntity<Integer>(id, HttpStatus.NO_CONTENT);
 	}
 	
 	
