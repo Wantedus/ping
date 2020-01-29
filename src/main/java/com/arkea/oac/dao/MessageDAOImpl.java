@@ -83,9 +83,9 @@ public class  MessageDAOImpl implements MessageDAO {
 
 
 /*
-	 * Crï¿½er un message 
+	 * Creer un message 
 	 * @param Messsage
-	 * @return Id du message crÃ©Ã©
+	 * @return Id du message cree
 	 * @exception exception while compiling SQL
 	 * @author ThomasCLISSON
 	 */
@@ -454,9 +454,9 @@ public class  MessageDAOImpl implements MessageDAO {
 	}
 
 	/**
-	 * Mettre un jour message 
+	 * Mettre � jour message 
 	 * @param id du message, Messsage
-	 * @return Id du message modifiÃ©
+	 * @return Id du message modifie
 	 * @exception exception while compiling SQL
 	 * @author ThomasCLISSON
 	 */
@@ -641,7 +641,7 @@ public class  MessageDAOImpl implements MessageDAO {
 	 * @param type Le type du message
 	 * @param page La page actuelle
 	 * @param size Les elements max sur la page
-	 * @return liste des messages filtrÃ©e
+	 * @return liste des messages filtres
 	 * @author YinjieZHAO
 	 */
 	public List<Message> getMessageByMotCle (String motCle, String type, Integer page, Integer size) {
@@ -752,7 +752,7 @@ public class  MessageDAOImpl implements MessageDAO {
 	 * Get all message by page
 	 * @param page la page actuelle
 	 * @param size les elements max sur la page
-	 * @return l'entitÃ© du message, c'est une liste des messages et un nombre total
+	 * @return l'entite du message, c'est une liste des messages et un nombre total
 	 * @author YinjieZHAO
 	 */
 	public MessagePageEntity getAllMessageByPage (Integer page, Integer size) {
@@ -889,7 +889,7 @@ public class  MessageDAOImpl implements MessageDAO {
 
 	/**
 	 * Get message by id
-	 * @param id id du message
+	 * @param id du message
 	 * @return le resultat du message
 	 * @author YinjieZHAO
 	 */
@@ -913,7 +913,7 @@ public class  MessageDAOImpl implements MessageDAO {
 		String identity="";
 		String type="";
 		String libelle="";
-		//Pas besoin de récupérer ce champ "votre conseiller vous informe"
+		//Pas besoin de recuperer ce champ "votre conseiller vous informe"
 		//String textBulle="";
 		String ville="";
 		Date start=null;
@@ -1161,7 +1161,7 @@ public class  MessageDAOImpl implements MessageDAO {
 
 		ResultSet r;
 
-		//Selectionner l'id de la publication liï¿½e au message
+		//Selectionner l'id de la publication liee au message
 		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlPubId))
 		{
 			ps.setInt(1,id);

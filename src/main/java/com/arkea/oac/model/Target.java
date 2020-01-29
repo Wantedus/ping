@@ -12,7 +12,7 @@ public class Target {
 	private String villeAgence;
 	
 	
-	//Posibilit� de g�n�rer des champs null, s'ils ne correspondent pas au target_type
+	//Posibilite de generer des champs null, s'ils ne correspondent pas au target_type
 	public Target(boolean federation, boolean agency, String clientList, String villeAgence) {
 		this.federation = federation;
 		this.agency = agency;

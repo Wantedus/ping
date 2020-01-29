@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -27,6 +26,15 @@ public class MessageController {
 	@Autowired
 	private MessageDAOImpl messageDAOImpl;
 	
+
+	
+
+	/**
+	 * récupérer un message en fonction de son id 
+	 * if id n'existe pas,
+	 * @return un fichier vide avec NO_CONTENT 
+	 * @return sinon retourner un fichier avec le message correspondant à l'id. 
+	 */
 	@CrossOrigin(origins = "*")
 	@GetMapping(value = "/message/{id}")
 	public ResponseEntity<Message> getMessage(@PathVariable int id) {
@@ -44,6 +52,13 @@ public class MessageController {
 	 
 
 	}
+
+	
+
+	/**
+	 * recuperer tous les messages
+	 * return list message
+	 */
 	@CrossOrigin(origins = "*")
 	@GetMapping(value = "/message")
 	public ArrayList<Message> getAllMessage() {
@@ -53,8 +68,8 @@ public class MessageController {
 	
 	/**
 	 * Get all message by page
-	 * @param page la page actuelle, 1 par dÃ©faut
-	 * @param size les rangs qu'ils vont afficher sur la page, 10 par dÃ©faut
+	 * @param page la page actuelle, 1 par defaut
+	 * @param size les rangs qu'ils vont afficher sur la page, 10 par defaut
 	 * @return la page
 	 */
 	@CrossOrigin(origins = "*")
@@ -66,6 +81,17 @@ public class MessageController {
 		return messageDAOImpl.getAllMessageByPage(page, size);
 	}
 
+
+	
+
+    /**
+     * Récupérer les messages en fonction du libellé	
+     * libelle declaration
+     * @param, recupere parametre de la requete Http
+     * @param page actuel, 0 par defaut
+     * @param size les rans qui seront afficher sur la page, 5 par defaut
+     * @return une page en fonction du libelle et type 
+     */
 	@CrossOrigin(origins = "*")
 	@GetMapping(value="/search/libelle")
 	public List<Message> getMessageByLibelle(
@@ -76,6 +102,16 @@ public class MessageController {
 		return messageDAOImpl.getMessageByLibelle(libelle, type, page, size);
 	}
 	
+
+	
+	/** 
+	 * get message en fonction du mot clé
+	 * @param motcle
+	 * @param type
+	 * @param page actuel, 0 par defaut
+	 * @param size
+	 * @return une page en fonction du mot cle et du type 
+	 */
 	@CrossOrigin(origins = "*")
 	@GetMapping(value="/search/motcle")
 	public List<Message> getMessageByMotCle(
@@ -86,6 +122,14 @@ public class MessageController {
 		return messageDAOImpl.getMessageByMotCle(motcle, type, page, size);
 	}
 	
+
+	
+
+	/**
+	 * Créer un nouveau message avec la requete Post 
+	 * @param m, affecter un id au nouveau message m crée
+	 * requete réussie, nouveau message crée
+	 */
 	@CrossOrigin(origins = "*")
 	@PostMapping(value = "/message")
 	public ResponseEntity<Integer> postMessage(@RequestBody Message m) {
@@ -96,6 +140,15 @@ public class MessageController {
 		return new ResponseEntity<Integer>(id, HttpStatus.CREATED);
 		
 	}
+
+	
+
+    /**
+     * Put un nouveau message pour substituer un ancien message
+     * @param m nouveau message crée
+     * @param id du message m
+     * @return requete a ete reçue
+     */
 	@CrossOrigin(origins = "*")
 	@PutMapping(value = "/message/{id}")
 	public ResponseEntity<Integer> putMessage(@RequestBody Message m,@PathVariable int id) {
@@ -124,6 +177,15 @@ public class MessageController {
 		return new ResponseEntity<Integer>(id, HttpStatus.ACCEPTED);
 		
 	}
+
+	
+
+	/**
+	 * Supprimer message en fonction d'un id
+	 * @param id du message à supprimer
+	 * @return une page vide 
+	 */
+	
 	@CrossOrigin(origins = "*")
 	@DeleteMapping(value = "/message/{id}")
 	public ResponseEntity<Integer> deleteMessage(@PathVariable int id) {
