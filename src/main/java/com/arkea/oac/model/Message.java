@@ -11,7 +11,7 @@ public class Message {
 	private String type;
 	private String vision360;
 	private String libelle;
-	private String textBulle;
+	//private String textBulle;
 	private String textMessage;
 	public String getTextMessage() {
 		return textMessage;
@@ -38,7 +38,7 @@ public class Message {
 
 	}
 
-
+/*
 	public Message(String id, String type, String vision360, String lib, String textBulle,String textMessage, List<String> keywords,
 			Date start, Date end, List<Integer> entity, List<String> canals, int priority, int priorityGAB, Target t) {
 		super();
@@ -47,6 +47,26 @@ public class Message {
 		this.vision360 = vision360;
 		this.libelle = lib;
 		this.textBulle = textBulle;
+		this.textMessage=textMessage;
+		this.keywords = keywords;
+		this.start = start;
+		this.end = end;
+		this.entity = entity;
+		this.canals = canals;
+		this.priority = priority;
+		this.priorityGAB = priorityGAB;
+		this.target = t;
+	}
+	*/
+	//Constructeur sans texte bulle
+	public Message(String id, String type, String vision360, String lib,String textMessage, List<String> keywords,
+			Date start, Date end, List<Integer> entity, List<String> canals, int priority, int priorityGAB, Target t) {
+		super();
+		this.id = id;
+		this.type = type;
+		this.vision360 = vision360;
+		this.libelle = lib;
+		
 		this.textMessage=textMessage;
 		this.keywords = keywords;
 		this.start = start;
@@ -92,7 +112,7 @@ public class Message {
 		this.libelle = lib;
 	}
 
-
+/*
 	public String getTextBulle() {
 		return textBulle;
 	}
@@ -101,7 +121,7 @@ public class Message {
 	public void setTextMes(String textMes) {
 		this.textBulle = textMes;
 	}
-
+*/
 	public List<String> getKeywords() {
 		return keywords;
 	}

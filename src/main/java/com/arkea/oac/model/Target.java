@@ -7,7 +7,7 @@ public class Target {
 	
 	private boolean federation = true;
 	private boolean agency = false;
-	private List<String> clientList = new ArrayList<>();
+	private String clientList;
 	private String targetType;//permet de controller le type de cible
 	private String villeAgence;
 	
@@ -16,7 +16,7 @@ public class Target {
 	
 	
 	//Posibilit� de g�n�rer des champs null, s'ils ne correspondent pas au target_type
-	public Target(boolean federation, boolean agency, List<String> clientList, String villeAgence) {
+	public Target(boolean federation, boolean agency, String clientList, String villeAgence) {
 		this.federation = federation;
 		this.agency = agency;
 		this.clientList = clientList;
@@ -40,10 +40,10 @@ public class Target {
 	public void setAgency(boolean agency) {
 		this.agency = agency;
 	}
-	public List<String> getClientList() {
+	public String getClientList() {
 		return this.clientList;
 	}
-	public void setClientList(List<String> clientList) {
+	public void setClientList(String clientList) {
 		this.clientList = clientList;
 	}
 
@@ -64,7 +64,7 @@ public class Target {
 	}
 	
 
-	public String defineTargetType (boolean federation, boolean agency, List<String> client_list) {
+	public String defineTargetType (boolean federation, boolean agency,String client_list) {
 		if (federation)
 //			Federation
 			return "F"; 
