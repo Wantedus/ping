@@ -22,7 +22,7 @@ public class  MessageDAOImpl implements MessageDAO {
 
 	private static java.sql.Connection con;
 
-	@Value( "${username}" )  
+	@Value( "${user}" )  
 	private String username;
 	@Value( "${mdp}" )  
 	private  String mdp;
@@ -116,10 +116,10 @@ public class  MessageDAOImpl implements MessageDAO {
 				+ " VALUES (?,?,?,?,?)";
 
 
-		String sqlTy = "INSERT INTO oac.T90_TY_CLI (CD_EFS, CD_ESA, IDT_MES_DWB, IDT_UTI, TM_STP)"
+		String sqlTy = "INSERT INTO t90_ty_cli (CD_EFS, CD_ESA, IDT_MES_DWB, IDT_UTI, TM_STP)"
 				+"VALUES (34, ?, ?, ?, ?)";
 		
-		String sqlVar = "INSERT INTO oac.T90_VAR (CD_EFS_PUB, CD_EFS_PSE, NO_PSE_MAIL, IDT_PUB, NO_PSE_IDT_CTB_CTU,CD_CHP_LIB_CHP)"
+		String sqlVar = "INSERT INTO t90_var (CD_EFS_PUB, CD_EFS_PSE, NO_PSE_MAL, IDT_PUB, NO_PSE,IDT_CTB_CTU,CD_CHP,LIB_CHP)"
 				+"VALUES (?, ?, ?, ?, ?,?,?,?)";
 
 		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS))
@@ -171,13 +171,14 @@ public class  MessageDAOImpl implements MessageDAO {
 			//CD_ETA_PUB
 			ps.setString(4,"O");  
 			//CD_TY_PUB
+			System.out.println(m.getT());
 			ps.setString(5,m.getT().getTargetType()); 
 
 			if(m.getStart()!=null) {
 				ps.setDate(6,  new java.sql.Date(m.getStart().getTime() ) ); 
 			}
 			else {
-				ps.setDate(6, null);
+				ps.setDate(6, null);	
 			}
 			if(m.getEnd()!=null) {
 				ps.setDate(7,  new java.sql.Date(m.getEnd().getTime() ) ); 
@@ -308,25 +309,7 @@ public class  MessageDAOImpl implements MessageDAO {
 		*/
 
 
-		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlEfs))
-		{
-
-			if(m.getEntity()!=null) {
-				for (Integer temp : m.getEntity()) {
-					ps.setInt(1,34); //CD_EFS
-
-					ps.setInt(2,generatedIdPub); //CD_EFS_MES
-					ps.setInt(3,temp ); //IDT_MES_DWB
-					ps.executeUpdate();
-				}
-			}
-
-
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+		
 
 
 		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlCnl))
@@ -349,44 +332,18 @@ public class  MessageDAOImpl implements MessageDAO {
 		{
 			e.printStackTrace();
 		}
-
-
-		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlMc))
-		{
-
-			if(m.getKeywords() !=null) {
-				for (String temp : m.getKeywords()) {
-
-					ps.setInt(1,34); 
-
-					ps.setString(2,temp);
-					ps.setInt(3,generatedId);
-					ps.setString(4, userName);
-					java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
-					ps.setTimestamp(5, date);
-
-					ps.executeUpdate();
-				}
-			}
-
-
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		//String sqlVar = "INSERT INTO oac.T90_VAR (CD_EFS_PUB, CD_EFS_PSE, NO_PSE_MAIL, IDT_PUB, NO_PSE_IDT_CTB_CTU,CD_CHP_LIB_CHP)"
-			//	+"VALUES (34, ?, ?, ?, ?,?,?)";
+		
 		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlVar))
 		{
 			String clients=m.getT().getClientList();
 			System.out.println("Voici les clients: "+clients);
+			clients = clients.replace(" ", "");
 			String[] listeClients =clients.split("\\r?\\n");
-			int i=0;
+			
 			String client=null;
 			System.out.println("taille de la liste:" +listeClients.length);
 			
-			for(i=0;i<listeClients.length;i++) {
+			for(int i=0;i<listeClients.length;i++) {
 				client=listeClients[i];
 				System.out.println(client);
 				
@@ -408,6 +365,7 @@ public class  MessageDAOImpl implements MessageDAO {
 					
 
 					ps.executeUpdate();
+					System.out.println("personne num�ro" +i);
 					
 					ps.setInt(1,34); 
 
@@ -949,7 +907,7 @@ public class  MessageDAOImpl implements MessageDAO {
 		ArrayList <String> NO_PSE = new ArrayList<>();
 
 		//Target
-		Target t;
+		Target target;
 
 		// Elements
 		String identity="";
@@ -1015,6 +973,7 @@ public class  MessageDAOImpl implements MessageDAO {
 				targetType = r.getString(22);
 				// La date dÃ©but d'affichage du message
 				start = r.getDate(23);
+				System.out.println(r.getDate(23));
 				// La date fin d'affichage du message
 				end = r.getDate(24);
 
@@ -1097,13 +1056,13 @@ public class  MessageDAOImpl implements MessageDAO {
 				tmp = "";
 			} 
 
-			t = new Target(federation, agency, clients, ville);
+			target = new Target(federation, agency, clients, ville);
 
 			r.close();
 
 			ps.close();
 
-			return new Message(identity, type, vision360, libelle, textMessage, keywords, start, end, entities, canaux, priority, priorityGAB, t );
+			return new Message(identity, type, vision360, libelle, textMessage, keywords, start, end, entities, canaux, priority, priorityGAB, target );
 
 		}
 

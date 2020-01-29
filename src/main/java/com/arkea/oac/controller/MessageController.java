@@ -29,7 +29,9 @@ public class MessageController {
 	@GetMapping(value = "/message/{id}")
 	public ResponseEntity<Message> getMessage(@PathVariable int id) {
 		
+		
 		 Message m =messageDAOImpl.getMessage(id);
+			System.out.println(m.getT().toString());	
 		
 		 if(m.getId()=="") {
 			 return  new ResponseEntity<Message>(m, HttpStatus.NO_CONTENT);
@@ -85,9 +87,9 @@ public class MessageController {
 	@PostMapping(value = "/message")
 	public ResponseEntity<Integer> postMessage(@RequestBody Message m) {
 		
+		//System.out.println(m.getT().toString());
 		int id =messageDAOImpl.createMessage(m);
-		
-		
+				
 		return new ResponseEntity<Integer>(id, HttpStatus.CREATED);
 		
 	}
@@ -115,7 +117,7 @@ public class MessageController {
 		messageDAOImpl.updateMessage(id, m);
 		
 		//return messageDAOImpl.getMessage(id);
-		
+	
 		return new ResponseEntity<Integer>(id, HttpStatus.ACCEPTED);
 		
 	}
