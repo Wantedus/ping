@@ -53,10 +53,10 @@ public class MessageController {
 	 * @param size les rangs qu'ils vont afficher sur la page, 10 par défaut
 	 * @return la page
 	 */
-	@GetMapping(value = "/all/")
+	@GetMapping(value = "/message/")
 	public MessagePageEntity getAllMessageByPage(
-			@RequestParam(defaultValue = "0") Integer page,
-			@RequestParam(defaultValue = "10") Integer size){
+			@RequestParam(defaultValue = "1", required=false) Integer page,
+			@RequestParam(defaultValue = "10", required=false) Integer size){
 		
 		return messageDAOImpl.getAllMessageByPage(page, size);
 	}
@@ -66,8 +66,8 @@ public class MessageController {
 	public List<Message> getMessageByLibelle(
 			String libelle,
 			@RequestParam String type,
-			@RequestParam(defaultValue = "0") Integer page,
-			@RequestParam(defaultValue = "5") Integer size){
+			@RequestParam(defaultValue = "0",required=false) Integer page,
+			@RequestParam(defaultValue = "5",required=false) Integer size){
 		return messageDAOImpl.getMessageByLibelle(libelle, type, page, size);
 	}
 	
@@ -76,8 +76,8 @@ public class MessageController {
 	public List<Message> getMessageByMotCle(
 			String motcle,
 			@RequestParam String type,
-			@RequestParam(defaultValue = "0") Integer page,
-			@RequestParam(defaultValue = "5") Integer size){
+			@RequestParam(defaultValue = "0",required=false) Integer page,
+			@RequestParam(defaultValue = "5",required=false) Integer size){
 		return messageDAOImpl.getMessageByMotCle(motcle, type, page, size);
 	}
 	
