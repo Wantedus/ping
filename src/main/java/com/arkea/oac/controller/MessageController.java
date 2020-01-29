@@ -1,8 +1,10 @@
 package com.arkea.oac.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,10 +13,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.arkea.oac.dao.MessageDAOImpl;
 import com.arkea.oac.model.Message;
+import com.arkea.page.MessagePageEntity;
 
 @RestController
 public class MessageController {
@@ -41,8 +45,41 @@ public class MessageController {
 	public ArrayList<Message> getAllMessage() {
 		return messageDAOImpl.getAllMessage();
 	}
+	
+	
+	/**
+	 * Get all message by page
+	 * @param page la page actuelle, 1 par défaut
+	 * @param size les rangs qu'ils vont afficher sur la page, 10 par défaut
+	 * @return la page
+	 */
+	@GetMapping(value = "/all/")
+	public MessagePageEntity getAllMessageByPage(
+			@RequestParam(defaultValue = "0") Integer page,
+			@RequestParam(defaultValue = "10") Integer size){
+		
+		return messageDAOImpl.getAllMessageByPage(page, size);
+	}
 
 	
+	@GetMapping(value="/search/libelle")
+	public List<Message> getMessageByLibelle(
+			String libelle,
+			@RequestParam String type,
+			@RequestParam(defaultValue = "0") Integer page,
+			@RequestParam(defaultValue = "5") Integer size){
+		return messageDAOImpl.getMessageByLibelle(libelle, type, page, size);
+	}
+	
+	
+	@GetMapping(value="/search/motcle")
+	public List<Message> getMessageByMotCle(
+			String motcle,
+			@RequestParam String type,
+			@RequestParam(defaultValue = "0") Integer page,
+			@RequestParam(defaultValue = "5") Integer size){
+		return messageDAOImpl.getMessageByMotCle(motcle, type, page, size);
+	}
 	
 	
 	@PostMapping(value = "/message")
@@ -60,7 +97,7 @@ public class MessageController {
 		
 	
 		/*
-		Message updatedMessage =messageDAOImpl.getMessage(id);
+		Message updatedMessa ge =messageDAOImpl.getMessage(id);
 		
 		updatedMessage.setCanals(m.getCanals());
 		updatedMessage.setEnd(m.getEnd());

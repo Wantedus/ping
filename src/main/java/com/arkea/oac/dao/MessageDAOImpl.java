@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import com.arkea.oac.model.Message;
 import com.arkea.oac.model.Target;
+import com.arkea.page.MessagePageEntity;
 import com.mysql.jdbc.Statement;
 
 @Component
@@ -27,7 +28,7 @@ public class  MessageDAOImpl implements MessageDAO {
 	private  String mdp;
 	@Value( "${url}" )  
 	private  String url ;
-	//IDT_UTI prends la valeur userName, vu que nous avons pas acc�s � la conexion ni aux utilisateurs, nous rempla
+	//IDT_UTI prends la valeur userName, vu que nous avons pas accès à la conexion ni aux utilisateurs, nous rempla
 	private String userName="";
 
 
@@ -80,10 +81,11 @@ public class  MessageDAOImpl implements MessageDAO {
 	//        return con;
 	//    }
 
+
 /*
-	 * Cr�er un message 
+	 * Crï¿½er un message 
 	 * @param Messsage
-	 * @return Id du message créé
+	 * @return Id du message crÃ©Ã©
 	 * @exception exception while compiling SQL
 	 * @author ThomasCLISSON
 	 */
@@ -437,7 +439,7 @@ public class  MessageDAOImpl implements MessageDAO {
 			 if(m.getKeywords() !=null) {
 			 		for (String temp : m.getKeywords()) {
 
-			 			   //AG, AS, PA,PR -- d�pend du fichier � l'upload ? 
+			 			   //AG, AS, PA,PR -- dï¿½pend du fichier ï¿½ l'upload ? 
 						    ps.setString(1,temp);
 						    //IDT_MES_DWB
 				        	ps.setInt(3,generatedId);
@@ -458,7 +460,7 @@ public class  MessageDAOImpl implements MessageDAO {
 	        }
 		 */  
 
-		//Ajouter les diff�rents clients en aprsant le fichier envoy�
+		//Ajouter les diffï¿½rents clients en aprsant le fichier envoyï¿½
 		/*
 		 String sqlVar = "INSERT INTO t90_var(CD_EFS_PUB,CD_EFS_PSE,NO_PSE_MAL,IDT_PUB,NO_PSE,IDT_CTB_CTU,CD_CHP,LIB_CHP)"
 			 		+ " VALUES (?,?,?,?,?)";
@@ -496,7 +498,7 @@ public class  MessageDAOImpl implements MessageDAO {
 	/**
 	 * Mettre un jour message 
 	 * @param id du message, Messsage
-	 * @return Id du message modifié
+	 * @return Id du message modifiÃ©
 	 * @exception exception while compiling SQL
 	 * @author ThomasCLISSON
 	 */
@@ -602,7 +604,7 @@ public class  MessageDAOImpl implements MessageDAO {
 
 				for(String k : m.getKeywords()) {
 					ps.setInt(1,  34); 
-					//Mot cl�
+					//Mot clï¿½
 					ps.setString(2,k);
 					//TXT_LIB_MES
 					ps.setInt(3,id);
@@ -673,7 +675,171 @@ public class  MessageDAOImpl implements MessageDAO {
 
 
 	}
+	
+	
+	/**
+	 * Get message by mot cle
+	 * @param motCle Le mot cle du message
+	 * @param type Le type du message
+	 * @param page La page actuelle
+	 * @param size Les elements max sur la page
+	 * @return liste des messages filtrÃ©e
+	 * @author YinjieZHAO
+	 */
+	public List<Message> getMessageByMotCle (String motCle, String type, Integer page, Integer size) {
+		int identity=0;
+		String containMot = "%"+motCle+"%";
+		if (motCle == null)
+			containMot = "%%";
+		String sqlRangeMessage="SELECT * "
+				+ "FROM t90_msg "
+				+ "LEFT JOIN t90_mot_cle ON t90_mot_cle.IDT_MES_DWB = t90_msg.IDT_MES_DWB "
+				+ "WHERE t90_mot_cle.TXT_CLE LIKE ? AND t90_msg.LIB_TY_MES = ? "
+				+ "LIMIT ?,?;";
+		ArrayList<Message> mMessageList = new ArrayList<>();
+		Message m;
+		
+		if (page != null && size != null) {
+			page = (page-1)*size;
+		}
+		
+		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlRangeMessage))
+		{
+			ps.setString(1,containMot);
+			ps.setString(2, type);
+			ps.setInt(3, page);
+			ps.setInt(4, size);
+			
+			ResultSet r = ps.executeQuery();
 
+			while (r.next()) {
+				identity = r.getInt(2);
+				m = getMessage(identity);
+				mMessageList.add(m);
+			}
+
+			r.close();
+			ps.close();
+
+		}catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return mMessageList;
+	}
+	
+	
+	/**
+	 * Get Message by Libelle
+	 * @param libelle Le libelle du message
+	 * @param type Le type du message
+	 * @param page La page actuelle
+	 * @param size Les elements max
+	 * @return liste des messages filtrÃ©e
+	 * @author YinjieZHAO
+	 */
+	public List<Message> getMessageByLibelle (String libelle, String type, Integer page, Integer size){
+		int identity=0;
+		String containLib = "%"+libelle+"%";
+		String sqlRangeMessage="SELECT * "
+				+ "FROM t90_msg "
+				+ "WHERE t90_msg.TXT_LIB_MES LIKE ? AND t90_msg.LIB_TY_MES = ? "
+				+ "LIMIT ?,?;";
+		ArrayList<Message> mMessageList = new ArrayList<>();
+		Message m;
+		
+		if (libelle == null)
+			containLib = "%%";
+		
+		if (page != null && size != null) {
+			page = (page-1)*size;
+		}
+		
+		System.out.println("In function getMessage by libelle");
+		System.out.println("Libelle : " + containLib);
+		System.out.println("Type : " + type);
+		
+		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlRangeMessage))
+		{
+			ps.setString(1, containLib);
+			ps.setString(2, type);
+			ps.setInt(3, page);
+			ps.setInt(4, size);
+			
+			System.out.println("In SQL getMessage by libelle");
+			
+			ResultSet r = ps.executeQuery();
+
+			while (r.next()) {
+				identity = r.getInt(2);
+				m = getMessage(identity);
+				System.out.println("Identity : " + identity);
+				mMessageList.add(m);
+			}
+
+			r.close();
+			ps.close();
+
+		}catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return mMessageList;
+	}
+	
+	
+	/**
+	 * Get all message by page
+	 * @param page la page actuelle
+	 * @param size les elements max sur la page
+	 * @return l'entitÃ© du message, c'est une liste des messages et un nombre total
+	 * @author YinjieZHAO
+	 */
+	public MessagePageEntity getAllMessageByPage (Integer page, Integer size) {
+		MessagePageEntity pageEntity = new MessagePageEntity();
+		
+		if (page != null && size != null) {
+			page = (page-1)*size;
+		} else {
+			System.out.println("Syntaxe error, MessagePageEntity");
+			return null;
+		}
+		
+		List<Message> messages = getRangedMessage(page, size);
+		pageEntity.setData(messages);
+		Long total = getTotal();
+		pageEntity.setTotal(total);
+		return pageEntity;
+	}
+
+	/**
+	 * Get le nombre total du message
+	 * @return le nombre total
+	 * @author YinjieZHAO
+	 */
+	public Long getTotal() {
+		long total=0;
+		String sqlGetTotal="SELECT count(*) "
+				+ "FROM t90_msg;";
+		
+		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlGetTotal))
+		{
+			ResultSet r = ps.executeQuery();
+
+			if (r.next()) {
+				total = r.getLong(1);
+			}
+			System.out.println("Total : " + total);
+		}catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return total;
+			
+	}
+	
 	/**
 	 * Get a range of message
 	 * @param range the range
@@ -681,10 +847,7 @@ public class  MessageDAOImpl implements MessageDAO {
 	 * @author YinjieZHAO
 	 */
 	@Override
-	public ArrayList<Message> getRangedMessage(String range) { 
-		int start=0;
-		int end=0;
-		int encart=0;
+	public ArrayList<Message> getRangedMessage(Integer page, Integer size ) { 
 		int identity=0;
 		String sqlRangeMessage="SELECT * "
 				+ "FROM t90_msg "
@@ -695,61 +858,31 @@ public class  MessageDAOImpl implements MessageDAO {
 
 		ArrayList<Message> mMessageList = new ArrayList<>();
 		Message m;
+		
+		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlRangeMessage))
+		{
+			ps.setInt(1,page);
+			ps.setInt(2, size);
+			
+			ResultSet r = ps.executeQuery();
 
-
-		if (!range.contains("-")) {
-			System.out.println("Not Contains - ");
-			return null;
-		}
-
-		System.out.println("Contains - ");
-		String parts[] = range.split("-");
-
-		try {
-			start = Integer.parseInt(parts[0]);
-			System.out.println("Start " + start);
-
-			end = Integer.parseInt(parts[1]);
-			System.out.println("End " + end);
-
-			if (start > end)
-				return null;
-
-			if (start <= 0)
-				return null;
-
-			start--;
-			encart = end - start;
-
-			try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlRangeMessage))
-			{
-				ps.setInt(1,start);
-				ps.setInt(2, encart);
-				ResultSet r = ps.executeQuery();
-
-				while (r.next()) {
-					identity = r.getInt(2);
-					m = getMessage(identity);
-					mMessageList.add(m);
-				}
-
-				r.close();
-				ps.close();
-
-				return mMessageList;
-
-			}catch (Exception e)
-			{
-				e.printStackTrace();
+			while (r.next()) {
+				identity = r.getInt(2);
+				m = getMessage(identity);
+				mMessageList.add(m);
 			}
-			return null;
 
-		}catch (NumberFormatException e) {
-			// Il ne faut pas être des caractères, il faut que des nombres
+			r.close();
+			ps.close();
+
+			return mMessageList;
+
+		}catch (Exception e)
+		{
+			e.printStackTrace();
 		}
-
+		
 		return mMessageList;
-
 	}
 
 
@@ -822,7 +955,7 @@ public class  MessageDAOImpl implements MessageDAO {
 		String identity="";
 		String type="";
 		String libelle="";
-		//Pas besoin de r�cup�rer ce champ "votre conseiller vous informe"
+		//Pas besoin de récupérer ce champ "votre conseiller vous informe"
 		//String textBulle="";
 		String ville="";
 		Date start=null;
@@ -869,18 +1002,18 @@ public class  MessageDAOImpl implements MessageDAO {
 				identity = r.getString(2);
 				//Type of message
 				type = r.getString(3);
-				// Libellé
+				// LibellÃ©
 				libelle = r.getString(4);
 				// Texte du message !
 				textMessage = r.getString(11);
 				// Texte pour Message Bulle
-				//Pas besoin de r�cup�rer "votre conseiller vous informe"
+				//Pas besoin de récupérer "votre conseiller vous informe"
 				//textBulle = r.getString(5);
 				// Vision360
 				vision360 = r.getString(9);
 				// Le type de la cible
 				targetType = r.getString(22);
-				// La date début d'affichage du message
+				// La date dÃ©but d'affichage du message
 				start = r.getDate(23);
 				// La date fin d'affichage du message
 				end = r.getDate(24);
@@ -888,26 +1021,26 @@ public class  MessageDAOImpl implements MessageDAO {
 
 
 
-				// La valeur temporaire de la priorité
+				// La valeur temporaire de la prioritÃ©
 				tmp = r.getString(6);
-				// Vérifier si la valeur temporaire est nulle
+				// VÃ©rifier si la valeur temporaire est nulle
 				if (tmp != null)
 					priority = Integer.parseInt(tmp);
 
-				// Vérifier si la liste entité contient un élément pareil
+				// VÃ©rifier si la liste entitÃ© contient un Ã©lÃ©ment pareil
 				if ( !entities.contains(r.getInt(32)) ) 
 					entities.add(r.getInt(32));
 
-				// Vérifier si la liste canal contient un élément pareil
+				// VÃ©rifier si la liste canal contient un Ã©lÃ©ment pareil
 				if ( !canaux.contains(r.getString(35)) ) 
 					canaux.add(r.getString(35));
 
 				// La valeur temporaire du canal
 				tmp = r.getString(35);
 
-				// Vérifier si le canal est null
+				// VÃ©rifier si le canal est null
 				if (tmp != null) {
-					// Vérifier si le canal est GAB
+					// VÃ©rifier si le canal est GAB
 					if (tmp.equals("GAB")) {
 						tmp = r.getString(36);
 						priorityGAB = r.getInt(36);
@@ -916,14 +1049,14 @@ public class  MessageDAOImpl implements MessageDAO {
 
 				tmp = "";
 
-				// Vérifier si la liste des mots clés contient un élément pareil
+				// VÃ©rifier si la liste des mots clÃ©s contient un Ã©lÃ©ment pareil
 				if ( !keywords.contains(r.getString(38)) )
 					keywords.add(r.getString(38));
 
-				// Vérifier si le type de la cible est null
+				// VÃ©rifier si le type de la cible est null
 				if(r.getString(22) !=null) {
 
-					// Vérifier si le type de la cible est de la liste des clients
+					// VÃ©rifier si le type de la cible est de la liste des clients
 					if (targetType.equals("C")) {
 						// Mettre la federation en false
 						federation=false;
@@ -949,7 +1082,7 @@ public class  MessageDAOImpl implements MessageDAO {
 						}
 
 					} else if (targetType.equals("F")) {
-						// Fédération
+						// FÃ©dÃ©ration
 						federation=true;
 						agency=false;
 					} else {
@@ -984,7 +1117,7 @@ public class  MessageDAOImpl implements MessageDAO {
 	/**
 	 * Delete message by id
 	 * @param id id du message
-	 * @return l'id du message supprim�
+	 * @return l'id du message supprimï¿½
 	 * @author Abdoul Leadi - Thomas Clisson
 	 */
 	public int deleteMessage(int id) {
@@ -1069,7 +1202,7 @@ public class  MessageDAOImpl implements MessageDAO {
 
 		ResultSet r;
 
-		//Selectionner l'id de la publication li�e au message
+		//Selectionner l'id de la publication liï¿½e au message
 		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlPubId))
 		{
 			ps.setInt(1,id);
@@ -1108,7 +1241,7 @@ public class  MessageDAOImpl implements MessageDAO {
 		{
 			e.printStackTrace();
 		}
-		//Delete from Mot Cl�
+		//Delete from Mot Clï¿½
 		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlMc))
 		{
 			ps.setInt(1,id); //CD_EFS
