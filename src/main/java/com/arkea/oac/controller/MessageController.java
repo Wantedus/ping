@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,7 @@ public class MessageController {
 	@Autowired
 	private MessageDAOImpl messageDAOImpl;
 	
+	@CrossOrigin(origins = "*")
 	@GetMapping(value = "/message/{id}")
 	public ResponseEntity<Message> getMessage(@PathVariable int id) {
 		
@@ -42,7 +44,7 @@ public class MessageController {
 	 
 
 	}
-	
+	@CrossOrigin(origins = "*")
 	@GetMapping(value = "/message")
 	public ArrayList<Message> getAllMessage() {
 		return messageDAOImpl.getAllMessage();
@@ -55,6 +57,7 @@ public class MessageController {
 	 * @param size les rangs qu'ils vont afficher sur la page, 10 par défaut
 	 * @return la page
 	 */
+	@CrossOrigin(origins = "*")
 	@GetMapping(value = "/message/")
 	public MessagePageEntity getAllMessageByPage(
 			@RequestParam(defaultValue = "1", required=false) Integer page,
@@ -63,7 +66,7 @@ public class MessageController {
 		return messageDAOImpl.getAllMessageByPage(page, size);
 	}
 
-	
+	@CrossOrigin(origins = "*")
 	@GetMapping(value="/search/libelle")
 	public List<Message> getMessageByLibelle(
 			String libelle,
@@ -73,7 +76,7 @@ public class MessageController {
 		return messageDAOImpl.getMessageByLibelle(libelle, type, page, size);
 	}
 	
-	
+	@CrossOrigin(origins = "*")
 	@GetMapping(value="/search/motcle")
 	public List<Message> getMessageByMotCle(
 			String motcle,
@@ -83,7 +86,7 @@ public class MessageController {
 		return messageDAOImpl.getMessageByMotCle(motcle, type, page, size);
 	}
 	
-	
+	@CrossOrigin(origins = "*")
 	@PostMapping(value = "/message")
 	public ResponseEntity<Integer> postMessage(@RequestBody Message m) {
 		
@@ -93,7 +96,7 @@ public class MessageController {
 		return new ResponseEntity<Integer>(id, HttpStatus.CREATED);
 		
 	}
-
+	@CrossOrigin(origins = "*")
 	@PutMapping(value = "/message/{id}")
 	public ResponseEntity<Integer> putMessage(@RequestBody Message m,@PathVariable int id) {
 		
@@ -121,7 +124,7 @@ public class MessageController {
 		return new ResponseEntity<Integer>(id, HttpStatus.ACCEPTED);
 		
 	}
-	
+	@CrossOrigin(origins = "*")
 	@DeleteMapping(value = "/message/{id}")
 	public ResponseEntity<Integer> deleteMessage(@PathVariable int id) {
 		messageDAOImpl.deleteMessage(id);
