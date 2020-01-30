@@ -96,10 +96,6 @@ public class Message {
 		this.type = type;
 	}
 
-	public String isVision360() {
-		return vision360;
-	}
-
 	public void setVision360(String vision360) {
 		this.vision360 = vision360;
 	}
@@ -205,6 +201,8 @@ public class Message {
 	public void setLibelle(String libelle) {
 		this.libelle = libelle;
 	}
+
+
 
 
 
