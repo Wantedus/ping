@@ -22,21 +22,20 @@ public class  MessageDAOImpl implements MessageDAO {
 
 	private static java.sql.Connection con;
 
+	//Informations sur la base de donn�es, modifiable dans le fichier de conf
 	@Value( "${username}" )  
 	private String username;
 	@Value( "${mdp}" )  
 	private  String mdp;
 	@Value( "${url}" )  
-	private  String url ;
-	//IDT_UTI prends la valeur userName, vu que nous avons pas accès à la conexion ni aux utilisateurs, nous rempla
+	private  String url;
+	
+	//IDT_UTI prends la valeur userName, vu que nous avons pas acc�s � la conexion ni aux utilisateurs, nous rempla�ons la valeur
 	private String userName="";
 
 
 	public java.sql.Connection getInstance(){
-		System.out.println(username);
-		System.out.println(mdp);
-		System.out.println(url);
-
+		
 		if(con == null){
 			try {
 				Class.forName("com.mysql.jdbc.Driver");
@@ -51,38 +50,7 @@ public class  MessageDAOImpl implements MessageDAO {
 	}
 
 
-
-	//    public static java.sql.Connection getInstance(){
-	//		
-	//    	private static java.sql.Connection con;
-	//
-	//		@Value( "${user}" )  
-	//		private String user;
-	//		@Value( "${mdp}" )  
-	//		private  String mdp;
-	//		@Value( "${url}" )  
-	//		private  String url ;
-	//		
-	//	
-	//    	System.out.println(user);
-	//    	System.out.println(mdp);
-	//    	System.out.println(url);
-	//    	
-	//        if(con == null){
-	//            try {
-	//            	Class.forName("com.mysql.jdbc.Driver");
-	//                con = DriverManager.getConnection(url, user, mdp);
-	//
-	//            } catch (Exception e)
-	//            {
-	//                e.printStackTrace();
-	//            }
-	//       }
-	//        return con;
-	//    }
-
-
-/*
+	/*
 	 * Creer un message 
 	 * @param Messsage
 	 * @return Id du message cree
@@ -171,7 +139,6 @@ public class  MessageDAOImpl implements MessageDAO {
 			//CD_ETA_PUB
 			ps.setString(4,"O");  
 			//CD_TY_PUB
-			System.out.println(m.getT());
 			ps.setString(5,m.getT().getTargetType()); 
 
 			if(m.getStart()!=null) {
@@ -255,57 +222,6 @@ public class  MessageDAOImpl implements MessageDAO {
 			e.printStackTrace();
 		}
 
-
-		/*
-		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlPub, Statement.RETURN_GENERATED_KEYS))
-		{
-			ps.setInt(1,34); //CD_EFS
-
-			ps.setInt(2,34); //CD_EFS_MES
-			ps.setInt(3,generatedId ); //IDT_MES_DWB
-
-			ps.setString(4,"O");  //CD_ETA_PUB
-
-			ps.setString(5,"F"); //CD_TY_PUB
-			if(m.getStart()!=null) {
-				ps.setDate(6,  new java.sql.Date(m.getStart().getTime() ) ); 
-			}
-			else {
-				ps.setDate(6, null);
-			}
-			if(m.getEnd()!=null) {
-				ps.setDate(7,  new java.sql.Date(m.getEnd().getTime() ) ); 
-			}
-			else {
-				ps.setDate(7, null);
-			}
-
-			ps.setString(8,"N"); //IDC_BIC
-			ps.setString(9,userName); //IDT_UTI
-			java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
-			ps.setTimestamp(10, date);
-
-
-			rowAffected =ps.executeUpdate();
-			if(rowAffected == 1)
-			{
-
-				rs = ps.getGeneratedKeys();
-				if(rs.next())
-					generatedIdPub = rs.getInt(1);
-			}
-			rowAffected=0;
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		*/
-
-
-		
-
-
 		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlCnl))
 		{
 
@@ -330,21 +246,14 @@ public class  MessageDAOImpl implements MessageDAO {
 		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlVar))
 		{
 			String clients=m.getT().getClientList();
-			System.out.println("Voici les clients: "+clients);
 			clients = clients.replace(" ", "");
 			String[] listeClients =clients.split("\\r?\\n");
 			
 			String client=null;
-			System.out.println("taille de la liste:" +listeClients.length);
-			
+					
 			for(int i=0;i<listeClients.length;i++) {
 				client=listeClients[i];
-				System.out.println(client);
-				
 				String[] clientChamps = client.split(","); 
-				
-				System.out.println(clientChamps[0]);
-				
 					ps.setInt(1,34); 
 
 					ps.setInt(2,01);
@@ -357,23 +266,18 @@ public class  MessageDAOImpl implements MessageDAO {
 					//Si PP remettre le code
 					ps.setInt(8,Integer.parseInt(clientChamps[0]));
 					
-
 					ps.executeUpdate();
-					System.out.println("personne num�ro" +i);
-					
+		
 					ps.setInt(1,34); 
-
 					ps.setInt(2,01);
 					ps.setString(3,"");
 					ps.setInt(4, generatedIdPub);
 					ps.setInt(5,Integer.parseInt(clientChamps[1])); 
-
 					ps.setString(6,"c_54246");
 					ps.setString(7,"PM");
 					//Si PP remettre le code
 					ps.setInt(8,Integer.parseInt(clientChamps[1]));
 					
-
 					ps.executeUpdate();
 				
 			}
@@ -384,71 +288,12 @@ public class  MessageDAOImpl implements MessageDAO {
 		{
 			e.printStackTrace();
 		}
-		/*
-		 try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlTy))
-	        {
-
-			 if(m.getKeywords() !=null) {
-			 		for (String temp : m.getKeywords()) {
-
-			 			   //AG, AS, PA,PR -- dï¿½pend du fichier ï¿½ l'upload ? 
-						    ps.setString(1,temp);
-						    //IDT_MES_DWB
-				        	ps.setInt(3,generatedId);
-				        	//IDT_UTI
-				        	ps.setString(4, userName);
-				        	//TP_STP (current timestamp)
-				        	java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
-				        	ps.setTimestamp(5, date);
-
-			 			ps.executeUpdate();
-					}
-			}
-
-	        }
-	        catch (Exception e)
-	        {
-	            e.printStackTrace();
-	        }
-		 */  
-
-		//Ajouter les diffï¿½rents clients en aprsant le fichier envoyï¿½
-		/*
-		 String sqlVar = "INSERT INTO t90_var(CD_EFS_PUB,CD_EFS_PSE,NO_PSE_MAL,IDT_PUB,NO_PSE,IDT_CTB_CTU,CD_CHP,LIB_CHP)"
-			 		+ " VALUES (?,?,?,?,?)";
-
-
-		 try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlMc))
-	        {
-
-			 if(m.getKeywords() !=null) {
-			 		for (String temp : m.getKeywords()) {
-
-			 			ps.setInt(1,34); 
-
-						    ps.setString(2,temp);
-				        	ps.setInt(3,generatedId);
-				        	ps.setString(4, userName);
-				        	java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
-				        	ps.setTimestamp(5, date);
-
-			 			ps.executeUpdate();
-					}
-			}
-
-
-	        }
-	        catch (Exception e)
-	        {
-	            e.printStackTrace();
-	        }
-		 */
-
+		
 		return  generatedId;
 	}
 
 	/**
-	 * Mettre � jour message 
+	 * Mettre a jour message 
 	 * @param id du message, Messsage
 	 * @return Id du message modifie
 	 * @exception exception while compiling SQL
@@ -470,26 +315,31 @@ public class  MessageDAOImpl implements MessageDAO {
 		String sqlMc = "INSERT INTO t90_mot_cle (CD_EFS,TXT_CLE,IDT_MES_DWB,IDT_UTI,TM_STP) values (?,?,?,?,?)  ";
 		String sqlMcD = "DELETE from t90_mot_cle WHERE IDT_MES_DWB = ? ";		
 
+		/*SQL en anticipation, pas eu le temps de l'impl�menter
 		String sqlEfsD = "DELETE from t90_efs WHERE IDT_PUB = ? ";		
 		String sqlEfsI = "INSERT into t90_efs (CD_EFS_PUB, IDT_PUB,CD_EFS) values (?,?,?)  ";		
-
+		*/
 		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlMsg, Statement.RETURN_GENERATED_KEYS))
 		{
-			ps.setInt(1,34); //CD_EFS
-
-			ps.setString(2,m.getType()); //LIB_TY_MES
-
-			ps.setString(3,m.getLibelle()); //TXT_LIB_MES
+			//CD_EFS
+			ps.setInt(1,34); 
+			//LIB_TY_MES
+			ps.setString(2,m.getType()); 
+			//TXT_LIB_MES
+			ps.setString(3,m.getLibelle()); 
 			if(m.getType().equals("BULLE_CONSEILLER")) { 
-				ps.setString(4,"Votre conseiller vous informe");  //LIB_MES_CNS
+				//LIB_MES_CNS
+				ps.setString(4,"Votre conseiller vous informe");  
 			}
 			else {
 				
 				ps.setString(4,""); 
 			}
-			ps.setInt(5,m.getPriority()); //CD_PRTY_MES
-			ps.setInt(6,0); //DUR_VIE_MES
-			//ps.setString(7,"thomas"); //IDT_UTI
+			//CD_PRTY_MES
+			ps.setInt(5,m.getPriority()); 
+			//DUR_VIE_MES
+			ps.setInt(6,0); 
+			ps.setString(7,userName); //IDT_UTI
 			java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
 			ps.setTimestamp(7,  date ); 
 			ps.setInt(8,0); //NB_AFG_MAX 
@@ -531,8 +381,8 @@ public class  MessageDAOImpl implements MessageDAO {
 			else {
 				ps.setDate(2, null);
 			}
-
-			ps.setInt(3,id); //TXT_LIB_MES
+			//TXT_LIB_MES
+			ps.setInt(3,id); 
 			rowAffected =ps.executeUpdate();
 			if(rowAffected == 1)
 			{
@@ -560,7 +410,7 @@ public class  MessageDAOImpl implements MessageDAO {
 					ps.setString(2,k);
 					//TXT_LIB_MES
 					ps.setInt(3,id);
-					ps.setString(4, "thomas");
+					ps.setString(4,userName);
 					java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
 					ps.setTimestamp(5,  date ); 
 					ps.executeUpdate();
@@ -586,45 +436,7 @@ public class  MessageDAOImpl implements MessageDAO {
 			}
 
 		}
-
-		/* 
-		 try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlEfsD))
-	        {
-
-
-			 	ps.setInt(1,  generatedIdPub ); 
-			 	ps.executeUpdate();
-	        }
-		  catch (Exception e)
-	        {
-	            e.printStackTrace();
-	        }
-
-		 try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlEfsI))
-	        {//String sqlEfsI = "Insert info t90_efs CD_EFSPUB, IDT_PUB,CD_EFS values (?,?,?)  ";	
-
-			 	if(m.getEntity()!=null) {
-			 		for (Integer temp : m.getEntity()) {
-			 			 ps.setInt(1, 34 ); 
-			 			 ps.setInt(2, generatedIdPub);
-			 			 ps.setInt(3, temp);
-			 			ps.executeUpdate();
-					}
-
-			 	}
-			 	else {
-			 		ps.setDate(1, null);
-			 	}
-
-	        }
-		  catch (Exception e)
-	        {
-	            e.printStackTrace();
-	        }
-
-		 */
 		return  generatedId;
-
 
 	}
 	
@@ -746,26 +558,18 @@ public class  MessageDAOImpl implements MessageDAO {
 		if (page != null && size != null) {
 			page = (page-1)*size;
 		}
-		
-		System.out.println("In function getMessage by libelle");
-		System.out.println("Libelle : " + containLib);
-		System.out.println("Type : " + type);
-		
+
 		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlRangeMessage))
 		{
 			ps.setString(1, containLib);
 			ps.setString(2, type);
 			ps.setInt(3, page);
 			ps.setInt(4, size);
-			
-			System.out.println("In SQL getMessage by libelle");
-			
-			ResultSet r = ps.executeQuery();
 
+			ResultSet r = ps.executeQuery();
 			while (r.next()) {
 				identity = r.getInt(2);
 				m = getMessage(identity);
-				System.out.println("Identity : " + identity);
 				mMessageList.add(m);
 			}
 
@@ -816,7 +620,6 @@ public class  MessageDAOImpl implements MessageDAO {
 		if (page != null && size != null) {
 			page = (page-1)*size;
 		} else {
-			System.out.println("Syntaxe error, MessagePageEntity");
 			return null;
 		}
 		
@@ -844,7 +647,6 @@ public class  MessageDAOImpl implements MessageDAO {
 			if (r.next()) {
 				total = r.getLong(1);
 			}
-			System.out.println("Total : " + total);
 		}catch (Exception e)
 		{
 			e.printStackTrace();
@@ -946,7 +748,7 @@ public class  MessageDAOImpl implements MessageDAO {
 	 * Get message by id
 	 * @param id du message
 	 * @return le resultat du message
-	 * @author YinjieZHAO
+	 * @author YinjieZHAO, Thomas Clisson
 	 */
 	@Override
 	public Message getMessage(int id) {
@@ -987,7 +789,6 @@ public class  MessageDAOImpl implements MessageDAO {
 		String tmp="";
 
 		// Method to get a message based on its ID
-		System.out.println("Get message with id : " +id);
 
 		String SELECT = "SELECT * FROM t90_msg  ";
 		String JOIN_t90_pub = "LEFT JOIN t90_pub ON t90_msg.IDT_MES_DWB = t90_pub.IDT_MES_DWB ";
@@ -1015,46 +816,45 @@ public class  MessageDAOImpl implements MessageDAO {
 				identity = r.getString(2);
 				//Type of message
 				type = r.getString(3);
-				// LibellÃ©
+				// Libelle
 				libelle = r.getString(4);
 				// Texte du message !
 				textMessage = r.getString(11);
 				// Texte pour Message Bulle
-				//Pas besoin de récupérer "votre conseiller vous informe"
+				//Pas besoin de recuperer"votre conseiller vous informe"
 				//textBulle = r.getString(5);
 				// Vision360
 				vision360 = r.getString(25);
 				// Le type de la cible
 				targetType = r.getString(22);
-				// La date dÃ©but d'affichage du message
+				// La date debut d'affichage du message
 				start = r.getDate(23);
 				
 				// La date fin d'affichage du message
 				end = r.getDate(24);
 
 
-
-
-				// La valeur temporaire de la prioritÃ©
+				// La valeur temporaire de la priorite
 				tmp = r.getString(6);
-				// VÃ©rifier si la valeur temporaire est nulle
+				// Verifier si la valeur temporaire est nulle
 				if (tmp != null)
 					priority = Integer.parseInt(tmp);
 
-				// VÃ©rifier si la liste entitÃ© contient un Ã©lÃ©ment pareil
+				// verifier si la liste entites contient un une valeur identique
 				if ( !entities.contains(r.getInt(32)) ) 
 					entities.add(r.getInt(32));
 
-				// VÃ©rifier si la liste canal contient un Ã©lÃ©ment pareil
+				// Verifier si la liste canal contient un une valeur identique
+				
 				if ( !canaux.contains(r.getString(35)) ) 
 					canaux.add(r.getString(35));
 
 				// La valeur temporaire du canal
 				tmp = r.getString(35);
 
-				// VÃ©rifier si le canal est null
+				// Vevifier si le canal est null
 				if (tmp != null) {
-					// VÃ©rifier si le canal est GAB
+					// verifier si le canal est GAB
 					if (tmp.equals("GAB")) {
 						tmp = r.getString(36);
 						priorityGAB = r.getInt(36);
@@ -1063,14 +863,14 @@ public class  MessageDAOImpl implements MessageDAO {
 
 				tmp = "";
 
-				// VÃ©rifier si la liste des mots clÃ©s contient un Ã©lÃ©ment pareil
+				// Verifier si la liste des mots cles contient un renregistrement identique
 				if ( !keywords.contains(r.getString(38)) )
 					keywords.add(r.getString(38));
 
-				// VÃ©rifier si le type de la cible est null
+				// Verifier si le type de la cible est null
 				if(r.getString(22) !=null) {
 
-					// VÃ©rifier si le type de la cible est de la liste des clients
+					// Vefirifer si le type de la cible est de la liste des clients
 					if (targetType.equals("C")) {
 						// Mettre la federation en false
 						federation=false;
@@ -1085,7 +885,6 @@ public class  MessageDAOImpl implements MessageDAO {
 							client +=","+tmp;
 							// Ajouter le PP/PM dans la liste de client
 							clients+=client+"\n";
-							System.out.println(clients);
 
 						} else if ( !NO_PSE.contains(r.getString(46))){
 							// Add client PP
@@ -1131,7 +930,7 @@ public class  MessageDAOImpl implements MessageDAO {
 	/**
 	 * Delete message by id
 	 * @param id id du message
-	 * @return l'id du message supprimï¿½
+	 * @return l'id du message supprime
 	 * @author Abdoul Leadi - Thomas Clisson
 	 */
 	public int deleteMessage(int id) {
@@ -1168,10 +967,7 @@ public class  MessageDAOImpl implements MessageDAO {
 		{
 			e.printStackTrace();
 		}
-		System.out.println("Identifiant de la pub = "+ idPub);
 		
-		
-	
 		//Delete from aprl
 		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlAprl))
 		{
@@ -1211,9 +1007,6 @@ public class  MessageDAOImpl implements MessageDAO {
 		{
 			e.printStackTrace();
 		}
-
-
-
 		ResultSet r;
 
 		//Selectionner l'id de la publication liee au message
@@ -1255,10 +1048,11 @@ public class  MessageDAOImpl implements MessageDAO {
 		{
 			e.printStackTrace();
 		}
-		//Delete from Mot Clï¿½
+		//Delete from Mot cl�
 		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlMc))
 		{
-			ps.setInt(1,id); //CD_EFS
+			//CD_EFS
+			ps.setInt(1,id); 
 			ps.executeUpdate();
 			ps.close();
 

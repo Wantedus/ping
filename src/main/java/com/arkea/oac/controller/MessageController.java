@@ -26,9 +26,6 @@ public class MessageController {
 	@Autowired
 	private MessageDAOImpl messageDAOImpl;
 	
-
-	
-
 	/**
 	 * récupérer un message en fonction de son id 
 	 * if id n'existe pas,
@@ -39,7 +36,6 @@ public class MessageController {
 	@GetMapping(value = "/message/{id}")
 	public ResponseEntity<Message> getMessage(@PathVariable int id) {
 		
-		
 		 Message m =messageDAOImpl.getMessage(id);
 					
 		 if(m.getId()=="") {
@@ -48,12 +44,9 @@ public class MessageController {
 		 else{
 			return new ResponseEntity<Message>(m, HttpStatus.OK);
 		 }
-	 
-
-	}
+	 }
 
 	
-
 	/**
 	 * recuperer tous les messages
 	 * return list message
@@ -96,7 +89,7 @@ public class MessageController {
 	public MessagePageEntity getMessageByLibelle(
 			String libelle,
 			@RequestParam String type,
-			@RequestParam(defaultValue = "0",required=false) Integer page,
+			@RequestParam(defaultValue = "1",required=false) Integer page,
 			@RequestParam(defaultValue = "5",required=false) Integer size){
 		return messageDAOImpl.getMessageByLibelle(libelle, type, page, size);
 	}
@@ -133,7 +126,6 @@ public class MessageController {
 	@PostMapping(value = "/message")
 	public ResponseEntity<Integer> postMessage(@RequestBody Message m) {
 		
-		//System.out.println(m.getT().toString());
 		int id; 
 		try {
 			id=messageDAOImpl.createMessage(m);
@@ -157,24 +149,6 @@ public class MessageController {
 	@PutMapping(value = "/message/{id}")
 	public ResponseEntity<Integer> putMessage(@RequestBody Message m,@PathVariable int id) {
 		
-	
-		/*
-		Message updatedMessa ge =messageDAOImpl.getMessage(id);
-		
-		updatedMessage.setCanals(m.getCanals());
-		updatedMessage.setEnd(m.getEnd());
-		updatedMessage.setEntity(m.getEntity());
-		updatedMessage.setKeywords(m.getKeywords());
-		updatedMessage.setPriority(m.getPriority());
-		updatedMessage.setStart(m.getStart());
-		updatedMessage.setT(m.getT());
-		updatedMessage.setText(m.getText());
-		updatedMessage.setType(m.getType());
-		updatedMessage.setVision360(m.isVision360());
-		updatedMessage.setWording(m.getWording());
-		*/
-		;
-	
 		try {
 			messageDAOImpl.updateMessage(id, m);
 			return new ResponseEntity<Integer>(id, HttpStatus.ACCEPTED);
@@ -182,11 +156,7 @@ public class MessageController {
 		catch(Exception e){
 			return new ResponseEntity<Integer>(0, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
-		//return messageDAOImpl.getMessage(id);
 	
-		
-		
 	}
 
 	

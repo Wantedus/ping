@@ -20,6 +20,12 @@ public class Target {
 		this.targetType = defineTargetType(federation, agency, clientList);
 		this.villeAgence = villeAgence;
 	}
+	
+
+	public Target() {
+		
+	}
+
 
 	public Target(String targetType) {
 		this.targetType = targetType;
