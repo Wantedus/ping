@@ -25,7 +25,7 @@ public interface MessageDAO {
 	
 	public MessagePageEntity getAllMessageByPage (Integer page, Integer size);
 	
-	public List<Message> getMessageByMotCle (String motCle, String type, Integer page, Integer size);
+	public MessagePageEntity getMessageByMotCle (String motCle, String type, Integer page, Integer size);
 	
-	public List<Message> getMessageByLibelle (String libelle, String type, Integer page, Integer size);
+	public MessagePageEntity getMessageByLibelle (String libelle, String type, Integer page, Integer size);
 }
