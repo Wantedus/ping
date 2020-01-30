@@ -63,7 +63,7 @@ public class MessageController {
 
 	
 	@GetMapping(value="/search/libelle")
-	public List<Message> getMessageByLibelle(
+	public MessagePageEntity getMessageByLibelle(
 			String libelle,
 			@RequestParam String type,
 			@RequestParam(defaultValue = "0") Integer page,
@@ -73,7 +73,7 @@ public class MessageController {
 	
 	
 	@GetMapping(value="/search/motcle")
-	public List<Message> getMessageByMotCle(
+	public MessagePageEntity getMessageByMotCle(
 			String motcle,
 			@RequestParam String type,
 			@RequestParam(defaultValue = "0") Integer page,

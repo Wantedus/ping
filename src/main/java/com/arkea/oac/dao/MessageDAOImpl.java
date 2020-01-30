@@ -756,6 +756,7 @@ public class  MessageDAOImpl implements MessageDAO {
 		
 		mpe.setData(mMessageList);
 		mpe.setTotal(total);
+		
 		return mpe;
 	}
 	
