@@ -186,16 +186,10 @@ public class  MessageDAOImpl implements MessageDAO {
 			else {
 				ps.setDate(7, null);
 			}
-			//IDC_BIC
-			if(m.isVision360()=="true") {
-				ps.setString(8,"O"); 
-			}
-			else if(m.isVision360()=="false") {
-				ps.setString(8,"N"); 
-			}
-			else {
-				ps.setString(8,null);
-			}
+			
+			
+			ps.setString(8,m.getVision360()); 
+			
 			//IDT_UTI
 			ps.setString(9,userName); 
 			java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
@@ -968,12 +962,12 @@ public class  MessageDAOImpl implements MessageDAO {
 				//Pas besoin de récupérer "votre conseiller vous informe"
 				//textBulle = r.getString(5);
 				// Vision360
-				vision360 = r.getString(9);
+				vision360 = r.getString(25);
 				// Le type de la cible
 				targetType = r.getString(22);
 				// La date dÃ©but d'affichage du message
 				start = r.getDate(23);
-				System.out.println(r.getDate(23));
+				
 				// La date fin d'affichage du message
 				end = r.getDate(24);
 
@@ -1061,7 +1055,7 @@ public class  MessageDAOImpl implements MessageDAO {
 			r.close();
 
 			ps.close();
-
+			
 			return new Message(identity, type, vision360, libelle, textMessage, keywords, start, end, entities, canaux, priority, priorityGAB, target );
 
 		}

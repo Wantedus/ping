@@ -65,6 +65,7 @@ public class Message {
 		this.id = id;
 		this.type = type;
 		this.vision360 = vision360;
+		
 		this.libelle = lib;
 		
 		this.textMessage=textMessage;
@@ -193,6 +194,16 @@ public class Message {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+
+	public String getVision360() {
+		return vision360;
+	}
+
+
+	public void setLibelle(String libelle) {
+		this.libelle = libelle;
 	}
 
 

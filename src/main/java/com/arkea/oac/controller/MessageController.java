@@ -41,7 +41,7 @@ public class MessageController {
 		
 		
 		 Message m =messageDAOImpl.getMessage(id);
-			System.out.println(m.getT().toString());	
+			System.out.println(m.getVision360());	
 		
 		 if(m.getId()=="") {
 			 return  new ResponseEntity<Message>(m, HttpStatus.NO_CONTENT);
@@ -135,9 +135,14 @@ public class MessageController {
 	public ResponseEntity<Integer> postMessage(@RequestBody Message m) {
 		
 		//System.out.println(m.getT().toString());
-		int id =messageDAOImpl.createMessage(m);
-				
-		return new ResponseEntity<Integer>(id, HttpStatus.CREATED);
+		int id; 
+		try {
+			id=messageDAOImpl.createMessage(m);
+			return new ResponseEntity<Integer>(id, HttpStatus.CREATED);
+		}
+		catch(Exception e){
+			return new ResponseEntity<Integer>(0, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 		
 	}
 
@@ -170,11 +175,18 @@ public class MessageController {
 		updatedMessage.setWording(m.getWording());
 		*/
 		;
-		messageDAOImpl.updateMessage(id, m);
+	
+		try {
+			messageDAOImpl.updateMessage(id, m);
+			return new ResponseEntity<Integer>(id, HttpStatus.ACCEPTED);
+		}
+		catch(Exception e){
+			return new ResponseEntity<Integer>(0, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 		
 		//return messageDAOImpl.getMessage(id);
 	
-		return new ResponseEntity<Integer>(id, HttpStatus.ACCEPTED);
+		
 		
 	}
 
@@ -189,8 +201,14 @@ public class MessageController {
 	@CrossOrigin(origins = "*")
 	@DeleteMapping(value = "/message/{id}")
 	public ResponseEntity<Integer> deleteMessage(@PathVariable int id) {
-		messageDAOImpl.deleteMessage(id);
-		return new ResponseEntity<Integer>(id, HttpStatus.NO_CONTENT);
+		try {
+			messageDAOImpl.deleteMessage(id);
+			return new ResponseEntity<Integer>(id, HttpStatus.NO_CONTENT);
+		}
+		catch(Exception e){
+			return new ResponseEntity<Integer>(0, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
 	}
 	
 	
