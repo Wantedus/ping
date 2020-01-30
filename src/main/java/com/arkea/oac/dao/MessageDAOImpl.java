@@ -686,18 +686,27 @@ public class  MessageDAOImpl implements MessageDAO {
 	 * @return liste des messages filtrÃ©e
 	 * @author YinjieZHAO
 	 */
-	public List<Message> getMessageByMotCle (String motCle, String type, Integer page, Integer size) {
+	public MessagePageEntity getMessageByMotCle (String motCle, String type, Integer page, Integer size) {
 		int identity=0;
+		long total=0;
 		String containMot = "%"+motCle+"%";
-		if (motCle == null)
-			containMot = "%%";
-		String sqlRangeMessage="SELECT * "
-				+ "FROM t90_msg "
+		
+		String sqlMessage = "FROM t90_msg "
 				+ "LEFT JOIN t90_mot_cle ON t90_mot_cle.IDT_MES_DWB = t90_msg.IDT_MES_DWB "
-				+ "WHERE t90_mot_cle.TXT_CLE LIKE ? AND t90_msg.LIB_TY_MES = ? "
+				+ "WHERE t90_mot_cle.TXT_CLE LIKE ? AND t90_msg.LIB_TY_MES = ? ";
+		
+		String sqlCount = "SELECT count(*) "+ sqlMessage;
+		
+		String sqlRangeMessage="SELECT * "
+				+ sqlMessage
 				+ "LIMIT ?,?;";
+		
 		ArrayList<Message> mMessageList = new ArrayList<>();
 		Message m;
+		MessagePageEntity mpe = new MessagePageEntity();
+		
+		if (motCle == null)
+			containMot = "%%";
 		
 		if (page != null && size != null) {
 			page = (page-1)*size;
@@ -726,7 +735,28 @@ public class  MessageDAOImpl implements MessageDAO {
 			e.printStackTrace();
 		}
 		
-		return mMessageList;
+		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlCount))
+		{
+			ps.setString(1,containMot);
+			ps.setString(2, type);
+			
+			ResultSet r = ps.executeQuery();
+
+			while (r.next()) {
+				total = r.getLong(1);
+			}
+
+			r.close();
+			ps.close();
+
+		}catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		mpe.setData(mMessageList);
+		mpe.setTotal(total);
+		return mpe;
 	}
 	
 	
@@ -739,15 +769,23 @@ public class  MessageDAOImpl implements MessageDAO {
 	 * @return liste des messages filtrÃ©e
 	 * @author YinjieZHAO
 	 */
-	public List<Message> getMessageByLibelle (String libelle, String type, Integer page, Integer size){
+	public MessagePageEntity getMessageByLibelle (String libelle, String type, Integer page, Integer size){
 		int identity=0;
+		long total=0;
 		String containLib = "%"+libelle+"%";
+		
+		String sqlMessage = "FROM t90_msg "
+				+ "WHERE t90_msg.TXT_LIB_MES LIKE ? AND t90_msg.LIB_TY_MES = ? ";
+		
 		String sqlRangeMessage="SELECT * "
-				+ "FROM t90_msg "
-				+ "WHERE t90_msg.TXT_LIB_MES LIKE ? AND t90_msg.LIB_TY_MES = ? "
+				+ sqlMessage
 				+ "LIMIT ?,?;";
+		
+		String sqlCount = "SELECT count(*) " + sqlMessage;
+		
 		ArrayList<Message> mMessageList = new ArrayList<>();
 		Message m;
+		MessagePageEntity mpe = new MessagePageEntity();
 		
 		if (libelle == null)
 			containLib = "%%";
@@ -786,7 +824,29 @@ public class  MessageDAOImpl implements MessageDAO {
 			e.printStackTrace();
 		}
 		
-		return mMessageList;
+		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlCount))
+		{
+			ps.setString(1,containLib);
+			ps.setString(2, type);
+			
+			ResultSet r = ps.executeQuery();
+
+			while (r.next()) {
+				total = r.getLong(1);
+			}
+
+			r.close();
+			ps.close();
+
+		}catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		mpe.setData(mMessageList);
+		mpe.setTotal(total);
+		
+		return mpe;
 	}
 	
 	
@@ -1010,7 +1070,7 @@ public class  MessageDAOImpl implements MessageDAO {
 				//Pas besoin de récupérer "votre conseiller vous informe"
 				//textBulle = r.getString(5);
 				// Vision360
-				vision360 = r.getString(9);
+				vision360 = r.getString(25);
 				// Le type de la cible
 				targetType = r.getString(22);
 				// La date dÃ©but d'affichage du message
