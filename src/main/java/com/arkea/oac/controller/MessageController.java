@@ -93,7 +93,7 @@ public class MessageController {
      */
 	@CrossOrigin(origins = "*")
 	@GetMapping(value="/search/libelle")
-	public List<Message> getMessageByLibelle(
+	public MessagePageEntity getMessageByLibelle(
 			String libelle,
 			@RequestParam String type,
 			@RequestParam(defaultValue = "0",required=false) Integer page,
@@ -113,7 +113,7 @@ public class MessageController {
 	 */
 	@CrossOrigin(origins = "*")
 	@GetMapping(value="/search/motcle")
-	public List<Message> getMessageByMotCle(
+	public MessagePageEntity getMessageByMotCle(
 			String motcle,
 			@RequestParam String type,
 			@RequestParam(defaultValue = "0",required=false) Integer page,
