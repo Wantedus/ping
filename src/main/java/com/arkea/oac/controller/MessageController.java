@@ -41,8 +41,7 @@ public class MessageController {
 		
 		
 		 Message m =messageDAOImpl.getMessage(id);
-			System.out.println(m.getVision360());	
-		
+					
 		 if(m.getId()=="") {
 			 return  new ResponseEntity<Message>(m, HttpStatus.NO_CONTENT);
 		 }
