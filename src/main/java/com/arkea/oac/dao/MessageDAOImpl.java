@@ -22,7 +22,7 @@ public class  MessageDAOImpl implements MessageDAO {
 
 	private static java.sql.Connection con;
 
-	@Value( "${user}" )  
+	@Value( "${username}" )  
 	private String username;
 	@Value( "${mdp}" )  
 	private  String mdp;
@@ -359,7 +359,7 @@ public class  MessageDAOImpl implements MessageDAO {
 					
 
 					ps.executeUpdate();
-					System.out.println("personne numéro" +i);
+					System.out.println("personne numï¿½ro" +i);
 					
 					ps.setInt(1,34); 
 
@@ -448,7 +448,7 @@ public class  MessageDAOImpl implements MessageDAO {
 	}
 
 	/**
-	 * Mettre à jour message 
+	 * Mettre ï¿½ jour message 
 	 * @param id du message, Messsage
 	 * @return Id du message modifie
 	 * @exception exception while compiling SQL
