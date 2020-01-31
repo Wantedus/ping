@@ -337,7 +337,7 @@ public class  MessageDAOImpl implements MessageDAO {
 			ResultSet r =  ps.executeQuery();
 			while(r.next() ) {
 				generatedIdPub= r.getInt(1);
-				System.out.println(generatedIdPub);
+				
 				
 			}
 			r.close();
@@ -466,7 +466,7 @@ public class  MessageDAOImpl implements MessageDAO {
 		
 			try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlEfsD))
 			{	
-				System.out.println(generatedIdPub);
+				
 				ps.setInt(1, generatedIdPub);
 				ps.executeUpdate();
 				ps.close();
@@ -503,7 +503,7 @@ public class  MessageDAOImpl implements MessageDAO {
 		 
 			try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlCnlD))
 			{	
-				System.out.println(generatedIdPub);
+				
 				ps.setInt(1, generatedIdPub);
 				ps.executeUpdate();
 				ps.close();
@@ -515,15 +515,20 @@ public class  MessageDAOImpl implements MessageDAO {
 			
 			try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlCnl))
 			{	
-
-
 				for(String k : m.getCanals()) {
 					ps.setInt(1,  34); 
 					//Mot cles
 					ps.setInt(2,generatedIdPub);
 					//TXT_LIB_MES
 					ps.setString(3,k);
-					ps.setInt(4,m.getPriority());
+					if(k.equals("GAB")) {
+						ps.setInt(4,m.getPriorityGAB());
+					}
+					else {
+						ps.setInt(4,0);
+					}
+						
+					
 					
 					ps.executeUpdate();
 				}
@@ -989,7 +994,7 @@ public class  MessageDAOImpl implements MessageDAO {
 							// La valeur temporaire du Client PP
 							tmp = r.getString(46);
 							client = tmp + ",";
-							System.out.println("Client= "+client);
+						
 							clients+=client;
 							client="";
 							
