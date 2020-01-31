@@ -25,7 +25,7 @@ public class Message {
 	private List<String> keywords = new ArrayList<>();
 	private Date start;
 	private Date end;
-	private List<Integer> entity = new ArrayList<Integer>();
+	private List<String> entity = new ArrayList<String>();
 	private List<String> canals = new ArrayList<>();
 	private int priority;
 	private int priorityGAB;
@@ -60,7 +60,7 @@ public class Message {
 	*/
 	//Constructeur sans texte bulle
 	public Message(String id, String type, String vision360, String lib,String textMessage, List<String> keywords,
-			Date start, Date end, List<Integer> entity, List<String> canals, int priority, int priorityGAB, Target t) {
+			Date start, Date end, List<String> entity, List<String> canals, int priority, int priorityGAB, Target t) {
 		super();
 		this.id = id;
 		this.type = type;
@@ -144,11 +144,11 @@ public class Message {
 		this.end = end;
 	}
 
-	public List<Integer> getEntity() {
+	public List<String> getEntity() {
 		return entity;
 	}
 
-	public void setEntity(List<Integer> entity) {
+	public void setEntity(List<String> entity) {
 		this.entity = entity;
 	}
 

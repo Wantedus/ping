@@ -184,11 +184,11 @@ public class  MessageDAOImpl implements MessageDAO {
 		{
 
 			if(m.getEntity()!=null) {	
-				for (Integer temp : m.getEntity()) {
+				for (String temp : m.getEntity()) {
 					ps.setInt(1,34); //CD_EFS
 
 					ps.setInt(2,generatedIdPub); //CD_EFS_MES
-					ps.setInt(3,temp ); //IDT_MES_DWB
+					ps.setString(3,temp ); //IDT_MES_DWB
 					ps.executeUpdate();
 				}
 			}
@@ -243,51 +243,54 @@ public class  MessageDAOImpl implements MessageDAO {
 			e.printStackTrace();
 		}
 		//Ajouter dans t90_var
-		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlVar))
-		{
-			String clients=m.getT().getClientList();
-			clients = clients.replace(" ", "");
-			String[] listeClients =clients.split("\\r?\\n");
-			
-			String client=null;
-					
-			for(int i=0;i<listeClients.length;i++) {
-				client=listeClients[i];
-				String[] clientChamps = client.split(","); 
-					ps.setInt(1,34); 
-
-					ps.setInt(2,01);
-					ps.setString(3,"");
-					ps.setInt(4, generatedIdPub);
-					ps.setInt(5,Integer.parseInt(clientChamps[0])); 
-
-					ps.setString(6,"c_54246");
-					ps.setString(7,"PP");
-					//Si PP remettre le code
-					ps.setInt(8,Integer.parseInt(clientChamps[0]));
-					
-					ps.executeUpdate();
-		
-					ps.setInt(1,34); 
-					ps.setInt(2,01);
-					ps.setString(3,"");
-					ps.setInt(4, generatedIdPub);
-					ps.setInt(5,Integer.parseInt(clientChamps[1])); 
-					ps.setString(6,"c_54246");
-					ps.setString(7,"PM");
-					//Si PP remettre le code
-					ps.setInt(8,Integer.parseInt(clientChamps[1]));
-					
-					ps.executeUpdate();
+		if(m.getT().getTargetType()=="C") {
+			try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlVar))
+			{
+				String clients=m.getT().getClientList();
+				clients = clients.replace(" ", "");
+				String[] listeClients =clients.split("\\r?\\n");
 				
+				String client=null;
+						
+				for(int i=0;i<listeClients.length;i++) {
+					client=listeClients[i];
+					String[] clientChamps = client.split(","); 
+						ps.setInt(1,34); 
+
+						ps.setInt(2,01);
+						ps.setString(3,"");
+						ps.setInt(4, generatedIdPub);
+						ps.setInt(5,Integer.parseInt(clientChamps[0])); 
+
+						ps.setString(6,"c_54246");
+						ps.setString(7,"PP");
+						//Si PP remettre le code
+						ps.setInt(8,Integer.parseInt(clientChamps[0]));
+						
+						ps.executeUpdate();
+			
+						ps.setInt(1,34); 
+						ps.setInt(2,01);
+						ps.setString(3,"");
+						ps.setInt(4, generatedIdPub);
+						ps.setInt(5,Integer.parseInt(clientChamps[1])); 
+						ps.setString(6,"c_54246");
+						ps.setString(7,"PM");
+						//Si PP remettre le code
+						ps.setInt(8,Integer.parseInt(clientChamps[1]));
+						
+						ps.executeUpdate();
+					
+				}
+
+
 			}
-
-
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
 		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+		
 		
 		return  generatedId;
 	}
@@ -758,7 +761,7 @@ public class  MessageDAOImpl implements MessageDAO {
 
 		// Lists
 		ArrayList <String> canaux = new ArrayList<>();
-		ArrayList <Integer> entities = new ArrayList<>();
+		List<String> entities = new ArrayList<>();
 		ArrayList <String> keywords = new ArrayList<>();
 		String clients = "";
 		ArrayList <String> NO_PSE = new ArrayList<>();
@@ -841,8 +844,8 @@ public class  MessageDAOImpl implements MessageDAO {
 					priority = Integer.parseInt(tmp);
 
 				// verifier si la liste entites contient un une valeur identique
-				if ( !entities.contains(r.getInt(32)) ) 
-					entities.add(r.getInt(32));
+				if ( !entities.contains(r.getString(32)) ) 
+					entities.add(r.getString(32));
 
 				// Verifier si la liste canal contient un une valeur identique
 				
