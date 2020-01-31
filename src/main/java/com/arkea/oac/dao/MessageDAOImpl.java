@@ -127,7 +127,7 @@ public class  MessageDAOImpl implements MessageDAO {
 		}
 
 
-
+		//Ajouter dans t90_pub
 		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlPub, Statement.RETURN_GENERATED_KEYS))
 		{
 			//CD_EFS
@@ -179,7 +179,7 @@ public class  MessageDAOImpl implements MessageDAO {
 		}
 
 
-
+		//Ajouter dans t90_efs
 		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlEfs))
 		{
 
@@ -198,7 +198,7 @@ public class  MessageDAOImpl implements MessageDAO {
 			e.printStackTrace();
 		}
 
-
+		//Ajouter dans t90_mot_cle
 		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlMc))
 		{
 
@@ -221,7 +221,7 @@ public class  MessageDAOImpl implements MessageDAO {
 		{
 			e.printStackTrace();
 		}
-
+		//Ajouter dans t90_cnl
 		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlCnl))
 		{
 
@@ -242,7 +242,7 @@ public class  MessageDAOImpl implements MessageDAO {
 		{
 			e.printStackTrace();
 		}
-		
+		//Ajouter dans t90_var
 		try(java.sql.PreparedStatement ps = getInstance().prepareStatement(sqlVar))
 		{
 			String clients=m.getT().getClientList();
@@ -760,7 +760,7 @@ public class  MessageDAOImpl implements MessageDAO {
 		ArrayList <String> canaux = new ArrayList<>();
 		ArrayList <Integer> entities = new ArrayList<>();
 		ArrayList <String> keywords = new ArrayList<>();
-		String clients = null;
+		String clients = "";
 		ArrayList <String> NO_PSE = new ArrayList<>();
 
 		//Target
@@ -876,23 +876,38 @@ public class  MessageDAOImpl implements MessageDAO {
 						federation=false;
 						// Mettre l'agence en false
 						agency=false;
-
+					
 						// Add list of clients
 						if ( NO_PSE.contains(r.getString(46)) && !tmp.equals(r.getString(49))) {
-							//la valeur temporaire du client
-							tmp = r.getString(49);
-							// Ajouter le PP
-							client +=","+tmp;
-							// Ajouter le PP/PM dans la liste de client
-							clients+=client+"\n";
+							
 
 						} else if ( !NO_PSE.contains(r.getString(46))){
 							// Add client PP
 							NO_PSE.add(r.getString(46));
+							
 							// La valeur temporaire du Client PP
-							tmp = r.getString(49);
+							
+							tmp = r.getString(46);
 							client = tmp + ",";
+							System.out.println("Client= "+client);
+							clients+=client;
+							client="";
+							
 						}
+						
+							
+						
+						/*
+						 * if ( !NO_PSE.contains(r.getString(46))){
+							// Add client PP
+							NO_PSE.add(r.getString(46));
+							
+							// La valeur temporaire du Client PP
+							
+							tmp = r.getString(49);
+							clients = tmp + ",";
+						}
+						 */
 
 					} else if (targetType.equals("F")) {
 						// FÃ©dÃ©ration
