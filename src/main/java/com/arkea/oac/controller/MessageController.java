@@ -100,7 +100,7 @@ public class MessageController {
 	 * get message en fonction du mot clé
 	 * @param motcle
 	 * @param type
-	 * @param page actuel, 0 par defaut
+	 * @param page actuel, 1 par defaut
 	 * @param size
 	 * @return une page en fonction du mot cle et du type 
 	 */
@@ -109,7 +109,7 @@ public class MessageController {
 	public MessagePageEntity getMessageByMotCle(
 			String motcle,
 			@RequestParam String type,
-			@RequestParam(defaultValue = "0",required=false) Integer page,
+			@RequestParam(defaultValue = "1",required=false) Integer page,
 			@RequestParam(defaultValue = "5",required=false) Integer size){
 		return messageDAOImpl.getMessageByMotCle(motcle, type, page, size);
 	}
